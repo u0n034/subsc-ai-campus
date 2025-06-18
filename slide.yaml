@@ -1,0 +1,122 @@
+# ───────────────────────────
+#  Slide-Text  Conversion Spec
+#  v1.1  2025-06-17
+# ───────────────────────────
+# 目的 : Markdown ナレーション原稿 → スライド用短文
+# 範囲 : テキストのみ（デザイン・画像指示は含めない）
+# ───────────────────────────
+
+process:
+  steps:
+    - extract_blocks             # H1 / H2 / 段落 / 箇条書き / 手順 に分割
+    - classify_block_type        # 7 タイプ判定（T0-T6）
+    - transform_by_type          # 各タイプ別に要約・整形
+    - paginate                   # 1 スライド当たり行数・文字数制限で分割
+    - emit_slide_text            # {slide_no, type, text} を出力
+
+# ---------- ① タイプ定義 ----------
+slide_types:
+  - id: T0                # Cover / Part
+    detect: {first_h1: true}
+    transform:
+      - strip_mark          # '#' と余分な記号を除く
+      - split_at: [" - ", "："]   # 左右で 2 行化
+      - limit_chars: 22
+  - id: T1                # Section Title
+    detect: {heading_level: 2}
+    transform:
+      - strip_mark
+      - replace: {"：": " ", "-": " "}
+      - split_to_lines: 2
+      - limit_chars: 18
+
+  - id: T2                # Message / Question
+    detect: {has_mark: ["?","？","!","！"], sentence_count: 1..2}
+    transform:
+      - hard_wrap: 16               # 16 文字で折り返し（2–3 行）
+      - keep_punct_end: true        # 語尾の「？」や「！」は残す
+
+  - id: T3                # Person / Event
+    detect: {regex: "(\\d{4}|[A-Za-z一-龠]{2,}.{0,8}(教授|博士|哲学者|父|発明者))"}
+    transform:
+      - capture_name                # 1 行目
+      - capture_achievement         # 年号＋功績を 18 字に要約
+      - bold_keywords: true
+      - join_lines: 2
+
+  - id: T4                # Bullet List
+    detect: {starts_with_any: ["-","・","*"]}
+    transform:
+      - bullet_symbol: "・"
+      - each_item:
+          - truncate: 20            # 各項 20 字
+      - max_items: 4
+      - overflow_to_new_slide: true
+
+  - id: T5                # Numbered Flow
+    detect: {starts_with_regex: "^(?:\\d+\\.\\s|\\d+\\)|[①-⑩])"}
+    transform:
+      - renumber: "◯"               # ①②③ 形式
+      - each_item:
+          - truncate: 18
+      - max_items: 5
+
+  - id: T6                # Long Paragraph
+    detect: {sentence_count: 3+}
+    transform:
+      - summarize_sent: 1           # 1 文に要約 (≤28 字)
+      - extract_keywords: 2         # 補足 bullet ×2 行 (各 ≤18 字)
+      - join_lines: 3
+
+# ---------- ② グローバル制限 ----------
+limits:
+  max_lines_per_slide: 4            # 例外: Cover は 2, Flow は 5
+  max_chars_per_line: 22
+  preferred_chars_per_slide: 70     # 目安 (自動改行後)
+
+# ---------- ③ 要約アルゴリズム ----------
+summarize_sent:
+  model: "lex_rank"                 # キーフレーズ抽出ベースで最短主述文
+  post_rules:
+    - remove_fillers: ["つまり","要するに","いわば"]
+    - normalize_tense: past→過去形 / fact→常体
+
+extract_keywords:
+  algo: "TextRank"
+  format: "・{kw}"
+  dedup: true
+
+bold_keywords:
+  pattern: "\\b(ImageNet|AlexNet|ディープラーニング|チューリング・テスト|エキスパートシステム|フレーム問題|(19|20)\\d{2}年)\\b"
+  wrapper: "**%s**"
+
+# ---------- ④ ページネーション ----------
+paginate:
+  logic: |
+    ◇ transform 後テキストが limits を超えた場合
+      → 行ごとに前詰めして新スライドを起こす
+    ◇ Bullet / Flow で項数上限超過
+      → 超過分を次スライド (同 Type) に送る
+    ◇ Section Title は必ず次スライド先頭に来る
+
+# ---------- ⑤ 変換サンプル (原稿 → スライド) ----------
+example_conversion:
+  narration_block: >
+    これは、AI研究の核心に迫る問いかけであり、今なお活発な議論が続くテーマです。
+    サールは「プログラムは記号を操作するだけで意味を理解しない」と主張しました。
+    しかし「システム全体が理解している」という反論もあります。
+  detected_type: T6
+  produced_slides:
+    - slide_no: 27
+      type: T6
+      text: |
+        AI研究の核心は
+        「記号操作だけでは意味を理解しない」論争
+        ・サール：プログラムは理解しない
+        ・反論：全体システムが理解
+
+notes:
+  - Cover, SectionTitle 以外は **数字・固有名詞を優先的に残す**。
+  - 疑問形は Message (T2) に振り分ける。章内 2 枚まで。
+  - フルコピーする Raw スライドはこの仕様では **禁止**。全文表示が必要な場合は
+    別テンプレート (handout 用) を使用すること。
