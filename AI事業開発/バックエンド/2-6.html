@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第2回：まとめ＆チェック＆次回予告 - AIによるバックエンド開発とデータベース講座</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #0f766e;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #14b8a6;
+        }
+        
+        /* イントロ */
+        .intro-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        
+        .intro-message {
+            font-size: 1.2em;
+            color: #333;
+            line-height: 2;
+            padding: 30px;
+            background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
+            border-radius: 15px;
+        }
+        
+        /* まとめセクション */
+        .summary-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .summary-points {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .summary-point {
+            background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+            border-radius: 15px;
+            padding: 35px;
+            border-left: 8px solid #8b5cf6;
+        }
+        
+        .point-number {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 50px;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-right: 15px;
+            vertical-align: middle;
+        }
+        
+        .point-title {
+            display: inline;
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #5b21b6;
+            vertical-align: middle;
+        }
+        
+        .point-content {
+            margin-top: 20px;
+            padding: 25px;
+            background: white;
+            border-radius: 10px;
+            font-size: 1.05em;
+            color: #333;
+            line-height: 1.9;
+        }
+        
+        .key-terms {
+            display: inline-flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .term {
+            background: linear-gradient(135deg, #fbbf24 0%, #fde68a 100%);
+            color: #78350f;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+        
+        .important-message {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 25px;
+            border: 3px solid #f59e0b;
+        }
+        
+        .important-message-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .important-message-content {
+            font-size: 1.05em;
+            color: #78350f;
+            line-height: 1.8;
+            text-align: center;
+        }
+        
+        /* 自己チェックセクション */
+        .check-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .check-intro {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 25px;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 15px;
+        }
+        
+        .check-intro-text {
+            font-size: 1.15em;
+            color: #1e3a8a;
+            line-height: 1.8;
+        }
+        
+        .check-questions {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .check-question {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 15px;
+            padding: 35px;
+            border: 3px solid #f59e0b;
+        }
+        
+        .question-number {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: #f59e0b;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 50px;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-right: 15px;
+            vertical-align: middle;
+        }
+        
+        .question-title {
+            display: inline;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #92400e;
+            vertical-align: middle;
+        }
+        
+        .question-desc {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            font-size: 1.05em;
+            color: #78350f;
+            line-height: 1.8;
+        }
+        
+        .reflection-box {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 40px;
+            text-align: center;
+            border: 3px solid #14b8a6;
+        }
+        
+        .reflection-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #0f766e;
+            margin-bottom: 20px;
+        }
+        
+        .reflection-content {
+            font-size: 1.05em;
+            color: #333;
+            line-height: 2;
+        }
+        
+        /* 次回予告セクション */
+        .next-section {
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            border-radius: 20px;
+            padding: 50px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .next-title {
+            font-size: 2.2em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .next-theme {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .next-theme-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .next-theme-subtitle {
+            font-size: 1.3em;
+            opacity: 0.95;
+        }
+        
+        .sql-operations {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .sql-operation {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        
+        .sql-operation-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .sql-operation-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .sql-operation-desc {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .reassurance-box {
+            background: rgba(255,255,255,0.3);
+            border-radius: 15px;
+            padding: 35px;
+            backdrop-filter: blur(10px);
+            margin-top: 40px;
+        }
+        
+        .reassurance-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .reassurance-content {
+            font-size: 1.15em;
+            line-height: 2;
+            text-align: center;
+        }
+        
+        .next-goal {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 35px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .next-goal-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .next-goal-content {
+            font-size: 1.15em;
+            line-height: 2;
+        }
+        
+        .farewell {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+            }
+            
+            .sql-operations {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .sql-operations {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">AIによるバックエンド開発とデータベース講座</h1>
+        <div class="subtitle">第2回：まとめ＆チェック＆次回予告</div>
+        
+        <!-- イントロ -->
+        <div class="intro-section">
+            <div class="intro-message">
+                ここまで約2時間、データベースの基礎について学んできましたが、<br>
+                いかがでしたでしょうか。<br><br>
+                
+                おそらく、最初に「データベース」という言葉を聞いたときよりも、<br>
+                <strong style="font-size: 1.2em; color: #0f766e;">
+                ずいぶんと身近なものに感じられるようになったのではないでしょうか。
+                </strong><br><br>
+                
+                それでは、今日学んだ内容を、しっかりと整理していきましょう。
+            </div>
+        </div>
+        
+        <!-- まとめセクション -->
+        <div class="summary-section">
+            <h2 class="section-title">📝 本日のまとめ</h2>
+            
+            <div style="text-align: center; margin-bottom: 30px; padding: 20px; background: #f9fafb; border-radius: 10px;">
+                <p style="font-size: 1.1em; color: #333; line-height: 1.8;">
+                    今日の核心を3つのポイントでおさらいします
+                </p>
+            </div>
+            
+            <div class="summary-points">
+                <!-- ポイント1 -->
+                <div class="summary-point">
+                    <div>
+                        <span class="point-number">1</span>
+                        <h3 class="point-title">データベースとは何か</h3>
+                    </div>
+                    
+                    <div class="point-content">
+                        データベースは、決して難しい技術の箱ではありません。<br>
+                        本質的には<strong style="color: #8b5cf6; font-size: 1.15em;">「業務データを整理して保存するための"表の集まり"」</strong>です。<br><br>
+                        
+                        皆さんが普段使っているExcelの表と、実はとても似ています。<br>
+                        ただし、Excelとデータベースでは得意分野が違います。<br><br>
+                        
+                        <strong style="color: #5b21b6;">データベースの特徴：</strong><br>
+                        ✓ 何万件、何十万件というデータを<strong>高速に検索</strong>できる<br>
+                        ✓ 複数の人が同時にアクセスしても<strong>壊れにくい</strong><br>
+                        ✓ バックエンドのプログラムから<strong>自動で読み書き</strong>できる<br><br>
+                        
+                        こうした特徴があるからこそ、業務システムの心臓部として使われているわけです。
+                    </div>
+                </div>
+                
+                <!-- ポイント2 -->
+                <div class="summary-point">
+                    <div>
+                        <span class="point-number">2</span>
+                        <h3 class="point-title">テーブル、レコード、カラム、そして主キー</h3>
+                    </div>
+                    
+                    <div class="point-content">
+                        今日、何度も出てきたこれらの用語。もう一度整理しておきましょう。<br><br>
+                        
+                        <div class="key-terms">
+                            <span class="term">テーブル</span>
+                            <span class="term">レコード</span>
+                            <span class="term">カラム</span>
+                            <span class="term">主キー</span>
+                        </div>
+                        
+                        <div style="margin-top: 20px; padding: 20px; background: #f0fdfa; border-radius: 10px;">
+                            <strong style="color: #0f766e; display: block; margin-bottom: 15px; font-size: 1.1em;">📊 それぞれの意味</strong>
+                            
+                            <strong>• テーブル：</strong>データのカテゴリのこと。顧客テーブル、注文テーブル、社員テーブルといったように、「何のデータか」を表す単位<br><br>
+                            
+                            <strong>• レコード：</strong>その中の1行。つまり1人分、1件分のデータ<br><br>
+                            
+                            <strong>• カラム：</strong>その情報を表す項目。名前、メールアドレス、電話番号といった、縦の列<br><br>
+                            
+                            <strong>• 主キー：</strong>「1行を一意に特定するための値」。人間で言えばマイナンバーや社員番号のようなもの
+                        </div>
+                        
+                        <div style="margin-top: 20px; padding: 20px; background: #fef3c7; border-radius: 10px; border-left: 5px solid #f59e0b;">
+                            <strong style="color: #92400e;">🔑 主キーの重要性</strong><br><br>
+                            同じ名前の人が複数いても、IDが違えば「この人はこの人」と確実に区別できる。<br>
+                            これがデータベースの大前提です。<br>
+                            主キーがなければ、どのレコードを指しているのか曖昧になり、トラブルの元になります。
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ポイント3 -->
+                <div class="summary-point">
+                    <div>
+                        <span class="point-number">3</span>
+                        <h3 class="point-title">実務のExcelを整理すること</h3>
+                    </div>
+                    
+                    <div class="point-content">
+                        <strong style="font-size: 1.15em; color: #5b21b6; display: block; margin-bottom: 15px;">
+                        「1行=1件」「1セル=1つの意味ある値」に整理すること
+                        </strong>
+                        
+                        これが、データベース設計の第一歩です。<br><br>
+                        
+                        今日のワークで、皆さんは自社の業務データを「1行=1人の顧客」「1行=1件の案件」といった形で整理してみたはずです。<br><br>
+                        
+                        <strong style="color: #5b21b6;">このとき大切なのは：</strong><br>
+                        ✓ 1つのセルに複数の情報を詰め込まないこと<br>
+                        ✓ 1行が何を表すのかを明確にすること<br><br>
+                        
+                        この感覚さえ掴めていれば、あとはAIに「このExcelをテーブルにして」と頼めば、カラム名や型まで提案してくれます。<br><br>
+                        
+                        <div style="margin-top: 20px; padding: 20px; background: #ede9fe; border-radius: 10px;">
+                            <strong style="color: #5b21b6; font-size: 1.1em;">
+                            つまり、皆さんがやるべきことは<br>
+                            「何を管理したいか」をきちんと言語化すること。
+                            </strong><br><br>
+                            
+                            それができれば、データベースという道具を使いこなす準備はできているんです。
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="important-message">
+                <div class="important-message-title">💡 重要なポイント</div>
+                <div class="important-message-content">
+                    AIにデータベース設計をお願いするにしても、<br>
+                    最低限の言葉——<strong>テーブル、カラム、主キー</strong>——のイメージは必要です。<br><br>
+                    
+                    今日学んだこの基礎用語が、これから先、<br>
+                    <strong style="font-size: 1.15em;">エンジニアとの会話や、外注先への説明、そしてAIへの指示において、<br>
+                    必ず役に立ちます。</strong>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 自己チェックセクション -->
+        <div class="check-section">
+            <h2 class="section-title">✅ 自己チェック</h2>
+            
+            <div class="check-intro">
+                <div class="check-intro-text">
+                    今日の学びをしっかり定着させるために、簡単な自己チェックをしてみましょう。<br><br>
+                    
+                    <strong style="font-size: 1.2em; color: #1e40af;">
+                    動画をここで一度止めて、1〜2分でいいので、<br>
+                    紙かメモアプリに書き出してみてください。
+                    </strong>
+                </div>
+            </div>
+            
+            <div class="check-questions">
+                <!-- 問い1 -->
+                <div class="check-question">
+                    <div>
+                        <span class="question-number">1</span>
+                        <h3 class="question-title">テーブル、レコード、カラムの違いを、人に説明できますか？</h3>
+                    </div>
+                    
+                    <div class="question-desc">
+                        もし同僚や上司に「データベースって何？」と聞かれたとき、<br>
+                        この3つの用語を使って、わかりやすく説明できるでしょうか。<br><br>
+                        
+                        <strong style="color: #92400e;">→ 自分の言葉で言語化してみてください。</strong>
+                    </div>
+                </div>
+                
+                <!-- 問い2 -->
+                <div class="check-question">
+                    <div>
+                        <span class="question-number">2</span>
+                        <h3 class="question-title">自分の会社の業務データから、「1行=1件」のテーブルを1つイメージできますか？</h3>
+                    </div>
+                    
+                    <div class="question-desc">
+                        顧客管理でも、案件管理でも、予約管理でも構いません。<br><br>
+                        
+                        何か1つ、「これをテーブルにするなら、こんな項目が必要だな」という<br>
+                        イメージが浮かびますか？<br><br>
+                        
+                        <strong style="color: #92400e;">→ できれば、カラム名を5個くらい挙げてみてください。</strong>
+                    </div>
+                </div>
+                
+                <!-- 問い3 -->
+                <div class="check-question">
+                    <div>
+                        <span class="question-number">3</span>
+                        <h3 class="question-title">そのテーブルの主キー候補、つまりIDを1つ挙げられますか？</h3>
+                    </div>
+                    
+                    <div class="question-desc">
+                        顧客IDでも、案件番号でも、予約IDでも結構です。<br><br>
+                        
+                        「この値があれば、1行を確実に特定できる」という項目を、<br>
+                        1つ考えてみてください。<br><br>
+                        
+                        <strong style="color: #92400e;">→ 主キー候補を1つ挙げてみましょう。</strong>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="reflection-box">
+                <div class="reflection-title">📊 理解度の確認</div>
+                <div class="reflection-content">
+                    <strong style="color: #0f766e; font-size: 1.15em; display: block; margin-bottom: 15px;">
+                    この3つの問いに、スラスラと答えられるようなら、<br>
+                    今日の内容はバッチリ理解できています！
+                    </strong>
+                    
+                    もし少し曖昧だなと感じたら、もう一度該当するセクションを見直してみてください。<br><br>
+                    
+                    焦る必要はありません。<br>
+                    データベースの基礎は、繰り返し触れることで、じわじわと染み込んでいくものですから。
+                </div>
+            </div>
+        </div>
+        
+        <!-- 次回予告セクション -->
+        <div class="next-section">
+            <div class="next-title">🚀 次回予告</div>
+            
+            <div class="next-theme">
+                <div class="next-theme-title">第3回のテーマ</div>
+                <div class="next-theme-subtitle">
+                    SQL入門 — AIに聞きながらデータを"読む・書く"
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-bottom: 40px; font-size: 1.15em; line-height: 2;">
+                今日作った"表"——つまりテーブル——のデータを、<br>
+                どうやって取り出すのか。どうやって新しいデータを登録するのか。<br><br>
+                
+                それを実現するのが、<strong style="font-size: 1.3em;">SQLという命令文</strong>です。
+            </div>
+            
+            <div class="sql-operations">
+                <div class="sql-operation">
+                    <div class="sql-operation-icon">🔍</div>
+                    <div class="sql-operation-name">SELECT</div>
+                    <div class="sql-operation-desc">検索する</div>
+                </div>
+                
+                <div class="sql-operation">
+                    <div class="sql-operation-icon">➕</div>
+                    <div class="sql-operation-name">INSERT</div>
+                    <div class="sql-operation-desc">新規登録する</div>
+                </div>
+                
+                <div class="sql-operation">
+                    <div class="sql-operation-icon">✏️</div>
+                    <div class="sql-operation-name">UPDATE</div>
+                    <div class="sql-operation-desc">更新する</div>
+                </div>
+                
+                <div class="sql-operation">
+                    <div class="sql-operation-icon">🗑️</div>
+                    <div class="sql-operation-name">DELETE</div>
+                    <div class="sql-operation-desc">削除する</div>
+                </div>
+            </div>
+            
+            <div class="reassurance-box">
+                <div class="reassurance-title">🙆‍♀️ ご安心ください</div>
+                <div class="reassurance-content">
+                    次回も、コードをゴリゴリ書く回ではありません。<br><br>
+                    
+                    むしろ<strong style="font-size: 1.2em;">「日本語でこういう条件で検索して」とAIに頼むと、<br>
+                    AIがSQLを書いてくれる。</strong><br><br>
+                    
+                    その結果を見て、「ああ、こういう命令文になるんだな」と理解する。<br>
+                    そういう感覚を掴む回です。
+                </div>
+            </div>
+            
+            <div class="next-goal">
+                <div class="next-goal-title">🎯 次回のゴール</div>
+                <div class="next-goal-content">
+                    皆さんがやることは：<br>
+                    <strong style="font-size: 1.2em; color: #fbbf24;">
+                    「何を検索したいか」「どんなデータを登録したいか」を<br>
+                    日本語で整理すること
+                    </strong><br><br>
+                    
+                    それをAIに伝えれば、AIがSQLに翻訳してくれます。<br>
+                    そして、そのSQLがどういう構造になっているのかを<br>
+                    <strong>「読める」</strong>ようになる。<br><br>
+                    
+                    データベースの基礎用語を理解した今日の皆さんなら、<br>
+                    SQLの文法も「ああ、こういうことか」とすんなり腹落ちするはずです。
+                </div>
+            </div>
+            
+            <div class="farewell">
+                それでは、第3回でまたお会いしましょう。<br>
+                お疲れさまでした！ 🎉
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

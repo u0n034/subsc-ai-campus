@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第2回：データベースのイメージとExcelとの違い - AIによるバックエンド開発とデータベース講座</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #0f766e;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #14b8a6;
+        }
+        
+        /* セクション1: 身近な表からスタート */
+        .excel-intro-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .key-message {
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            border-radius: 15px;
+            padding: 35px;
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .key-message-title {
+            font-size: 1.6em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .key-message-content {
+            font-size: 1.2em;
+            line-height: 1.8;
+        }
+        
+        .excel-example {
+            background: #f9fafb;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+        
+        .excel-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .excel-table th {
+            background: linear-gradient(135deg, #1e7e34 0%, #28a745 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+            border: 1px solid #ddd;
+        }
+        
+        .excel-table td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+        
+        .excel-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .excel-table tr:hover {
+            background: #e9ecef;
+        }
+        
+        .mapping-section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .mapping-card {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            border: 3px solid #14b8a6;
+        }
+        
+        .mapping-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .mapping-excel {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #1e7e34;
+            margin-bottom: 10px;
+        }
+        
+        .mapping-equals {
+            font-size: 2em;
+            color: #14b8a6;
+            margin: 10px 0;
+        }
+        
+        .mapping-db {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #0f766e;
+            margin-top: 10px;
+        }
+        
+        /* セクション2: 用語の解説 */
+        .terms-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .visual-table {
+            background: #f9fafb;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+        
+        .visual-table-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #0f766e;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .annotated-table {
+            position: relative;
+            margin: 40px 0;
+        }
+        
+        .db-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .db-table th {
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+            border: 1px solid #0f766e;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .db-table td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+        
+        .db-table tr:hover {
+            background: #f0fdfa;
+        }
+        
+        .annotation {
+            position: absolute;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid #f59e0b;
+            border-radius: 10px;
+            padding: 15px 20px;
+            font-size: 0.95em;
+            font-weight: bold;
+            color: #92400e;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .annotation-table {
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .annotation-record {
+            right: -220px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .annotation-column {
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .terms-explanation {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 40px;
+        }
+        
+        .term-card {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 5px solid #14b8a6;
+        }
+        
+        .term-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .term-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #0f766e;
+            margin-bottom: 15px;
+        }
+        
+        .term-description {
+            font-size: 0.95em;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .term-examples {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.7);
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+        
+        /* セクション3: ExcelとDBの違い */
+        .differences-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .excel-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 3px solid #3b82f6;
+            border-radius: 15px;
+            padding: 30px;
+        }
+        
+        .db-box {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border: 3px solid #10b981;
+            border-radius: 15px;
+            padding: 30px;
+        }
+        
+        .comparison-header {
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .excel-box .comparison-header {
+            color: #1e3a8a;
+        }
+        
+        .db-box .comparison-header {
+            color: #0f766e;
+        }
+        
+        .comparison-icon-large {
+            text-align: center;
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        
+        .strength-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .strength-item {
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #14b8a6;
+        }
+        
+        .strength-title {
+            font-weight: bold;
+            color: #0f766e;
+            margin-bottom: 8px;
+            font-size: 1.05em;
+        }
+        
+        .strength-description {
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .use-case {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        
+        .use-case-title {
+            font-weight: bold;
+            color: #0f766e;
+            margin-bottom: 10px;
+        }
+        
+        .balance-message {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .balance-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 15px;
+        }
+        
+        .balance-content {
+            font-size: 1.05em;
+            color: #78350f;
+            line-height: 1.8;
+        }
+        
+        /* セクション4: まとめ */
+        .summary-section {
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .summary-points {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .summary-point {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        
+        .summary-point-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .summary-point-content {
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        .next-topic {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .next-topic-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .next-topic-content {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 1200px) {
+            .annotation-record {
+                position: static;
+                transform: none;
+                margin: 20px 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+            }
+            
+            .mapping-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .terms-explanation {
+                grid-template-columns: 1fr;
+            }
+            
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .summary-points {
+                grid-template-columns: 1fr;
+            }
+            
+            .annotation-table,
+            .annotation-column {
+                position: static;
+                transform: none;
+                margin: 20px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">AIによるバックエンド開発とデータベース講座</h1>
+        <div class="subtitle">第2回：データベースのイメージとExcelとの違い</div>
+        
+        <!-- セクション1: 身近な表からスタート -->
+        <div class="excel-intro-section">
+            <h2 class="section-title">📊 身近な表からスタート</h2>
+            
+            <div class="key-message">
+                <div class="key-message-title">💡 最も重要なポイント</div>
+                <div class="key-message-content">
+                    データベースは、決して遠い世界の話ではありません。<br>
+                    <strong style="font-size: 1.2em;">皆さんがすでに理解している「表」の延長線上にあるもの</strong>なんです。
+                </div>
+            </div>
+            
+            <div class="excel-example">
+                <h3 style="font-size: 1.3em; color: #0f766e; margin-bottom: 20px; text-align: center;">
+                    よくあるExcelの顧客一覧シート
+                </h3>
+                <p style="text-align: center; color: #666; margin-bottom: 20px;">
+                    多くの会社で、こういった形式のExcelファイル、ありますよね？
+                </p>
+                
+                <table class="excel-table">
+                    <thead>
+                        <tr>
+                            <th>A: 顧客名</th>
+                            <th>B: 会社名</th>
+                            <th>C: 電話番号</th>
+                            <th>D: メールアドレス</th>
+                            <th>E: 住所</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>田中太郎</td>
+                            <td>株式会社AAA</td>
+                            <td>03-1234-5678</td>
+                            <td>tanaka@example.com</td>
+                            <td>東京都千代田区...</td>
+                        </tr>
+                        <tr>
+                            <td>鈴木花子</td>
+                            <td>株式会社BBB</td>
+                            <td>03-9876-5432</td>
+                            <td>hanako@example.com</td>
+                            <td>東京都港区...</td>
+                        </tr>
+                        <tr>
+                            <td>佐藤次郎</td>
+                            <td>株式会社CCC</td>
+                            <td>06-1111-2222</td>
+                            <td>sato@example.com</td>
+                            <td>大阪府大阪市...</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div style="margin-top: 20px; padding: 20px; background: white; border-radius: 10px; text-align: center;">
+                    <p style="color: #333; line-height: 1.8;">
+                        営業部門なら<strong>顧客リスト</strong>、人事部門なら<strong>社員名簿</strong>、企画部門なら<strong>イベント参加者リスト</strong><br>
+                        「情報を表形式で整理している」という点では、皆さんも日常的にやっていることです。
+                    </p>
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.4em; color: #0f766e; margin: 40px 0 25px 0; text-align: center;">
+                📌 Excelとデータベースの対応関係
+            </h3>
+            
+            <div class="mapping-section">
+                <div class="mapping-card">
+                    <div class="mapping-icon">📄</div>
+                    <div class="mapping-excel">Excel の「シート」</div>
+                    <div class="mapping-equals">‖</div>
+                    <div class="mapping-db">データベースの「テーブル」</div>
+                    <div style="margin-top: 15px; font-size: 0.9em; color: #666;">
+                        顧客一覧シート<br>↓<br>顧客テーブル
+                    </div>
+                </div>
+                
+                <div class="mapping-card">
+                    <div class="mapping-icon">📏</div>
+                    <div class="mapping-excel">Excel の「横1行」</div>
+                    <div class="mapping-equals">‖</div>
+                    <div class="mapping-db">データベースの「レコード」</div>
+                    <div style="margin-top: 15px; font-size: 0.9em; color: #666;">
+                        1人分のデータ<br>1件分のデータ
+                    </div>
+                </div>
+                
+                <div class="mapping-card">
+                    <div class="mapping-icon">📊</div>
+                    <div class="mapping-excel">Excel の「縦1列」</div>
+                    <div class="mapping-equals">‖</div>
+                    <div class="mapping-db">データベースの「カラム」</div>
+                    <div style="margin-top: 15px; font-size: 0.9em; color: #666;">
+                        項目名・フィールド
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 40px; padding: 25px; background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border-radius: 10px; text-align: center;">
+                <strong style="display: block; font-size: 1.2em; color: #1e3a8a; margin-bottom: 15px;">
+                    🎯 この3つの対応関係を覚えるだけで、データベースの理解がグッと進みます！
+                </strong>
+            </div>
+        </div>
+        
+        <!-- セクション2: テーブル／レコード／カラムの基本用語 -->
+        <div class="terms-section">
+            <h2 class="section-title">📚 テーブル／レコード／カラムの基本用語</h2>
+            
+            <div class="visual-table">
+                <div class="visual-table-title">📊 具体例で見てみましょう</div>
+                
+                <div class="annotated-table" style="margin: 60px 40px;">
+                    <div class="annotation annotation-table">
+                        👆 この表全体が「テーブル」<br>
+                        （顧客テーブル / customers）
+                    </div>
+                    
+                    <table class="db-table">
+                        <thead>
+                            <tr>
+                                <th>customer_id</th>
+                                <th>name</th>
+                                <th>company</th>
+                                <th>email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background: #fef3c7;">
+                                <td>1</td>
+                                <td>田中太郎</td>
+                                <td>株式会社AAA</td>
+                                <td>tanaka@example.com</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>鈴木花子</td>
+                                <td>株式会社BBB</td>
+                                <td>hanako@example.com</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="annotation annotation-record">
+                        👈 この1行が「レコード」<br>
+                        （1人分の情報）
+                    </div>
+                    
+                    <div class="annotation annotation-column">
+                        👆 この縦の列が「カラム」<br>
+                        （項目のラベル）
+                    </div>
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.4em; color: #0f766e; margin: 40px 0 25px 0; text-align: center;">
+                💡 日常的な言葉で言い換えると...
+            </h3>
+            
+            <div class="terms-explanation">
+                <div class="term-card">
+                    <div class="term-icon">📁</div>
+                    <div class="term-name">テーブル</div>
+                    <div class="term-description">
+                        <strong>データの「カテゴリー」</strong><br><br>
+                        
+                        「顧客」というカテゴリーで管理したいなら顧客テーブル、「商品」というカテゴリーで管理したいなら商品テーブル。
+                    </div>
+                    <div class="term-examples">
+                        <strong>一つのシステムの例：</strong><br>
+                        • 顧客テーブル<br>
+                        • 商品テーブル<br>
+                        • 注文テーブル<br>
+                        • 配送先テーブル<br>
+                        → 管理したいものごとに分ける
+                    </div>
+                </div>
+                
+                <div class="term-card">
+                    <div class="term-icon">📋</div>
+                    <div class="term-name">レコード</div>
+                    <div class="term-description">
+                        <strong>「1人分」「1件分」「1行分」の情報</strong><br><br>
+                        
+                        常に、「1行＝1つの何か」という感覚を持つことが大切。
+                    </div>
+                    <div class="term-examples">
+                        <strong>具体例：</strong><br>
+                        • 顧客テーブル<br>
+                        　→ 1人のお客様の情報<br>
+                        • 商品テーブル<br>
+                        　→ 1つの商品の情報<br>
+                        • 注文テーブル<br>
+                        　→ 1回の注文の情報
+                    </div>
+                </div>
+                
+                <div class="term-card">
+                    <div class="term-icon">🏷️</div>
+                    <div class="term-name">カラム</div>
+                    <div class="term-description">
+                        <strong>「その情報を表す項目のラベル」</strong><br><br>
+                        
+                        履歴書の項目欄と同じ。「この欄には氏名を書く」「この欄には電話番号を書く」というように、項目が決まっている。
+                    </div>
+                    <div class="term-examples">
+                        <strong>カラムの例：</strong><br>
+                        • customer_id: 顧客ID<br>
+                        • name: 氏名<br>
+                        • company: 会社名<br>
+                        • email: メールアドレス<br><br>
+                        
+                        新しいレコードを追加するときは、決まっているカラムに沿ってデータを埋めていく
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション3: ExcelとDBの違い -->
+        <div class="differences-section">
+            <h2 class="section-title">⚖️ Excelとデータベースの違い</h2>
+            
+            <div style="text-align: center; margin-bottom: 30px; padding: 20px; background: #f9fafb; border-radius: 10px;">
+                <p style="font-size: 1.1em; color: #333; line-height: 1.8;">
+                    <strong>共通点：</strong>どちらも「表形式」でデータを扱う<br>
+                    行と列があって、それぞれのセルに情報が入る。この基本構造は全く同じ。<br><br>
+                    <strong>では、何が違うのか？</strong><br>
+                    それは<strong>「得意なこと」</strong>と<strong>「使う場面」</strong>の違いです。
+                </p>
+            </div>
+            
+            <div class="comparison-grid">
+                <div class="db-box">
+                    <div class="comparison-icon-large">🗄️</div>
+                    <div class="comparison-header">データベースが得意なこと</div>
+                    
+                    <ul class="strength-list">
+                        <li class="strength-item">
+                            <div class="strength-title">⚡ 大量データの高速処理</div>
+                            <div class="strength-description">
+                                Excelは数千行までは快適ですが、数万行以上になると重くなります。<br><br>
+                                データベースは、何百万件のレコードがあっても、適切な設定をすれば<strong>一瞬で検索結果を返してくれます。</strong>
+                            </div>
+                        </li>
+                        
+                        <li class="strength-item">
+                            <div class="strength-title">👥 同時アクセスへの対応</div>
+                            <div class="strength-description">
+                                Excelファイルを複数人で同時に編集すると、「読み取り専用」になったり、誰かが閉じるまで待たなければならない...<br><br>
+                                データベースは、複数のユーザーが同時にアクセスして、同時にデータを読み書きしても、<strong>壊れにくい仕組み</strong>になっています。
+                            </div>
+                        </li>
+                        
+                        <li class="strength-item">
+                            <div class="strength-title">🤖 システムからの自動操作</div>
+                            <div class="strength-description">
+                                Excelは基本的に「人が開いて、人が入力する」もの。<br><br>
+                                データベースは<strong>「バックエンドのプログラムから自動的にデータを読み書きする」</strong>ことが前提で作られています。<br>
+                                Webサイトで会員登録ボタンを押したら、裏側で自動的にデータベースに情報が保存される。
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="excel-box">
+                    <div class="comparison-icon-large">📊</div>
+                    <div class="comparison-header">Excelが便利な場面</div>
+                    
+                    <ul class="strength-list">
+                        <li class="strength-item" style="border-left-color: #3b82f6;">
+                            <div class="strength-title" style="color: #1e3a8a;">📝 ざっくりメモしたい</div>
+                            <div class="strength-description">
+                                思いついたことをサッと書き留めて、後から整理する。<br>
+                                そういう柔軟な使い方は、Excelのほうがやりやすいです。
+                            </div>
+                        </li>
+                        
+                        <li class="strength-item" style="border-left-color: #3b82f6;">
+                            <div class="strength-title" style="color: #1e3a8a;">🧮 手作業で計算・加工</div>
+                            <div class="strength-description">
+                                関数を使った計算や、グラフ機能、ちょっとしたデータ加工。<br>
+                                こういった手作業が必要な場面では、Excelが非常に便利です。
+                            </div>
+                        </li>
+                        
+                        <li class="strength-item" style="border-left-color: #3b82f6;">
+                            <div class="strength-title" style="color: #1e3a8a;">🎨 見た目の自由度</div>
+                            <div class="strength-description">
+                                セルを結合したり、色を付けたり、自由にレイアウトできる。<br>
+                                報告書や提案資料として使うには、Excelが適しています。
+                            </div>
+                        </li>
+                    </ul>
+                    
+                    <div class="use-case">
+                        <div class="use-case-title" style="color: #1e3a8a;">💡 Excelが向いている場面</div>
+                        <div style="color: #666; font-size: 0.9em; line-height: 1.6;">
+                            • 小規模なデータ（数百〜数千行程度）<br>
+                            • 一時的なメモやリスト<br>
+                            • 分析やレポート作成<br>
+                            • 見た目を重視する資料
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="balance-message">
+                <div class="balance-title">⚖️ ExcelとDBは「どちらが優れている」という話ではない</div>
+                <div class="balance-content">
+                    <strong>役割が違うだけです。</strong><br><br>
+                    
+                    <strong style="font-size: 1.1em;">
+                    小規模で手軽に使いたいなら Excel<br>
+                    大規模で自動処理したいなら データベース
+                    </strong><br><br>
+                    
+                    この使い分けの感覚を持つことが大切です。<br><br>
+                    
+                    非エンジニアの皆さんにとっては、まず<strong>「Excelで整理できるレベルのデータ」</strong>から始めて、<br>
+                    それを<strong>データベースの考え方に翻訳していく</strong>、というステップが現実的です。<br><br>
+                    
+                    今日のワークでも、まさにそれをやっていきます！
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション4: まとめ -->
+        <div class="summary-section">
+            <h2 class="section-title" style="color: white; border-bottom-color: white;">📝 このセクションのまとめ</h2>
+            
+            <div class="summary-points">
+                <div class="summary-point">
+                    <div class="summary-point-title">📊 基本構造</div>
+                    <div class="summary-point-content">
+                        データベースは、Excelのような「表」を、より大規模に、より安全に、より自動的に扱うための仕組み<br><br>
+                        
+                        <strong>対応関係：</strong><br>
+                        • シート = テーブル<br>
+                        • 横1行 = レコード<br>
+                        • 縦1列 = カラム
+                    </div>
+                </div>
+                
+                <div class="summary-point">
+                    <div class="summary-point-title">🎯 3つの基本用語</div>
+                    <div class="summary-point-content">
+                        <strong>テーブル：</strong><br>
+                        データのカテゴリー<br><br>
+                        
+                        <strong>レコード：</strong><br>
+                        1件分のデータ<br><br>
+                        
+                        <strong>カラム：</strong><br>
+                        項目のラベル<br><br>
+                        
+                        この3つを押さえればOK！
+                    </div>
+                </div>
+                
+                <div class="summary-point">
+                    <div class="summary-point-title">⚖️ 使い分け</div>
+                    <div class="summary-point-content">
+                        ExcelとDBは対立するものではなく、役割が違うだけ<br><br>
+                        
+                        <strong>Excel：</strong><br>
+                        小規模、手軽、柔軟<br><br>
+                        
+                        <strong>データベース：</strong><br>
+                        大規模、高速、自動処理<br><br>
+                        
+                        場面に応じて使い分ける！
+                    </div>
+                </div>
+            </div>
+            
+            <div class="next-topic">
+                <div class="next-topic-title">🔜 次のセクション</div>
+                <div class="next-topic-content">
+                    データベースを使う上で欠かせない<strong>「主キー」</strong>、つまりIDの役割について学んでいきます。<br><br>
+                    
+                    <strong>「なぜIDが必要なのか」</strong><br>
+                    <strong>「IDがないとどんな困りごとが起きるのか」</strong><br><br>
+                    
+                    具体例を通して見ていきましょう！
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

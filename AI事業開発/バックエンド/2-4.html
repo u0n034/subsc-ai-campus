@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第2回：業務データのテーブル化ワーク - AIによるバックエンド開発とデータベース講座</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #0f766e;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #14b8a6;
+        }
+        
+        /* セクション1: ワークのゴール */
+        .goal-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .main-goal {
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            border-radius: 15px;
+            padding: 40px;
+            color: white;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .main-goal-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .main-goal-content {
+            font-size: 1.5em;
+            font-weight: bold;
+            line-height: 1.8;
+            border-top: 2px solid rgba(255,255,255,0.3);
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding: 25px 0;
+        }
+        
+        .data-examples {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .data-example-card {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .data-example-icon {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+        }
+        
+        .data-example-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 15px;
+        }
+        
+        .data-example-desc {
+            font-size: 0.95em;
+            color: #1e40af;
+            line-height: 1.6;
+        }
+        
+        /* ワークの進め方 */
+        .workflow-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .workflow-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .workflow-step {
+            background: white;
+            border: 3px solid #14b8a6;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .workflow-step::after {
+            content: '→';
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2em;
+            color: #14b8a6;
+            font-weight: bold;
+        }
+        
+        .workflow-step:last-child::after {
+            content: '';
+        }
+        
+        .workflow-step-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 0 auto 15px;
+        }
+        
+        .workflow-step-title {
+            font-size: 1.05em;
+            font-weight: bold;
+            color: #0f766e;
+            margin-bottom: 10px;
+        }
+        
+        .workflow-step-desc {
+            font-size: 0.85em;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        /* カラム洗い出し */
+        .columns-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .two-questions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .question-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 15px;
+            padding: 30px;
+            border: 3px solid #f59e0b;
+        }
+        
+        .question-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 15px;
+        }
+        
+        .question-content {
+            font-size: 1.1em;
+            color: #78350f;
+            line-height: 1.8;
+        }
+        
+        .template-display {
+            background: #1e293b;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            color: #e2e8f0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.8;
+        }
+        
+        .template-highlight {
+            color: #fbbf24;
+            font-weight: bold;
+        }
+        
+        .template-comment {
+            color: #86efac;
+        }
+        
+        .key-points {
+            background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+        
+        .key-point-item {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 5px solid #ec4899;
+        }
+        
+        .key-point-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #9f1239;
+            margin-bottom: 10px;
+        }
+        
+        .key-point-desc {
+            font-size: 0.95em;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* NGな表の例 */
+        .ng-examples-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .ng-example {
+            margin: 40px 0;
+            padding: 30px;
+            background: #fef2f2;
+            border-radius: 15px;
+            border: 3px solid #ef4444;
+        }
+        
+        .ng-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #991b1b;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .ng-icon {
+            font-size: 1.5em;
+        }
+        
+        .table-display {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        .data-table th {
+            background: #334155;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #475569;
+        }
+        
+        .data-table td {
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+        }
+        
+        .data-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+        
+        .problem-cell {
+            background: #fee2e2 !important;
+            font-weight: bold;
+            color: #991b1b;
+        }
+        
+        .problem-explanation {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #dc2626;
+        }
+        
+        .problem-title {
+            font-weight: bold;
+            color: #991b1b;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+        
+        .solution-box {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 25px;
+            border: 3px solid #10b981;
+        }
+        
+        .solution-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #065f46;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .solution-icon {
+            font-size: 1.5em;
+        }
+        
+        /* ワーク実践 */
+        .workshop-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .workshop-banner {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            border-radius: 15px;
+            padding: 40px;
+            color: white;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .workshop-banner-title {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .workshop-banner-time {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .workshop-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .workshop-step-card {
+            background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .workshop-step-number {
+            width: 60px;
+            height: 60px;
+            background: #8b5cf6;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+        
+        .workshop-step-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #5b21b6;
+            margin-bottom: 15px;
+        }
+        
+        .workshop-step-desc {
+            font-size: 0.95em;
+            color: #6b21a8;
+            line-height: 1.6;
+        }
+        
+        .example-output {
+            background: #f0fdfa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 3px solid #14b8a6;
+        }
+        
+        .example-output-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #0f766e;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .example-list {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            font-family: 'Courier New', monospace;
+            line-height: 2;
+        }
+        
+        /* AIデモ */
+        .ai-demo-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .ai-flow {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 30px;
+            align-items: center;
+            margin: 40px 0;
+        }
+        
+        .ai-input-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 15px;
+            padding: 30px;
+            border: 3px solid #3b82f6;
+        }
+        
+        .ai-arrow {
+            font-size: 4em;
+            color: #8b5cf6;
+            font-weight: bold;
+        }
+        
+        .ai-output-box {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-radius: 15px;
+            padding: 30px;
+            border: 3px solid #10b981;
+        }
+        
+        .ai-box-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .ai-box-content {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.8;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .prompt-code {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.8;
+        }
+        
+        .output-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.85em;
+        }
+        
+        .output-table th {
+            background: #0f766e;
+            color: white;
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #0f766e;
+        }
+        
+        .output-table td {
+            padding: 8px 10px;
+            border: 1px solid #cbd5e1;
+            background: white;
+        }
+        
+        /* まとめ */
+        .summary-section {
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .summary-message {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 35px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .summary-message-title {
+            font-size: 1.6em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .summary-message-content {
+            font-size: 1.2em;
+            line-height: 2;
+        }
+        
+        .takeaway-boxes {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .takeaway-box {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .takeaway-box-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .takeaway-box-content {
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 1200px) {
+            .workflow-steps {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .workflow-step::after {
+                content: '';
+            }
+            
+            .ai-flow {
+                grid-template-columns: 1fr;
+            }
+            
+            .ai-arrow {
+                transform: rotate(90deg);
+                margin: 20px 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+            }
+            
+            .data-examples {
+                grid-template-columns: 1fr;
+            }
+            
+            .workflow-steps {
+                grid-template-columns: 1fr;
+            }
+            
+            .two-questions {
+                grid-template-columns: 1fr;
+            }
+            
+            .workshop-steps {
+                grid-template-columns: 1fr;
+            }
+            
+            .takeaway-boxes {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">AIによるバックエンド開発とデータベース講座</h1>
+        <div class="subtitle">第2回：業務データのテーブル化ワーク（40分）</div>
+        
+        <!-- セクション1: ワークのゴール -->
+        <div class="goal-section">
+            <h2 class="section-title">🎯 ワークのゴール</h2>
+            
+            <div class="main-goal">
+                <div class="main-goal-title">このワークで目指すゴール</div>
+                <div class="main-goal-content">
+                    今、Excelで管理している業務データを、<br>
+                    1つのテーブルとして整理してみる
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0; padding: 20px; background: #f9fafb; border-radius: 10px;">
+                <p style="font-size: 1.1em; color: #333; line-height: 1.8;">
+                    難しいSQL文を書くわけでも、複雑なシステムを作るわけでもありません。<br>
+                    <strong style="color: #0f766e;">「自分が日々扱っているデータを、データベース視点で見たらどうなるか」</strong><br>
+                    を考えてみる。それがこのワークの目的です。
+                </p>
+            </div>
+            
+            <h3 style="font-size: 1.3em; color: #0f766e; margin: 40px 0 25px 0; text-align: center;">
+                📊 題材の候補（どれか1つを選んでください）
+            </h3>
+            
+            <div class="data-examples">
+                <div class="data-example-card">
+                    <div class="data-example-icon">👥</div>
+                    <div class="data-example-title">顧客管理</div>
+                    <div class="data-example-desc">
+                        顧客リスト、取引先リスト、クライアント情報など。<br><br>
+                        「誰と」取引しているか、「どんな会社」とやり取りしているかを管理している表
+                    </div>
+                </div>
+                
+                <div class="data-example-card">
+                    <div class="data-example-icon">📋</div>
+                    <div class="data-example-title">案件管理</div>
+                    <div class="data-example-desc">
+                        営業案件、商談リスト、プロジェクト一覧など。<br><br>
+                        「どんな仕事が進んでいるか」「どの案件がどういう状態か」を追いかけている表
+                    </div>
+                </div>
+                
+                <div class="data-example-card">
+                    <div class="data-example-icon">📅</div>
+                    <div class="data-example-title">予約管理</div>
+                    <div class="data-example-desc">
+                        セミナーの予約、面談の予約、施設の予約など。<br><br>
+                        「いつ・誰が・何を予約したか」を記録している表
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション2: ワークの進め方 -->
+        <div class="workflow-section">
+            <h2 class="section-title">🔄 ワークの進め方（4つのステップ）</h2>
+            
+            <div class="workflow-steps">
+                <div class="workflow-step">
+                    <div class="workflow-step-number">1</div>
+                    <div class="workflow-step-title">カラムを洗い出す</div>
+                    <div class="workflow-step-desc">
+                        「1行に何を書きたいか」を決めて、その1件についてどんな情報を持っておきたいかを整理
+                    </div>
+                </div>
+                
+                <div class="workflow-step">
+                    <div class="workflow-step-number">2</div>
+                    <div class="workflow-step-title">NGな表の例と修正</div>
+                    <div class="workflow-step-desc">
+                        Excelで管理している表の中で、データベースに持っていくと困る形を学ぶ
+                    </div>
+                </div>
+                
+                <div class="workflow-step">
+                    <div class="workflow-step-number">3</div>
+                    <div class="workflow-step-title">実際に手を動かす</div>
+                    <div class="workflow-step-desc">
+                        10分間の作業時間。実際にご自身の業務データのテーブルを設計してみる
+                    </div>
+                </div>
+                
+                <div class="workflow-step">
+                    <div class="workflow-step-number">4</div>
+                    <div class="workflow-step-title">AIに変換させる</div>
+                    <div class="workflow-step-desc">
+                        日本語で整理した項目を、AIがデータベースのテーブル定義書に変換するデモ
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション3: カラムを洗い出すステップ -->
+        <div class="columns-section">
+            <h2 class="section-title">📝 ステップ1：カラムを洗い出す方法</h2>
+            
+            <div style="text-align: center; margin-bottom: 30px; padding: 20px; background: #f0fdfa; border-radius: 10px;">
+                <p style="font-size: 1.15em; color: #0f766e; line-height: 1.8; font-weight: bold;">
+                    ここでの作業は、非常にシンプルです。<br>
+                    たった2つのことを決めるだけです。
+                </p>
+            </div>
+            
+            <div class="two-questions">
+                <div class="question-box">
+                    <div class="question-number">❶ 1つ目の質問</div>
+                    <div class="question-content">
+                        <strong style="font-size: 1.15em; display: block; margin-bottom: 15px;">
+                            「1行に何を書きたいか」を決める
+                        </strong>
+                        これは「1行=1件」の考え方そのもの。<br><br>
+                        
+                        • 顧客管理なら「1行=1人の顧客」<br>
+                        • 案件管理なら「1行=1件の案件」<br>
+                        • 予約管理なら「1行=1件の予約」
+                    </div>
+                </div>
+                
+                <div class="question-box">
+                    <div class="question-number">❷ 2つ目の質問</div>
+                    <div class="question-content">
+                        <strong style="font-size: 1.15em; display: block; margin-bottom: 15px;">
+                            その1件について、どんな情報を持っておきたいか
+                        </strong>
+                        1行に何を書くかが決まったら、その1件について「どんな項目が必要か」を考える。<br><br>
+                        
+                        これが、そのまま「カラム」のリストになります
+                    </div>
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.4em; color: #0f766e; margin: 40px 0 25px 0; text-align: center;">
+                📋 テンプレートの例：顧客管理の場合
+            </h3>
+            
+            <div class="template-display">
+<span class="template-highlight">テーブル名:</span>customers(顧客)
+
+<span class="template-highlight">1行=1人の顧客</span>
+
+<span class="template-comment">欲しいカラム(項目):</span>
+- customer_id(顧客ID)      <span class="template-comment">← 主キー</span>
+- name(氏名)
+- company_name(会社名)
+- email(メールアドレス)
+- phone(電話)
+- prefecture(都道府県)
+- sales_person(担当営業)
+- status(ステータス:見込み/受注/失注 等)
+- notes(備考メモ)
+            </div>
+            
+            <div class="key-points">
+                <h3 style="font-size: 1.3em; color: #9f1239; margin-bottom: 25px; text-align: center;">
+                    ⭐ 特に意識してほしい2つのポイント
+                </h3>
+                
+                <div class="key-point-item">
+                    <div class="key-point-title">ポイント1：まずは日本語で書いてOK</div>
+                    <div class="key-point-desc">
+                        最初から英語で考える必要はありません。「顧客ID」「会社名」「メールアドレス」といった日本語で書いて構いません。英語のカラム名にするのは、後からAIに手伝ってもらうこともできますし、エンジニアと一緒に決めてもいいでしょう。<br><br>
+                        
+                        <strong>今の段階で大切なのは、「どんな情報が必要か」を日本語で明確にすること</strong>です。
+                    </div>
+                </div>
+                
+                <div class="key-point-item">
+                    <div class="key-point-title">ポイント2：「1行=1件」という感覚を常に意識する</div>
+                    <div class="key-point-desc">
+                        これは本当に大事なポイントです。データベースのテーブルを設計するとき、必ず<strong>「1行=1件」の原則を守ってください</strong>。<br><br>
+                        
+                        1行が「1人の顧客」を表すなら、その行には1人分の情報だけを入れる。2人分の情報を1行に詰め込んだり、1人の情報を複数行に分散させたりしない。<br><br>
+                        
+                        実際のExcelを見てみると、この原則が崩れている表が意外と多いんです。
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション4: NGな表の例1 -->
+        <div class="ng-examples-section">
+            <h2 class="section-title">❌ よくある「NGな表」の例と修正</h2>
+            
+            <div style="text-align: center; margin-bottom: 30px; padding: 20px; background: #fef2f2; border-radius: 10px; border: 2px solid #ef4444;">
+                <p style="font-size: 1.1em; color: #991b1b; line-height: 1.8;">
+                    <strong>「人間が見て分かりやすい表」と「データベースとして扱いやすい表」は、<br>
+                    必ずしも一致しません。</strong><br><br>
+                    どんなパターンが問題なのか、どう修正すればいいのか、<br>
+                    3つの代表的な例を見ていきましょう。
+                </p>
+            </div>
+            
+            <!-- NG例1 -->
+            <div class="ng-example">
+                <div class="ng-title">
+                    <span class="ng-icon">❌</span>
+                    NG例1：1つのセルに複数の値が入っている
+                </div>
+                
+                <div class="table-display">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>顧客ID</th>
+                                <th>顧客名</th>
+                                <th>取引先企業</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>001</td>
+                                <td>田中太郎</td>
+                                <td class="problem-cell">A社/B社/C社</td>
+                            </tr>
+                            <tr>
+                                <td>002</td>
+                                <td>鈴木花子</td>
+                                <td>D社</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="problem-explanation">
+                    <div class="problem-title">🚫 何が問題なのか？</div>
+                    <ul style="padding-left: 25px; margin-top: 10px; line-height: 1.8;">
+                        <li>「A社/B社/C社」と、スラッシュで区切られた3つの企業名が1つのセルに入っている</li>
+                        <li>検索や集計が非常に難しくなる</li>
+                        <li>「A社と取引がある顧客」を抽出するのが困難</li>
+                        <li>「B社と取引がある顧客は何人いるか」を数えることができない</li>
+                    </ul>
+                </div>
+                
+                <div class="solution-box">
+                    <div class="solution-title">
+                        <span class="solution-icon">✅</span>
+                        修正方法：「1セル=1つの値」にする
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div>
+                            <h4 style="color: #065f46; margin-bottom: 15px;">顧客テーブル</h4>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>顧客ID</th>
+                                        <th>顧客名</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>001</td>
+                                        <td>田中太郎</td>
+                                    </tr>
+                                    <tr>
+                                        <td>002</td>
+                                        <td>鈴木花子</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div>
+                            <h4 style="color: #065f46; margin-bottom: 15px;">顧客-企業 関連テーブル</h4>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>顧客ID</th>
+                                        <th>企業名</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>001</td>
+                                        <td>A社</td>
+                                    </tr>
+                                    <tr>
+                                        <td>001</td>
+                                        <td>B社</td>
+                                    </tr>
+                                    <tr>
+                                        <td>001</td>
+                                        <td>C社</td>
+                                    </tr>
+                                    <tr>
+                                        <td>002</td>
+                                        <td>D社</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background: white; border-radius: 8px;">
+                        <strong style="color: #065f46;">💡 メリット：</strong><br>
+                        田中太郎さんが3社と取引があることは、関連テーブルの3行で表現されます。<br>
+                        1行に1つの企業名しか入らないので、検索や集計が簡単になります。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- NG例2 -->
+            <div class="ng-example">
+                <div class="ng-title">
+                    <span class="ng-icon">❌</span>
+                    NG例2：列の意味がバラバラ
+                </div>
+                
+                <div class="table-display">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>顧客ID</th>
+                                <th>顧客名</th>
+                                <th>情報</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>001</td>
+                                <td>田中太郎</td>
+                                <td class="problem-cell">東京都渋谷区</td>
+                            </tr>
+                            <tr>
+                                <td>002</td>
+                                <td>鈴木花子</td>
+                                <td class="problem-cell">営業部で働いている</td>
+                            </tr>
+                            <tr>
+                                <td>003</td>
+                                <td>佐藤次郎</td>
+                                <td class="problem-cell">2024年入会</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="problem-explanation">
+                    <div class="problem-title">🚫 何が問題なのか？</div>
+                    <ul style="padding-left: 25px; margin-top: 10px; line-height: 1.8;">
+                        <li>同じ「情報」というカラムなのに、行によって入っている内容の意味が全然違う</li>
+                        <li>田中太郎さんには「住所」、鈴木花子さんには「部署」、佐藤次郎さんには「登録日」</li>
+                        <li>カラムには一貫した意味の値が入っていることが前提</li>
+                    </ul>
+                </div>
+                
+                <div class="solution-box">
+                    <div class="solution-title">
+                        <span class="solution-icon">✅</span>
+                        修正方法：カラムを分けて、意味を統一する
+                    </div>
+                    
+                    <div class="table-display">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>顧客ID</th>
+                                    <th>顧客名</th>
+                                    <th>住所</th>
+                                    <th>部署</th>
+                                    <th>登録日</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>001</td>
+                                    <td>田中太郎</td>
+                                    <td>東京都渋谷区</td>
+                                    <td>NULL</td>
+                                    <td>NULL</td>
+                                </tr>
+                                <tr>
+                                    <td>002</td>
+                                    <td>鈴木花子</td>
+                                    <td>NULL</td>
+                                    <td>営業部</td>
+                                    <td>NULL</td>
+                                </tr>
+                                <tr>
+                                    <td>003</td>
+                                    <td>佐藤次郎</td>
+                                    <td>NULL</td>
+                                    <td>NULL</td>
+                                    <td>2024-01-01</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background: white; border-radius: 8px;">
+                        <strong style="color: #065f46;">💡 ポイント：</strong><br>
+                        情報がない部分は<strong>NULL</strong>（データなし）にしておけばOK。<br>
+                        データベースは空欄があっても問題なく動きますし、むしろ「各カラムの意味が明確」である方が、<br>
+                        後々の検索や集計、システムとの連携がスムーズになります。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- NG例3 -->
+            <div class="ng-example">
+                <div class="ng-title">
+                    <span class="ng-icon">❌</span>
+                    NG例3：1行が「1件」ではなく、複数の意味を持っている
+                </div>
+                
+                <div class="table-display">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>顧客ID</th>
+                                <th>顧客名</th>
+                                <th class="problem-cell">2023年購入額</th>
+                                <th class="problem-cell">2024年購入額</th>
+                                <th class="problem-cell">2025年購入額</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>001</td>
+                                <td>田中太郎</td>
+                                <td class="problem-cell">100,000</td>
+                                <td class="problem-cell">150,000</td>
+                                <td class="problem-cell">200,000</td>
+                            </tr>
+                            <tr>
+                                <td>002</td>
+                                <td>鈴木花子</td>
+                                <td class="problem-cell">80,000</td>
+                                <td class="problem-cell">90,000</td>
+                                <td class="problem-cell">100,000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="problem-explanation">
+                    <div class="problem-title">🚫 何が問題なのか？</div>
+                    <ul style="padding-left: 25px; margin-top: 10px; line-height: 1.8;">
+                        <li>2026年が来たら、また新しいカラムを追加しますか？ 10年経ったら、カラムが10個以上に...</li>
+                        <li>「2024年の購入額が10万円以上の顧客」を検索するとき、年が変わるたびに条件を変える必要がある</li>
+                        <li>時系列データが横（カラム）に展開されているため、柔軟性がない</li>
+                    </ul>
+                </div>
+                
+                <div class="solution-box">
+                    <div class="solution-title">
+                        <span class="solution-icon">✅</span>
+                        修正方法：「1行=1件の購入実績」として再設計
+                    </div>
+                    
+                    <div class="table-display">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>購入実績ID</th>
+                                    <th>顧客ID</th>
+                                    <th>年</th>
+                                    <th>購入額</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>00001</td>
+                                    <td>001</td>
+                                    <td>2023</td>
+                                    <td>100,000</td>
+                                </tr>
+                                <tr>
+                                    <td>00002</td>
+                                    <td>001</td>
+                                    <td>2024</td>
+                                    <td>150,000</td>
+                                </tr>
+                                <tr>
+                                    <td>00003</td>
+                                    <td>001</td>
+                                    <td>2025</td>
+                                    <td>200,000</td>
+                                </tr>
+                                <tr>
+                                    <td>00004</td>
+                                    <td>002</td>
+                                    <td>2023</td>
+                                    <td>80,000</td>
+                                </tr>
+                                <tr>
+                                    <td>00005</td>
+                                    <td>002</td>
+                                    <td>2024</td>
+                                    <td>90,000</td>
+                                </tr>
+                                <tr>
+                                    <td>00006</td>
+                                    <td>002</td>
+                                    <td>2025</td>
+                                    <td>100,000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background: white; border-radius: 8px;">
+                        <strong style="color: #065f46;">💡 メリット：</strong><br>
+                        • 「2024年の購入額が10万円以上」という条件は、「年=2024 AND 購入額>=100,000」というシンプルな検索で実現<br>
+                        • 新しい年が来ても、カラムを追加する必要はなく、新しい行を追加していくだけ<br>
+                        • 時系列データを扱うときは、「1行=1つの時点のデータ」として設計すると扱いやすい
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 15px; padding: 30px; margin-top: 40px; border: 3px solid #f59e0b;">
+                <h3 style="font-size: 1.4em; color: #92400e; margin-bottom: 20px; text-align: center;">
+                    📚 修正の2つの原則
+                </h3>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div style="background: white; border-radius: 10px; padding: 20px;">
+                        <div style="font-size: 1.2em; font-weight: bold; color: #92400e; margin-bottom: 10px;">
+                            原則1
+                        </div>
+                        <div style="color: #78350f; line-height: 1.8;">
+                            <strong>1セル=1つの意味のある値</strong><br><br>
+                            複数の値をスラッシュやカンマで区切って1つのセルに入れない。それぞれ別の行、または別のテーブルに分ける。
+                        </div>
+                    </div>
+                    
+                    <div style="background: white; border-radius: 10px; padding: 20px;">
+                        <div style="font-size: 1.2em; font-weight: bold; color: #92400e; margin-bottom: 10px;">
+                            原則2
+                        </div>
+                        <div style="color: #78350f; line-height: 1.8;">
+                            <strong>1行=1つの「出来事」や「対象」</strong><br><br>
+                            1行が表すものを明確にする。顧客なら1行=1人の顧客。購入実績なら1行=1回の購入。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション5: 実際に手を動かすワーク -->
+        <div class="workshop-section">
+            <h2 class="section-title">✍️ 実際に手を動かすワーク</h2>
+            
+            <div class="workshop-banner">
+                <div class="workshop-banner-title">🎯 さあ、実践してみましょう！</div>
+                <div class="workshop-banner-time">作業時間：10分間</div>
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0; padding: 25px; background: #f9fafb; border-radius: 10px;">
+                <p style="font-size: 1.1em; color: #333; line-height: 1.8;">
+                    動画をここで一度止めていただいて、10分間、<br>
+                    <strong style="color: #0f766e;">ご自身の業務データをテーブルとして設計してみてください。</strong><br><br>
+                    
+                    使うツールは何でも構いません。<br>
+                    紙とペン、Excel、Word、スマホのメモアプリ、Notion、何でもOKです。<br>
+                    大事なのは、<strong>「書き出してみる」</strong>ことです。
+                </p>
+            </div>
+            
+            <h3 style="font-size: 1.4em; color: #0f766e; margin: 40px 0 25px 0; text-align: center;">
+                📝 やること：3つのステップ
+            </h3>
+            
+            <div class="workshop-steps">
+                <div class="workshop-step-card">
+                    <div class="workshop-step-number">1</div>
+                    <div class="workshop-step-title">「1行=何か」を決める</div>
+                    <div class="workshop-step-desc">
+                        自分が扱っているデータの中から1つ選んで、「1行が何を表すか」を決めてください。<br><br>
+                        
+                        • 顧客管理なら「1行=1人の顧客」<br>
+                        • 案件管理なら「1行=1件の案件」<br>
+                        • 予約管理なら「1行=1件の予約」<br><br>
+                        
+                        複数ある場合は、一番よく使うものを1つ選びましょう。
+                    </div>
+                </div>
+                
+                <div class="workshop-step-card">
+                    <div class="workshop-step-number">2</div>
+                    <div class="workshop-step-title">項目を箇条書きにする</div>
+                    <div class="workshop-step-desc">
+                        「1行=何か」が決まったら、その1件について、どんな情報を持っておきたいかを箇条書きにしてください。<br><br>
+                        
+                        <strong>最低でも5項目、できれば10項目くらい</strong>挙げてみるといいでしょう。<br><br>
+                        
+                        すべて日本語で書いて構いません。<br>
+                        今使っているExcelファイルの列見出しをそのまま書き出してもOKです。
+                    </div>
+                </div>
+                
+                <div class="workshop-step-card">
+                    <div class="workshop-step-number">3</div>
+                    <div class="workshop-step-title">主キーとなるIDを決める</div>
+                    <div class="workshop-step-desc">
+                        余裕があれば、このテーブルの主キー、つまり「各行を一意に識別するためのID」も考えてみてください。<br><br>
+                        
+                        「顧客ID」「案件ID」「予約ID」など、「◯◯ID」という名前にすることが多いです。<br><br>
+                        
+                        今のExcelに既にそういうID列があれば、それを主キーとして使えます。
+                    </div>
+                </div>
+            </div>
+            
+            <div class="example-output">
+                <div class="example-output-title">📋 記入例：顧客管理の場合</div>
+                
+                <div class="example-list">
+<strong style="color: #0f766e;">テーブル名:</strong>顧客テーブル(customers)<br>
+<br>
+<strong style="color: #0f766e;">1行=1人の顧客</strong><br>
+<br>
+<strong style="color: #0f766e;">カラム(項目)のリスト:</strong><br>
+1. 顧客ID - 主キー<br>
+2. 顧客名<br>
+3. 会社名<br>
+4. 部署<br>
+5. 役職<br>
+6. メールアドレス<br>
+7. 電話番号<br>
+8. 都道府県<br>
+9. 担当営業<br>
+10. ステータス(見込み/受注/失注)<br>
+11. 初回接触日<br>
+12. 備考
+                </div>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 15px; padding: 30px; margin-top: 30px; text-align: center;">
+                <p style="font-size: 1.15em; color: #78350f; line-height: 2;">
+                    <strong style="font-size: 1.2em; display: block; margin-bottom: 15px;">💡 ワークの心構え</strong>
+                    
+                    完璧である必要はありません。<br>
+                    「これで合っているのかな」と不安に思っても大丈夫です。<br><br>
+                    
+                    まずは書き出してみる。<strong>それがスタートです。</strong><br><br>
+                    
+                    <strong style="color: #f59e0b; font-size: 1.3em;">
+                    それでは、ここで一度動画を止めて、10分間、作業をしてみてください。
+                    </strong>
+                </p>
+            </div>
+        </div>
+        
+        <!-- セクション6: AIデモ -->
+        <div class="ai-demo-section">
+            <h2 class="section-title">🤖 AIにテーブル定義へ変換させるデモ</h2>
+            
+            <div style="text-align: center; margin-bottom: 30px; padding: 20px; background: #f0f9ff; border-radius: 10px;">
+                <p style="font-size: 1.1em; color: #1e3a8a; line-height: 1.8;">
+                    ワークで皆さんが書き出した<strong>「日本語の項目リスト」</strong>を、<br>
+                    AIに渡すと、どんな風に<strong>「データベースのテーブル定義」</strong>に変換してくれるのか。<br><br>
+                    
+                    実際のプロンプトと、AIの出力結果をお見せします。
+                </p>
+            </div>
+            
+            <h3 style="font-size: 1.3em; color: #0f766e; margin: 40px 0 25px 0; text-align: center;">
+                📤 実演プロンプトの例
+            </h3>
+            
+            <div class="prompt-code">
+以下は、ある会社の顧客管理Excelで使っている項目です。
+
+- 顧客名
+- 会社名
+- 部署
+- 役職
+- メールアドレス
+- 電話番号
+- 都道府県
+- 担当営業
+- ステータス(見込み/受注/失注)
+- 備考メモ
+
+これをデータベースの「顧客テーブル」として、
+テーブル名・カラム名(英語)・型・説明を含むテーブル定義書にしてください。
+主キーのカラムも1つ提案してください。
+            </div>
+            
+            <div style="background: #dbeafe; border-radius: 10px; padding: 20px; margin: 20px 0;">
+                <strong style="color: #1e3a8a; display: block; margin-bottom: 10px;">💡 プロンプトのポイント</strong>
+                <ul style="padding-left: 25px; color: #1e40af; line-height: 1.8;">
+                    <li>「〇〇で使っている項目です」という前置きで文脈を伝える</li>
+                    <li>日本語で箇条書きにした項目をそのまま貼り付ける</li>
+                    <li>「カラム名(英語)」と指定することで、AIが英語のカラム名に変換してくれる</li>
+                    <li>「主キーのカラムも1つ提案してください」と追加で依頼する</li>
+                </ul>
+            </div>
+            
+            <div class="ai-flow">
+                <div class="ai-input-box">
+                    <div class="ai-box-title" style="color: #1e3a8a;">📥 INPUT（人間が書いた日本語リスト）</div>
+                    <div class="ai-box-content">
+- 顧客名<br>
+- 会社名<br>
+- 部署<br>
+- 役職<br>
+- メールアドレス<br>
+- 電話番号<br>
+- 都道府県<br>
+- 担当営業<br>
+- ステータス<br>
+- 備考メモ
+                    </div>
+                </div>
+                
+                <div class="ai-arrow">🤖→</div>
+                
+                <div class="ai-output-box">
+                    <div class="ai-box-title" style="color: #065f46;">📤 OUTPUT（AIが生成したテーブル定義書）</div>
+                    <div class="ai-box-content">
+                        <table class="output-table">
+                            <thead>
+                                <tr>
+                                    <th>カラム名</th>
+                                    <th>型</th>
+                                    <th>説明</th>
+                                    <th>制約</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>customer_id</td>
+                                    <td>INT</td>
+                                    <td>顧客ID(主キー)</td>
+                                    <td>PRIMARY KEY, AUTO_INCREMENT</td>
+                                </tr>
+                                <tr>
+                                    <td>name</td>
+                                    <td>VARCHAR(100)</td>
+                                    <td>顧客名</td>
+                                    <td>NOT NULL</td>
+                                </tr>
+                                <tr>
+                                    <td>company_name</td>
+                                    <td>VARCHAR(100)</td>
+                                    <td>会社名</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>department</td>
+                                    <td>VARCHAR(50)</td>
+                                    <td>部署</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>position</td>
+                                    <td>VARCHAR(50)</td>
+                                    <td>役職</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>email</td>
+                                    <td>VARCHAR(100)</td>
+                                    <td>メールアドレス</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>phone</td>
+                                    <td>VARCHAR(20)</td>
+                                    <td>電話番号</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>prefecture</td>
+                                    <td>VARCHAR(20)</td>
+                                    <td>都道府県</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>sales_person</td>
+                                    <td>VARCHAR(50)</td>
+                                    <td>担当営業</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>status</td>
+                                    <td>VARCHAR(20)</td>
+                                    <td>ステータス</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>notes</td>
+                                    <td>TEXT</td>
+                                    <td>備考メモ</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 15px; padding: 30px; margin-top: 30px;">
+                <h3 style="font-size: 1.3em; color: #92400e; margin-bottom: 20px; text-align: center;">
+                    ✨ AIを使うことの意義
+                </h3>
+                
+                <div style="background: white; border-radius: 10px; padding: 25px; line-height: 2; color: #333;">
+                    <strong style="display: block; font-size: 1.15em; color: #0f766e; margin-bottom: 15px;">
+                        「人間側は"何を管理したいか"さえ言語化できれば、AIがデータベースの形にしてくれる」
+                    </strong>
+                    
+                    皆さんは、カラム名を英語で書く必要も、型を決める必要も、制約を考える必要もありません。<br><br>
+                    
+                    まずは、<strong>「こういう情報を持っておきたい」というリストを日本語で作る</strong>。<br>
+                    それをAIに渡せば、あとはAIが整形してくれます。<br><br>
+                    
+                    <strong style="color: #f59e0b;">「ゼロから全部自分で考える」のと、「AIが作った叩き台を見ながら話す」のとでは、<br>
+                    作業のスピードも、議論の質も、まったく違います。</strong>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション7: まとめ -->
+        <div class="summary-section">
+            <h2 class="section-title" style="color: white; border-bottom-color: white;">📝 まとめ</h2>
+            
+            <div class="summary-message">
+                <div class="summary-message-title">🎯 今日のゴール</div>
+                <div class="summary-message-content">
+                    <strong style="font-size: 1.3em; display: block; margin: 20px 0;">
+                        「自分の業務データを<br>
+                        『何を管理したいか』という形で言語化できること」
+                    </strong>
+                    
+                    これができれば、AIの力を借りて、テーブル設計ができます。<br><br>
+                    
+                    そして、このテーブル設計ができれば、<br>
+                    次の第3回で学ぶSQLも、第4回で学ぶAPIも、<br>
+                    すべてこのテーブルを基盤にして理解できるようになります。
+                </div>
+            </div>
+            
+            <div class="takeaway-boxes">
+                <div class="takeaway-box">
+                    <div class="takeaway-box-title">💾 作成した項目リストは保存を</div>
+                    <div class="takeaway-box-content">
+                        今日、皆さんが作った「項目リスト」は、ぜひ大切に保管しておいてください。<br><br>
+                        
+                        この後の講座で、SQLを学んだり、APIを設計したりするときにも、この「自分が設計したテーブル」を使って考えることができます。<br><br>
+                        
+                        また、実際に社内でシステムを導入したり、外注したりするときにも、エンジニアやベンダーとの会話がスムーズになります。
+                    </div>
+                </div>
+                
+                <div class="takeaway-box">
+                    <div class="takeaway-box-title">🚀 次のステップへ</div>
+                    <div class="takeaway-box-content">
+                        余力があれば、他の業務データについても、同じように「1行=何か」「必要なカラムは何か」を考えてみてください。<br><br>
+                        
+                        顧客管理だけでなく、案件管理、在庫管理、勤怠管理、経費精算…<br><br>
+                        
+                        いろいろな業務データを「テーブル」として見る練習をすればするほど、データベース的な思考が身についていきます。
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px; padding: 30px; background: rgba(255,255,255,0.3); border-radius: 15px; backdrop-filter: blur(10px);">
+                <p style="font-size: 1.3em; font-weight: bold; line-height: 2;">
+                    次のセクションでは、<br>
+                    こうして作ったテーブルが、他のテーブルとどう関係するのか、<br>
+                    <strong style="font-size: 1.2em;">「テーブル同士のつながり」</strong>について学んでいきます。
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

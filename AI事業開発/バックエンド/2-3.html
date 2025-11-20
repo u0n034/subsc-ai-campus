@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第2回：主キーとIDの役割 - AIによるバックエンド開発とデータベース講座</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #0f766e;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #14b8a6;
+        }
+        
+        /* セクション1: なぜIDが必要か */
+        .intro-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .problem-examples {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .problem-card {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border: 3px solid #ef4444;
+            border-radius: 15px;
+            padding: 25px;
+        }
+        
+        .problem-icon {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .problem-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #991b1b;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .problem-description {
+            font-size: 0.95em;
+            color: #7f1d1d;
+            line-height: 1.6;
+        }
+        
+        /* セクション2: 図書館の例 */
+        .library-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .library-visual {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+        
+        .library-books {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .book {
+            background: linear-gradient(135deg, #1e7e34 0%, #28a745 100%);
+            color: white;
+            border-radius: 8px;
+            padding: 20px 10px;
+            text-align: center;
+            font-size: 0.85em;
+            position: relative;
+        }
+        
+        .book-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .book-barcode {
+            background: white;
+            color: #333;
+            padding: 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .library-explanation {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        /* セクション3: 主キーの定義 */
+        .definition-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .key-definition {
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            border-radius: 15px;
+            padding: 35px;
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .definition-title {
+            font-size: 1.6em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .definition-content {
+            font-size: 1.2em;
+            line-height: 1.8;
+        }
+        
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .rule-card {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .rule-number {
+            width: 50px;
+            height: 50px;
+            background: #f59e0b;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 0 auto 15px;
+        }
+        
+        .rule-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+        
+        .rule-description {
+            font-size: 0.9em;
+            color: #78350f;
+            line-height: 1.6;
+        }
+        
+        /* セクション4: 具体例 */
+        .examples-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .example-table-container {
+            margin: 30px 0;
+        }
+        
+        .example-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        .example-table th {
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+            border: 1px solid #0f766e;
+        }
+        
+        .primary-key-header {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%) !important;
+            position: relative;
+        }
+        
+        .primary-key-header::after {
+            content: '🔑 主キー';
+            position: absolute;
+            top: -8px;
+            right: 10px;
+            background: #dc2626;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.7em;
+        }
+        
+        .example-table td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+        
+        .example-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .highlight-row {
+            background: #fef3c7 !important;
+            font-weight: bold;
+        }
+        
+        .example-explanation {
+            background: #f0fdfa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+            border-left: 4px solid #14b8a6;
+        }
+        
+        /* セクション5: 失敗例 */
+        .failures-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .failure-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .failure-card {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-radius: 15px;
+            padding: 25px;
+            border: 3px solid #ef4444;
+        }
+        
+        .failure-icon {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .failure-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #991b1b;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .failure-description {
+            font-size: 0.9em;
+            color: #7f1d1d;
+            line-height: 1.6;
+        }
+        
+        .lessons-learned {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            margin-top: 30px;
+        }
+        
+        .lessons-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .lessons-list {
+            font-size: 1.05em;
+            line-height: 2;
+        }
+        
+        /* セクション6: AI活用 */
+        .ai-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .ai-questions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .ai-question-card {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+            border-radius: 15px;
+            padding: 25px;
+            color: white;
+        }
+        
+        .ai-question-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .ai-question-text {
+            font-size: 0.95em;
+            line-height: 1.6;
+            font-style: italic;
+        }
+        
+        .ai-tips {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+        
+        .ai-tips-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 20px;
+        }
+        
+        .ai-tips-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .ai-tip-item {
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .ai-tip-title {
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 5px;
+        }
+        
+        .ai-tip-desc {
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        /* セクション7: ベストプラクティス */
+        .best-practices-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .practices-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .practice-item {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 5px solid #10b981;
+        }
+        
+        .practice-number {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            background: #10b981;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 35px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .practice-title {
+            display: inline;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #0f766e;
+        }
+        
+        .practice-description {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* セクション8: まとめ */
+        .summary-section {
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .summary-box {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .summary-box-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .summary-box-content {
+            font-size: 1em;
+            line-height: 1.8;
+        }
+        
+        .final-metaphor {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .final-metaphor-title {
+            font-size: 1.6em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .final-metaphor-content {
+            font-size: 1.2em;
+            line-height: 2;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 1200px) {
+            .library-books {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+            }
+            
+            .problem-examples {
+                grid-template-columns: 1fr;
+            }
+            
+            .library-books {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .rules-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .failure-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .ai-questions {
+                grid-template-columns: 1fr;
+            }
+            
+            .practices-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">AIによるバックエンド開発とデータベース講座</h1>
+        <div class="subtitle">第2回：主キーとIDの役割</div>
+        
+        <!-- セクション1: なぜIDが必要か -->
+        <div class="intro-section">
+            <h2 class="section-title">❓ なぜ「ID」が必要なのか</h2>
+            
+            <div style="text-align: center; margin-bottom: 30px; padding: 20px; background: #f9fafb; border-radius: 10px;">
+                <p style="font-size: 1.1em; color: #333; line-height: 1.8;">
+                    「同じような情報が複数あって区別できない」という問題は、<br>
+                    データベースの世界でも全く同じように起こります。<br><br>
+                    この問題を解決するために考え出されたのが、<br>
+                    <strong style="font-size: 1.2em; color: #0f766e;">「主キー」と「ID」</strong>という仕組みなのです。
+                </p>
+            </div>
+            
+            <div class="problem-examples">
+                <div class="problem-card">
+                    <div class="problem-icon">👥</div>
+                    <div class="problem-title">同姓同名の問題</div>
+                    <div class="problem-description">
+                        会社の名簿を見ていて、「あれ？田中さんって何人いるんだろう？」<br><br>
+                        同姓同名の人がいて、「どちらの田中さんのことを指しているのか分からない」という状況
+                    </div>
+                </div>
+                
+                <div class="problem-card">
+                    <div class="problem-icon">📦</div>
+                    <div class="problem-title">複数注文の混乱</div>
+                    <div class="problem-description">
+                        お客様から「先日注文した商品について」と言われたとき...<br><br>
+                        「その方、先月だけで3回も注文されているけど、どの注文のことだろう？」と混乱
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション2: 図書館の例 -->
+        <div class="library-section">
+            <h2 class="section-title">📚 日常生活の中のID：図書館の例</h2>
+            
+            <div class="library-visual">
+                <h3 style="font-size: 1.3em; color: #0f766e; margin-bottom: 25px; text-align: center;">
+                    同じタイトルの本が5冊あったら...どう区別する？
+                </h3>
+                
+                <div class="library-books">
+                    <div class="book">
+                        <div class="book-title">吾輩は猫である</div>
+                        <div class="book-barcode">001234</div>
+                    </div>
+                    <div class="book">
+                        <div class="book-title">吾輩は猫である</div>
+                        <div class="book-barcode">005678</div>
+                    </div>
+                    <div class="book">
+                        <div class="book-title">吾輩は猫である</div>
+                        <div class="book-barcode">009012</div>
+                    </div>
+                    <div class="book">
+                        <div class="book-title">吾輩は猫である</div>
+                        <div class="book-barcode">013456</div>
+                    </div>
+                    <div class="book">
+                        <div class="book-title">吾輩は猫である</div>
+                        <div class="book-barcode">017890</div>
+                    </div>
+                </div>
+                
+                <div class="library-explanation">
+                    <p style="font-size: 1.1em; color: #333; line-height: 1.8;">
+                        <strong style="color: #0f766e;">答えは、一冊一冊の本に貼られている「バーコード」！</strong><br><br>
+                        
+                        あのバーコードには、その本固有の番号が振られています。<br>
+                        たとえ全く同じ本が100冊あったとしても、それぞれに<strong>異なる番号</strong>が付いているんです。<br><br>
+                        
+                        これがあるからこそ、「あなたが借りたのは、この番号の本ですよ」<br>
+                        「その本が今返ってきましたよ」ということが正確に管理できるわけです。<br><br>
+                        
+                        <strong style="font-size: 1.15em; color: #0f766e;">
+                        データベースの「主キー」も、まさにこの図書館のバーコード番号と同じ役割を果たしています。
+                        </strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション3: 主キーの定義 -->
+        <div class="definition-section">
+            <h2 class="section-title">🔑 主キー（Primary Key）とは何か</h2>
+            
+            <div class="key-definition">
+                <div class="definition-title">📖 正式な定義</div>
+                <div class="definition-content">
+                    主キー（Primary Key / プライマリーキー）とは、<br>
+                    <strong style="font-size: 1.2em;">テーブルの中の各レコード（各行）を一意に識別するための項目</strong><br><br>
+                    
+                    「一意に識別する」=「他と重複しない」「唯一無二である」<br>
+                    主キーの値を見れば、「あ、これは確実にこのレコードのことだ」と特定できる
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.4em; color: #0f766e; margin: 40px 0 25px 0; text-align: center;">
+                ⚖️ 主キーの3つの重要なルール
+            </h3>
+            
+            <div class="rules-grid">
+                <div class="rule-card">
+                    <div class="rule-number">1</div>
+                    <div class="rule-title">重複してはいけない</div>
+                    <div class="rule-description">
+                        同じ値が2つ以上存在してはいけません。<br>
+                        全てのレコードで異なる値を持つ必要があります。
+                    </div>
+                </div>
+                
+                <div class="rule-card">
+                    <div class="rule-number">2</div>
+                    <div class="rule-title">空(NULL)であってはいけない</div>
+                    <div class="rule-description">
+                        必ず何かしらの値が入っていなければなりません。<br>
+                        「未定」「空欄」というのは許されません。
+                    </div>
+                </div>
+                
+                <div class="rule-card">
+                    <div class="rule-number">3</div>
+                    <div class="rule-title">変更しないことが望ましい</div>
+                    <div class="rule-description">
+                        一度決めた主キーの値は、基本的に変更しない方が良いとされています。
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 40px; padding: 25px; background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border-radius: 10px; text-align: center;">
+                <strong style="display: block; font-size: 1.2em; color: #1e3a8a; margin-bottom: 15px;">
+                    🎯 なぜこんなに厳しいルールがあるのか？
+                </strong>
+                <p style="font-size: 1.05em; color: #333; line-height: 1.8;">
+                    主キーが<strong>「そのレコードの身分証明書」</strong>のような役割を果たすからです。<br>
+                    身分証明書の番号がころころ変わったり、2人が同じ番号を使っていたりしたら、大混乱ですよね。
+                </p>
+            </div>
+        </div>
+        
+        <!-- セクション4: 具体例1 - 社員番号 -->
+        <div class="examples-section">
+            <h2 class="section-title">👔 具体例1：社員番号で考える</h2>
+            
+            <div class="example-table-container">
+                <h3 style="font-size: 1.2em; color: #0f766e; margin-bottom: 20px; text-align: center;">
+                    社員テーブルの例
+                </h3>
+                
+                <table class="example-table">
+                    <thead>
+                        <tr>
+                            <th class="primary-key-header">社員番号</th>
+                            <th>氏名</th>
+                            <th>部署</th>
+                            <th>入社日</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="highlight-row">
+                            <td>1001</td>
+                            <td>田中太郎</td>
+                            <td>営業部</td>
+                            <td>2020-04-01</td>
+                        </tr>
+                        <tr>
+                            <td>1002</td>
+                            <td>佐藤花子</td>
+                            <td>経理部</td>
+                            <td>2019-10-01</td>
+                        </tr>
+                        <tr>
+                            <td>1003</td>
+                            <td>田中次郎</td>
+                            <td>営業部</td>
+                            <td>2021-04-01</td>
+                        </tr>
+                        <tr>
+                            <td>1004</td>
+                            <td>鈴木一郎</td>
+                            <td>開発部</td>
+                            <td>2018-07-15</td>
+                        </tr>
+                        <tr>
+                            <td>1005</td>
+                            <td>田中三郎</td>
+                            <td>営業部</td>
+                            <td>2022-04-01</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="example-explanation">
+                    <strong style="color: #0f766e; font-size: 1.1em;">💡 注目ポイント</strong>
+                    <ul style="margin-top: 10px; padding-left: 20px; line-height: 1.8;">
+                        <li>「田中」という苗字の人が3人もいます</li>
+                        <li>もし社員番号がなかったら、「営業部の田中さん」と言われても、どの田中さんか分からない</li>
+                        <li>でも、<strong>「社員番号1001」</strong>と言えば、確実に田中太郎さんを指定できる</li>
+                        <li>田中太郎さんが結婚して「山田太郎」に改姓しても、社員番号は変わらない</li>
+                        <li>営業部から開発部に異動しても、社員番号は変わらない</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-weight: bold; color: #0f766e;">
+                        → 主キーは「その人そのもの」を表していて、属性（名前や部署）とは独立しています
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション5: 具体例2 - 顧客ID -->
+        <div class="examples-section">
+            <h2 class="section-title">🏢 具体例2：顧客IDと重複の恐怖</h2>
+            
+            <div class="example-table-container">
+                <h3 style="font-size: 1.2em; color: #0f766e; margin-bottom: 20px; text-align: center;">
+                    顧客テーブルの例（同じ名前の顧客が複数！）
+                </h3>
+                
+                <table class="example-table">
+                    <thead>
+                        <tr>
+                            <th class="primary-key-header">顧客ID</th>
+                            <th>顧客名</th>
+                            <th>所在地</th>
+                            <th>電話番号</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>C0001</td>
+                            <td>株式会社サンライズ</td>
+                            <td>東京都渋谷区</td>
+                            <td>03-1234-5678</td>
+                        </tr>
+                        <tr>
+                            <td>C0002</td>
+                            <td>株式会社サンライズ</td>
+                            <td>大阪府大阪市</td>
+                            <td>06-9876-5432</td>
+                        </tr>
+                        <tr>
+                            <td>C0003</td>
+                            <td>田中太郎</td>
+                            <td>神奈川県横浜市</td>
+                            <td>045-111-2222</td>
+                        </tr>
+                        <tr>
+                            <td>C0004</td>
+                            <td>田中太郎</td>
+                            <td>埼玉県さいたま市</td>
+                            <td>048-333-4444</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="example-explanation">
+                    <strong style="color: #0f766e; font-size: 1.1em;">💡 顧客IDがあるメリット</strong>
+                    <ul style="margin-top: 10px; padding-left: 20px; line-height: 1.8;">
+                        <li>たとえ同じ名前の顧客が複数いても、顧客IDが異なれば完全に区別できる</li>
+                        <li>「C0001の顧客に請求書を送る」→ 東京の株式会社サンライズを間違いなく指定</li>
+                        <li>「C0003の顧客が注文した商品」→ 横浜の田中太郎さんのことだと確実に分かる</li>
+                    </ul>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background: #fee2e2; border-radius: 8px; border-left: 4px solid #ef4444;">
+                        <strong style="color: #991b1b;">⚠️ これがないと、どうなる？</strong>
+                        <ul style="margin-top: 10px; padding-left: 20px; color: #7f1d1d;">
+                            <li>間違った顧客に請求書を送ってしまう</li>
+                            <li>別の顧客の注文履歴を見てしまう</li>
+                            <li>個人情報が混ざってしまう</li>
+                        </ul>
+                        <p style="margin-top: 10px; font-weight: bold; color: #991b1b;">
+                            恐ろしいですよね。特に、個人情報保護が重要視される現代では、<br>
+                            顧客を取り違えるというのは絶対に避けなければならないミスです。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション6: 具体例3 - 注文ID -->
+        <div class="examples-section">
+            <h2 class="section-title">📦 具体例3：注文IDと時系列の管理</h2>
+            
+            <div class="example-table-container">
+                <h3 style="font-size: 1.2em; color: #0f766e; margin-bottom: 20px; text-align: center;">
+                    注文テーブルの例（同じ顧客が複数回注文、同じ商品も購入）
+                </h3>
+                
+                <table class="example-table">
+                    <thead>
+                        <tr>
+                            <th class="primary-key-header">注文ID</th>
+                            <th>顧客ID</th>
+                            <th>注文日</th>
+                            <th>商品</th>
+                            <th>金額</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>O00001</td>
+                            <td>C0001</td>
+                            <td>2024-01-15</td>
+                            <td>ノートPC</td>
+                            <td>120,000円</td>
+                        </tr>
+                        <tr>
+                            <td>O00002</td>
+                            <td>C0003</td>
+                            <td>2024-01-16</td>
+                            <td>マウス</td>
+                            <td>2,000円</td>
+                        </tr>
+                        <tr>
+                            <td>O00003</td>
+                            <td>C0001</td>
+                            <td>2024-01-20</td>
+                            <td>モニター</td>
+                            <td>30,000円</td>
+                        </tr>
+                        <tr>
+                            <td>O00004</td>
+                            <td>C0003</td>
+                            <td>2024-01-25</td>
+                            <td>キーボード</td>
+                            <td>5,000円</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td>O00005</td>
+                            <td>C0001</td>
+                            <td>2024-02-01</td>
+                            <td>ノートPC</td>
+                            <td>120,000円</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="example-explanation">
+                    <strong style="color: #0f766e; font-size: 1.1em;">💡 注文IDのメリット</strong>
+                    <ul style="margin-top: 10px; padding-left: 20px; line-height: 1.8;">
+                        <li>顧客ID「C0001」が3回も注文している。しかもO00001とO00005は同じ商品・同じ金額</li>
+                        <li>「C0001の顧客のノートPCの注文について」→ どちらの注文か分からない！</li>
+                        <li>でも「<strong>注文ID O00001</strong>」と言えば、1月15日の注文だと明確</li>
+                        <li>注文IDは時系列順に振られるので、番号を見ただけで古い/新しいがおおよそ分かる</li>
+                        <li>お客様が「先週注文した商品がまだ届かない」→「注文ID O00004ですね」とすぐ特定</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション7: 失敗例 -->
+        <div class="failures-section">
+            <h2 class="section-title">⚠️ 重複しないIDの大切さ：失敗例から学ぶ</h2>
+            
+            <div class="failure-cards">
+                <div class="failure-card">
+                    <div class="failure-icon">❌</div>
+                    <div class="failure-title">失敗例1：手動で番号を振って重複</div>
+                    <div class="failure-description">
+                        人事担当者のAさんとBさんが、それぞれ別々に新入社員の登録をしていたところ、同じ「1020」という社員番号を別々の人に割り振ってしまいました。<br><br>
+                        
+                        <strong>結果：</strong><br>
+                        給与システムが混乱し、一方の社員に両方の給与が振り込まれ、もう一方の社員には給与が振り込まれないという事態が発生。
+                    </div>
+                </div>
+                
+                <div class="failure-card">
+                    <div class="failure-icon">🔄</div>
+                    <div class="failure-title">失敗例2：削除した番号を再利用</div>
+                    <div class="failure-description">
+                        あるECサイトで、顧客が退会すると顧客IDを削除し、その番号を新しい顧客に再利用していました。<br><br>
+                        
+                        <strong>結果：</strong><br>
+                        退会した顧客の過去の注文履歴が、新しい顧客に紐づいてしまい、全く関係ない人の購入履歴が表示されるという問題が発生。
+                    </div>
+                </div>
+                
+                <div class="failure-card">
+                    <div class="failure-icon">🏷️</div>
+                    <div class="failure-title">失敗例3：意味のある番号を主キーに</div>
+                    <div class="failure-description">
+                        ある会社で、商品コードを「カテゴリー番号 + 連番」という形式にしていました。例えば、「家電は1000番台、食品は2000番台」。<br><br>
+                        
+                        <strong>結果：</strong><br>
+                        ある商品が「家電」から「生活雑貨」にカテゴリー変更されることになり、商品コードも変更。すると、過去の注文履歴やレビューが全て紐づかなくなり、データが断絶。
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lessons-learned">
+                <div class="lessons-title">📚 失敗例から学ぶ3つの教訓</div>
+                <div class="lessons-list">
+                    <strong>1. 主キーは絶対に重複させてはいけない</strong><br>
+                    → システムが自動で番号を振るようにする<br><br>
+                    
+                    <strong>2. 一度割り振った主キーは変更してはいけない</strong><br>
+                    → データの継続性を保つために不変にする<br><br>
+                    
+                    <strong>3. 主キーには意味を持たせてはいけない</strong><br>
+                    → 単なる識別番号として扱う（カテゴリーや地域などの意味を込めない）
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション8: AI活用 -->
+        <div class="ai-section">
+            <h2 class="section-title">🤖 AIに質問してみよう</h2>
+            
+            <div style="text-align: center; margin-bottom: 30px; padding: 20px; background: #f9fafb; border-radius: 10px;">
+                <p style="font-size: 1.1em; color: #333; line-height: 1.8;">
+                    「まだ少し難しいな」「もっと違う言葉で聞きたいな」と思った方もいるかもしれません。<br>
+                    そんなときは、<strong style="color: #8b5cf6;">AIに質問してみましょう！</strong><br>
+                    AIは、同じ概念を様々な角度から、様々な言葉で説明してくれます。
+                </p>
+            </div>
+            
+            <div class="ai-questions">
+                <div class="ai-question-card">
+                    <div class="ai-question-number">質問例 1</div>
+                    <div class="ai-question-text">
+                        「データベースの主キーとは何ですか？小学生にも分かるように、身近な例えを使って説明してください」
+                    </div>
+                </div>
+                
+                <div class="ai-question-card">
+                    <div class="ai-question-number">質問例 2</div>
+                    <div class="ai-question-text">
+                        「主キーがないとどんな問題が起きますか？具体的な失敗例を3つ教えてください」
+                    </div>
+                </div>
+                
+                <div class="ai-question-card">
+                    <div class="ai-question-number">質問例 3</div>
+                    <div class="ai-question-text">
+                        「顧客管理システムで、顧客IDを主キーにする利点を5つ挙げてください」
+                    </div>
+                </div>
+            </div>
+            
+            <div class="ai-tips">
+                <div class="ai-tips-title">💡 AIに質問するときの4つのコツ</div>
+                
+                <ul class="ai-tips-list">
+                    <li class="ai-tip-item">
+                        <div class="ai-tip-title">1. 「〜にも分かるように」という表現を使う</div>
+                        <div class="ai-tip-desc">
+                            「小学生にも」「全くの初心者にも」と指定すると、専門用語を避けた説明をしてくれます
+                        </div>
+                    </li>
+                    
+                    <li class="ai-tip-item">
+                        <div class="ai-tip-title">2. 「具体例を挙げて」と依頼する</div>
+                        <div class="ai-tip-desc">
+                            抽象的な説明だけでなく、実際の例を出してもらうと理解が深まります
+                        </div>
+                    </li>
+                    
+                    <li class="ai-tip-item">
+                        <div class="ai-tip-title">3. 「5つ挙げて」など数を指定する</div>
+                        <div class="ai-tip-desc">
+                            複数の視点から説明してもらえるので、理解が多角的になります
+                        </div>
+                    </li>
+                    
+                    <li class="ai-tip-item">
+                        <div class="ai-tip-title">4. 自分の業務に関連付けて質問する</div>
+                        <div class="ai-tip-desc">
+                            「飲食店の予約管理システムでは？」「製造業の在庫管理では？」など、自分の業界に当てはめて聞くと、より実践的な理解ができます
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- セクション9: ベストプラクティス -->
+        <div class="best-practices-section">
+            <h2 class="section-title">✨ 主キー設計のベストプラクティス</h2>
+            <p style="text-align: center; margin-bottom: 30px; font-size: 1.1em; color: #666;">
+                実務で主キーを設計するときの「良いやり方」をまとめます
+            </p>
+            
+            <div class="practices-grid">
+                <div class="practice-item">
+                    <span class="practice-number">1</span>
+                    <span class="practice-title">単純な連番IDを使う</span>
+                    <div class="practice-description">
+                        できるだけシンプルに、1から始まる連番を使いましょう。複雑な採番ルールは避けるのが無難です。
+                    </div>
+                </div>
+                
+                <div class="practice-item">
+                    <span class="practice-number">2</span>
+                    <span class="practice-title">自動採番にする</span>
+                    <div class="practice-description">
+                        データベースの「AUTO INCREMENT」機能などを使って、システムに自動的に番号を振らせましょう。人間が手動で割り振ると、ミスが起きやすくなります。
+                    </div>
+                </div>
+                
+                <div class="practice-item">
+                    <span class="practice-number">3</span>
+                    <span class="practice-title">意味を持たせない</span>
+                    <div class="practice-description">
+                        「1000番台は東京、2000番台は大阪」といった意味付けは避けましょう。単なる識別番号として扱います。
+                    </div>
+                </div>
+                
+                <div class="practice-item">
+                    <span class="practice-number">4</span>
+                    <span class="practice-title">絶対に変更しない</span>
+                    <div class="practice-description">
+                        一度割り振ったIDは、どんな理由があっても変更しないようにしましょう。
+                    </div>
+                </div>
+                
+                <div class="practice-item">
+                    <span class="practice-number">5</span>
+                    <span class="practice-title">削除した番号は再利用しない</span>
+                    <div class="practice-description">
+                        退会した顧客のIDや、削除した商品のIDは、欠番のままにしておきましょう。再利用すると、過去のデータとの紐付けが混乱します。
+                    </div>
+                </div>
+                
+                <div class="practice-item">
+                    <span class="practice-number">6</span>
+                    <span class="practice-title">十分な桁数を確保する</span>
+                    <div class="practice-description">
+                        将来のデータ増加を見越して、十分な桁数を確保しておきましょう。例えば、顧客が100人程度の会社でも、顧客IDは5桁や6桁にしておくと安心です。
+                    </div>
+                </div>
+                
+                <div class="practice-item">
+                    <span class="practice-number">7</span>
+                    <span class="practice-title">プレフィックスを付けることもある</span>
+                    <div class="practice-description">
+                        顧客IDに「C」、注文IDに「O」など、頭文字を付けることで、一目でどのテーブルのIDか分かるようにすることもあります。ただし、これは必須ではありません。
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション10: まとめ -->
+        <div class="summary-section">
+            <h2 class="section-title" style="color: white; border-bottom-color: white;">📝 まとめ</h2>
+            
+            <div class="summary-grid">
+                <div class="summary-box">
+                    <div class="summary-box-title">🔑 主キーがあることで</div>
+                    <div class="summary-box-content">
+                        • 同姓同名の人でも確実に区別できる<br>
+                        • データの取り違えを防げる<br>
+                        • システムが正確に動作する<br>
+                        • 過去のデータを確実に追跡できる
+                    </div>
+                </div>
+                
+                <div class="summary-box">
+                    <div class="summary-box-title">⚖️ 主キーの重要なルール</div>
+                    <div class="summary-box-content">
+                        • 重複してはいけない<br>
+                        • 空(NULL)であってはいけない<br>
+                        • 変更しないことが望ましい<br>
+                        • 意味を持たせないことが望ましい
+                    </div>
+                </div>
+            </div>
+            
+            <div class="final-metaphor">
+                <div class="final-metaphor-title">🏠 主キーは「データの住所」</div>
+                <div class="final-metaphor-content">
+                    主キーとは、テーブルの各レコードを一意に識別するための項目です。<br>
+                    いわば、各データの<strong>「住所」「身分証明書番号」</strong>のようなものです。<br><br>
+                    
+                    実務では、「顧客ID」「注文ID」「社員ID」など、<br>
+                    シンプルな連番のIDを主キーとして使うことが最も一般的です。<br><br>
+                    
+                    皆さんが今使っている業務システムや会社のデータベースにも、<br>
+                    必ずこうした主キー・IDが使われているはずです。<br><br>
+                    
+                    <strong style="font-size: 1.15em;">「なぜこの項目に番号が振られているのか」<br>
+                    「この番号は何のためにあるのか」</strong><br><br>
+                    
+                    そう考えると、データベースの設計思想が見えてきます。
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

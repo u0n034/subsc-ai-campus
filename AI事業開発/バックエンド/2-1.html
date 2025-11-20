@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第2回：オープニング＆前回の振り返り - AIによるバックエンド開発とデータベース講座</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #0f766e;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #14b8a6;
+        }
+        
+        /* セクション1: 前回の振り返り */
+        .review-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .review-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .review-card {
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            text-align: center;
+        }
+        
+        .review-icon {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+        }
+        
+        .review-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .review-content {
+            font-size: 0.95em;
+            line-height: 1.8;
+        }
+        
+        .key-insight {
+            background: linear-gradient(135d, #fef3c7 0%, #fde68a 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .key-insight-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 15px;
+        }
+        
+        .key-insight-content {
+            font-size: 1.1em;
+            color: #78350f;
+            line-height: 1.8;
+        }
+        
+        /* セクション2: 今日のゴール */
+        .goals-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .goal-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .goal-header {
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            padding: 30px;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+        
+        .goal-number {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+            margin: 0 auto 15px;
+        }
+        
+        .goal-title {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        .goal-content {
+            background: white;
+            padding: 25px;
+        }
+        
+        .goal-description {
+            font-size: 1em;
+            color: #333;
+            line-height: 1.8;
+        }
+        
+        .reassurance-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .reassurance-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 15px;
+        }
+        
+        .reassurance-content {
+            font-size: 1.05em;
+            color: #333;
+            line-height: 1.8;
+        }
+        
+        /* セクション3: 今日のテーマの核心 */
+        .theme-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .theme-core {
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            border-radius: 15px;
+            padding: 40px;
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .theme-core-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .theme-core-content {
+            font-size: 1.2em;
+            line-height: 1.8;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 80px 1fr;
+            gap: 0;
+            align-items: center;
+            margin-top: 30px;
+        }
+        
+        .comparison-box {
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .excel-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 3px solid #3b82f6;
+        }
+        
+        .database-box {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border: 3px solid #10b981;
+        }
+        
+        .comparison-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .comparison-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+        
+        .comparison-description {
+            font-size: 0.95em;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .arrow-between {
+            text-align: center;
+            font-size: 3em;
+            color: #14b8a6;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .benefit-item {
+            background: #f9fafb;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #14b8a6;
+        }
+        
+        .benefit-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .benefit-title {
+            font-size: 1.05em;
+            font-weight: bold;
+            color: #0f766e;
+            margin-bottom: 10px;
+        }
+        
+        .benefit-text {
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* セクション4: AIとの協働 */
+        .ai-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .ai-intro {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+            border-radius: 15px;
+            padding: 35px;
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .ai-intro-title {
+            font-size: 1.6em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .ai-intro-content {
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+        
+        .before-after-ai {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .before-ai {
+            background: #f5f5f5;
+            border: 3px dashed #999;
+            border-radius: 15px;
+            padding: 30px;
+        }
+        
+        .after-ai {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+        }
+        
+        .ba-ai-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .ba-ai-content {
+            font-size: 1em;
+            line-height: 1.8;
+        }
+        
+        .before-ai .ba-ai-title {
+            color: #666;
+        }
+        
+        .before-ai .ba-ai-content {
+            color: #666;
+        }
+        
+        .common-language-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+        
+        .common-language-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .common-language-content {
+            font-size: 1.05em;
+            color: #78350f;
+            line-height: 1.8;
+            text-align: center;
+        }
+        
+        /* セクション5: 今日の流れ */
+        .flow-section {
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .flow-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .flow-step {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        
+        .flow-step-number {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 0 auto 15px;
+        }
+        
+        .flow-step-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        
+        .flow-step-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .flow-step-content {
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        
+        .final-message {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .final-message-content {
+            font-size: 1.2em;
+            line-height: 2;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 1200px) {
+            .review-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .flow-steps {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+            }
+            
+            .goals-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .comparison {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .arrow-between {
+                transform: rotate(90deg);
+            }
+            
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .before-after-ai {
+                grid-template-columns: 1fr;
+            }
+            
+            .flow-steps {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">AIによるバックエンド開発とデータベース講座</h1>
+        <div class="subtitle">第2回：データベースとは？業務データを「表」にしてみる</div>
+        
+        <!-- セクション1: 前回の振り返り -->
+        <div class="review-section">
+            <h2 class="section-title">📚 前回の振り返り</h2>
+            <p style="font-size: 1.1em; color: #333; text-align: center; margin-bottom: 30px;">
+                第1回で学んだ重要なポイントを確認しましょう
+            </p>
+            
+            <div class="review-grid">
+                <div class="review-card">
+                    <div class="review-icon">🎨⚙️</div>
+                    <div class="review-title">フロントエンド<br>vs<br>バックエンド</div>
+                    <div class="review-content">
+                        <strong>フロントエンド：</strong><br>
+                        ユーザーの目に見える部分<br>
+                        画面、ボタン、入力フォーム<br><br>
+                        
+                        <strong>バックエンド：</strong><br>
+                        裏側で動いている処理<br>
+                        保存、計算、検索など<br>
+                        「見えない心臓部」
+                    </div>
+                </div>
+                
+                <div class="review-card">
+                    <div class="review-icon">🏗️</div>
+                    <div class="review-title">3層構造</div>
+                    <div class="review-content">
+                        <strong>クライアント</strong><br>
+                        ↓ リクエスト<br>
+                        <strong>サーバー</strong><br>
+                        ↓ 問い合わせ<br>
+                        <strong>データベース</strong><br>
+                        ↑ データ返却<br><br>
+                        
+                        この一連の流れが<br>
+                        わずか数秒で完了
+                    </div>
+                </div>
+                
+                <div class="review-card">
+                    <div class="review-icon">💪</div>
+                    <div class="review-title">バックエンドの役割</div>
+                    <div class="review-content">
+                        表に出てくる華やかな部分だけでなく、<br>
+                        裏側でしっかりとした仕組みが動いている<br><br>
+                        
+                        <strong>入力した情報が<br>
+                        「どこかに保存」されている</strong><br><br>
+                        
+                        その場所こそが...<br>
+                        <strong style="font-size: 1.2em;">データベース！</strong>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="key-insight">
+                <div class="key-insight-title">💡 前回の重要な気づき</div>
+                <div class="key-insight-content">
+                    入力した情報が「どこかに保存されている」、過去の履歴が「どこかから呼び出されている」<br><br>
+                    その「どこか」が、今日のテーマである<strong style="font-size: 1.2em;">「データベース」</strong>なのです
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション2: 今日のゴール -->
+        <div class="goals-section">
+            <h2 class="section-title">🎯 今日の3つのゴール</h2>
+            
+            <div class="goals-grid">
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <div class="goal-number">1</div>
+                        <div class="goal-title">基本用語を<br>説明できる</div>
+                    </div>
+                    <div class="goal-content">
+                        <div class="goal-description">
+                            <strong>テーブル、レコード、カラム</strong>を説明できるようになる<br><br>
+                            
+                            これらはデータベースを語る上で欠かせない基本用語です。<br><br>
+                            
+                            今日の講座が終わる頃には、これらの言葉を使って、他の人にデータベースの構造を説明できるようになります。
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <div class="goal-number">2</div>
+                        <div class="goal-title">業務データを<br>設計できる</div>
+                    </div>
+                    <div class="goal-content">
+                        <div class="goal-description">
+                            <strong>「1行=1件のデータ」として設計</strong>できるようになる<br><br>
+                            
+                            顧客情報、案件情報、在庫情報など、日頃Excelで管理しているデータを、データベースの「テーブル」として整理し直す感覚を身につけます。
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <div class="goal-number">3</div>
+                        <div class="goal-title">テーブル間の<br>つながりを理解</div>
+                    </div>
+                    <div class="goal-content">
+                        <div class="goal-description">
+                            <strong>テーブル同士のつながり</strong>のイメージを持てるようになる<br><br>
+                            
+                            「顧客」と「注文」、「社員」と「部署」など、複数のテーブルがどのように関連し合っているのか、基本的なイメージを掴みます。
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="reassurance-box">
+                <div class="reassurance-title">😊 安心してください！</div>
+                <div class="reassurance-content">
+                    <strong>今日は、まだSQLもコードも書きません。</strong><br><br>
+                    
+                    今日の焦点は、あくまでも<strong>「表として整理する力」</strong>に集中します。<br>
+                    「データベースとは何か」「業務データをどう整理すればいいのか」という<strong>「考え方」</strong>の部分です。<br><br>
+                    
+                    実際にSQLを使ってデータを操作するのは、次回の第3回からになります。<br><br>
+                    
+                    <strong style="font-size: 1.15em;">リラックスして、「これなら自分にもできそうだ」と思いながら学んでください！</strong>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション3: 今日のテーマの核心 -->
+        <div class="theme-section">
+            <h2 class="section-title">🎯 今日のテーマの核心</h2>
+            
+            <div class="theme-core">
+                <div class="theme-core-title">📊 今日のテーマを一言で言うなら</div>
+                <div class="theme-core-content">
+                    <strong style="font-size: 1.3em;">
+                        「Excelで管理している業務データを、<br>
+                        データベースの『表』として考えてみる」
+                    </strong>
+                </div>
+            </div>
+            
+            <div class="comparison">
+                <div class="comparison-box excel-box">
+                    <div class="comparison-icon">📊</div>
+                    <div class="comparison-title">Excel の「表」</div>
+                    <div class="comparison-description">
+                        日々の業務で使い慣れている<br><br>
+                        • 顧客リストを作る<br>
+                        • 営業案件を管理<br>
+                        • 予約状況を記録<br><br>
+                        身近なツール
+                    </div>
+                </div>
+                
+                <div class="arrow-between">≈</div>
+                
+                <div class="comparison-box database-box">
+                    <div class="comparison-icon">🗄️</div>
+                    <div class="comparison-title">データベースの「テーブル」</div>
+                    <div class="comparison-description">
+                        とてもよく似ている！<br><br>
+                        ただし、データベースには<br>
+                        データベースならではの<br>
+                        「お作法」や「メリット」がある
+                    </div>
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.4em; color: #0f766e; margin: 40px 0 25px 0; text-align: center;">
+                💡 データベースを理解することで変わること
+            </h3>
+            
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon">⚡</div>
+                    <div class="benefit-title">高速検索</div>
+                    <div class="benefit-text">
+                        何万件、何十万件というデータでも、一瞬で目的の情報を取り出せる
+                    </div>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon">👥</div>
+                    <div class="benefit-title">同時アクセス</div>
+                    <div class="benefit-text">
+                        複数の人が同時にデータにアクセスしても、混乱が起きにくい
+                    </div>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon">🔗</div>
+                    <div class="benefit-title">システム連携</div>
+                    <div class="benefit-text">
+                        バックエンドのシステムと連携して、自動でデータを読み書きできる
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px; padding: 25px; background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border-radius: 10px;">
+                <strong style="display: block; font-size: 1.2em; color: #1e3a8a; margin-bottom: 15px; text-align: center;">
+                    📌 データベースを理解することは...
+                </strong>
+                <div style="font-size: 1.05em; color: #333; line-height: 1.8; text-align: center;">
+                    業務の効率化やシステム化を考える上で、<strong>非常に重要な第一歩</strong>なのです。<br><br>
+                    
+                    そして、その第一歩を踏み出すために必要なのが、<br>
+                    今日学ぶ<strong>「テーブル、レコード、カラム」</strong>という基本概念であり、<br>
+                    <strong>「主キー」</strong>という仕組みであり、<br>
+                    <strong>「テーブル同士のつながり」</strong>というイメージなのです。
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション4: AIとの協働 -->
+        <div class="ai-section">
+            <h2 class="section-title">🤖 AIとの協働という視点</h2>
+            
+            <div class="ai-intro">
+                <div class="ai-intro-title">💡 今日の講座を通じて意識していただきたいこと</div>
+                <div class="ai-intro-content">
+                    <strong style="font-size: 1.2em;">「AIと一緒にデータベースを考える」</strong>という視点<br><br>
+                    
+                    もしかしたら「データベース設計なんて、専門知識がないとできないんじゃないか」と思われているかもしれません。<br>
+                    確かに、従来はそうでした。<br><br>
+                    
+                    しかし、<strong>今はAIの時代</strong>です。
+                </div>
+            </div>
+            
+            <div class="before-after-ai">
+                <div class="before-ai">
+                    <div class="ba-ai-title">📚 従来</div>
+                    <div class="ba-ai-content">
+                        データベースの設計には、専門的な知識や経験が必要とされてきました。<br><br>
+                        
+                        非エンジニアには、ハードルが高かった...
+                    </div>
+                </div>
+                
+                <div class="after-ai">
+                    <div class="ba-ai-title">✨ AI時代</div>
+                    <div class="ba-ai-content">
+                        ChatGPTをはじめとする生成AIを使えば、日本語で「こういうデータを管理したい」と伝えるだけで、<br><br>
+                        
+                        <strong>• AIがテーブルの設計案を提示</strong><br>
+                        <strong>• 「主キーはこれがいいですよ」と提案</strong><br>
+                        <strong>• 「このカラムを追加したほうがいいですよ」とアドバイス</strong><br><br>
+                        
+                        非エンジニアでも、AIの力を借りることで、十分にデータベース設計に関わることができます！
+                    </div>
+                </div>
+            </div>
+            
+            <div class="common-language-box">
+                <div class="common-language-title">🔑 ただし、最低限の「共通言語」が必要</div>
+                <div class="common-language-content">
+                    AIに指示を出すにも、AIの提案を理解するにも、<br>
+                    「テーブルとは何か」「主キーとは何か」といった<br>
+                    <strong>基本的な用語や概念を知っておく必要があります。</strong><br><br>
+                    
+                    <strong style="font-size: 1.15em;">今日の講座は、まさにその「共通言語」を身につけるための時間です。</strong>
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px; padding: 30px; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-radius: 15px;">
+                <h3 style="font-size: 1.3em; color: #1e3a8a; margin-bottom: 20px; text-align: center;">
+                    🎯 今日学べば、明日から...
+                </h3>
+                <div style="font-size: 1.05em; color: #333; line-height: 1.8;">
+                    <strong>AIに自信を持って質問できる：</strong><br>
+                    「顧客テーブルを作りたいんだけど、どんなカラムが必要？」<br><br>
+                    
+                    <strong>AIの回答を理解して判断できる：</strong><br>
+                    「なるほど、この設計は理にかなっているな」<br>
+                    「いや、うちの業務にはこの項目も必要だな」<br><br>
+                    
+                    <strong style="font-size: 1.15em; color: #0f766e;">こうした対話ができるようになります！</strong>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション5: 今日の流れ -->
+        <div class="flow-section">
+            <h2 class="section-title" style="color: white; border-bottom-color: white;">📋 今日の講座の流れ</h2>
+            
+            <div class="flow-steps">
+                <div class="flow-step">
+                    <div class="flow-step-number">1</div>
+                    <div class="flow-step-icon">📊</div>
+                    <div class="flow-step-title">データベースとExcelの違い</div>
+                    <div class="flow-step-content">
+                        「テーブル」「レコード」「カラム」という3つの基本用語を、身近な例を使ってしっかりと理解
+                    </div>
+                </div>
+                
+                <div class="flow-step">
+                    <div class="flow-step-number">2</div>
+                    <div class="flow-step-icon">🔑</div>
+                    <div class="flow-step-title">主キーとは何か</div>
+                    <div class="flow-step-content">
+                        データベースの中で1行1行を一意に特定するための「背番号」のようなもの。これがないと区別がつかない
+                    </div>
+                </div>
+                
+                <div class="flow-step">
+                    <div class="flow-step-number">3</div>
+                    <div class="flow-step-icon">✏️</div>
+                    <div class="flow-step-title">実践ワーク</div>
+                    <div class="flow-step-content">
+                        自分の業務データ（顧客管理、案件管理など）を思い浮かべながら、「テーブル」として整理し直す体験
+                    </div>
+                </div>
+                
+                <div class="flow-step">
+                    <div class="flow-step-number">4</div>
+                    <div class="flow-step-icon">🔗</div>
+                    <div class="flow-step-title">テーブル間のつながり</div>
+                    <div class="flow-step-content">
+                        「1対多」や「多対多」といった関係性について、基本的なイメージを理解。ER図も登場
+                    </div>
+                </div>
+            </div>
+            
+            <div class="final-message">
+                <div class="final-message-content">
+                    今日の講座が終わる頃には、<br>
+                    データベースというものが、決して遠い世界の話ではなく、<br>
+                    <strong style="font-size: 1.3em;">みなさんの日々の業務と密接につながっているもの</strong><br>
+                    だと実感していただけるはずです。<br><br>
+                    
+                    <strong style="font-size: 1.4em;">それでは、さっそく本編に入っていきましょう！</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

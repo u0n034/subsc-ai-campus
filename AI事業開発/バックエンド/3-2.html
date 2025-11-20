@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第3回：SQLって何をするもの？ - AIによるバックエンド開発とデータベース講座</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #7c3aed;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #a78bfa;
+        }
+        
+        /* SQLの位置づけ */
+        .position-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .system-architecture {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr auto 1fr;
+            align-items: center;
+            gap: 30px;
+            margin: 40px 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 15px;
+        }
+        
+        .layer-box {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .layer-frontend {
+            border: 4px solid #3b82f6;
+        }
+        
+        .layer-backend {
+            border: 4px solid #10b981;
+        }
+        
+        .layer-database {
+            border: 4px solid #f59e0b;
+        }
+        
+        .layer-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .layer-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .layer-desc {
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .connection-arrow {
+            font-size: 2.5em;
+            color: #7c3aed;
+            font-weight: bold;
+        }
+        
+        .sql-highlight {
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 0 10px;
+            box-shadow: 0 3px 10px rgba(124,58,237,0.3);
+        }
+        
+        .communication-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .communication-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 20px;
+        }
+        
+        .communication-content {
+            font-size: 1.1em;
+            color: #78350f;
+            line-height: 2;
+        }
+        
+        /* SQLとは */
+        .what-is-sql-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .sql-definition {
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            border-radius: 15px;
+            padding: 40px;
+            color: white;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .sql-full-name {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .sql-abbreviation {
+            font-size: 1.2em;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        .sql-simple-explanation {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .simple-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .simple-content {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+        
+        .key-point-box {
+            background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
+            border-radius: 15px;
+            padding: 35px;
+            margin-top: 30px;
+            border: 3px solid #ef4444;
+        }
+        
+        .key-point-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #991b1b;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .key-point-content {
+            font-size: 1.1em;
+            color: #7f1d1d;
+            line-height: 2;
+            text-align: center;
+        }
+        
+        /* 4つの基本命令 */
+        .commands-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .commands-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .command-card {
+            background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+            border-radius: 15px;
+            padding: 35px;
+            text-align: center;
+            border: 4px solid #7c3aed;
+            position: relative;
+        }
+        
+        .command-card.select {
+            border-color: #3b82f6;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+        }
+        
+        .command-card.insert {
+            border-color: #10b981;
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        }
+        
+        .command-card.update {
+            border-color: #f59e0b;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        }
+        
+        .command-card.delete {
+            border-color: #ef4444;
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        }
+        
+        .command-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        
+        .command-name {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .command-name.select { color: #1e3a8a; }
+        .command-name.insert { color: #065f46; }
+        .command-name.update { color: #92400e; }
+        .command-name.delete { color: #991b1b; }
+        
+        .command-japanese {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+        
+        .command-desc {
+            font-size: 1em;
+            line-height: 1.8;
+        }
+        
+        .command-example {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 0.9em;
+            font-style: italic;
+            text-align: left;
+        }
+        
+        .most-important {
+            background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+            color: white;
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+            box-shadow: 0 3px 10px rgba(59,130,246,0.5);
+        }
+        
+        .usage-note {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+        
+        .usage-note-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .usage-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+        
+        .usage-box {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+        }
+        
+        .usage-box-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .usage-select { color: #1e3a8a; }
+        .usage-others { color: #991b1b; }
+        
+        .usage-content {
+            font-size: 0.95em;
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        /* AIデモ */
+        .ai-demo-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .demo-intro {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.15em;
+            color: #333;
+            line-height: 2;
+        }
+        
+        .prompt-box {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .prompt-label {
+            color: #fbbf24;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        
+        .prompt-text {
+            font-size: 1em;
+            line-height: 1.8;
+        }
+        
+        .ai-response {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 3px solid #10b981;
+        }
+        
+        .response-label {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #065f46;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .response-content {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            line-height: 2;
+            color: #333;
+        }
+        
+        .analogy-item {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f0fdfa;
+            border-radius: 8px;
+            border-left: 4px solid #14b8a6;
+        }
+        
+        .analogy-command {
+            font-weight: bold;
+            color: #0f766e;
+        }
+        
+        /* まとめ */
+        .summary-section {
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            border-radius: 20px;
+            padding: 50px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .summary-points {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 35px;
+            backdrop-filter: blur(10px);
+            margin: 30px 0;
+        }
+        
+        .summary-point {
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+        
+        .reminder-box {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 35px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .reminder-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .reminder-content {
+            font-size: 1.15em;
+            line-height: 2;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 1200px) {
+            .system-architecture {
+                grid-template-columns: 1fr;
+            }
+            
+            .connection-arrow {
+                transform: rotate(90deg);
+                margin: 20px 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+            }
+            
+            .commands-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .usage-comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">AIによるバックエンド開発とデータベース講座</h1>
+        <div class="subtitle">第3回：SQLって何をするもの？</div>
+        
+        <!-- SQLの位置づけ -->
+        <div class="position-section">
+            <h2 class="section-title">🗺️ SQLの位置づけ</h2>
+            
+            <div style="text-align: center; margin-bottom: 30px; padding: 20px; background: #f9fafb; border-radius: 10px;">
+                <p style="font-size: 1.15em; color: #333; line-height: 1.8;">
+                    システム全体の中で、SQLがどこに位置しているのかを確認しましょう
+                </p>
+            </div>
+            
+            <div class="system-architecture">
+                <div class="layer-box layer-frontend">
+                    <div class="layer-icon">🖥️</div>
+                    <div class="layer-title" style="color: #3b82f6;">フロントエンド</div>
+                    <div class="layer-desc">
+                        ブラウザで見ている画面の部分。<br>
+                        ボタンを押したり、文字を入力したりする、見えている部分
+                    </div>
+                </div>
+                
+                <div class="connection-arrow">→</div>
+                
+                <div class="layer-box layer-backend">
+                    <div class="layer-icon">⚙️</div>
+                    <div class="layer-title" style="color: #10b981;">バックエンド</div>
+                    <div class="layer-desc">
+                        画面からのリクエストを受け取って、実際の処理をする部分
+                    </div>
+                </div>
+                
+                <div class="connection-arrow">
+                    <div class="sql-highlight">SQL</div>
+                </div>
+                
+                <div class="layer-box layer-database">
+                    <div class="layer-icon">🗄️</div>
+                    <div class="layer-title" style="color: #f59e0b;">データベース</div>
+                    <div class="layer-desc">
+                        顧客情報や注文データなど、様々な情報を表形式で保管しておく場所
+                    </div>
+                </div>
+            </div>
+            
+            <div class="communication-box">
+                <div class="communication-title">💬 バックエンドとデータベースの「やり取り」</div>
+                <div class="communication-content">
+                    バックエンドが「このデータをください」とか<br>
+                    「このデータを保存してください」とお願いをして、<br>
+                    データベースがそれに応える。<br><br>
+                    
+                    この「お願い」を伝えるための言語が、<br>
+                    <strong style="font-size: 1.3em; color: #7c3aed;">SQL（エスキューエル）</strong>なんです！
+                </div>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border-radius: 15px; padding: 30px; margin-top: 30px;">
+                <h3 style="font-size: 1.3em; color: #1e3a8a; margin-bottom: 20px; text-align: center;">
+                    🌐 人間の世界で例えると
+                </h3>
+                <div style="background: white; border-radius: 10px; padding: 25px; text-align: center;">
+                    <p style="font-size: 1.1em; color: #333; line-height: 2;">
+                        日本人同士なら<strong>日本語</strong>で会話しますよね。<br>
+                        アメリカ人となら<strong>英語</strong>で会話します。<br><br>
+                        
+                        同じように、プログラムとデータベースの間では、<br>
+                        <strong style="font-size: 1.2em; color: #7c3aed;">「SQL」という共通言語</strong>で会話をしているイメージです。
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SQLとは -->
+        <div class="what-is-sql-section">
+            <h2 class="section-title">📖 SQLとは何か</h2>
+            
+            <div class="sql-definition">
+                <div class="sql-full-name">
+                    Structured Query Language<br>
+                    （構造化問い合わせ言語）
+                </div>
+                <div class="sql-abbreviation">
+                    略して「SQL（エスキューエル）」
+                </div>
+                
+                <div class="sql-simple-explanation">
+                    <div class="simple-title">💡 シンプルに言うと</div>
+                    <div class="simple-content">
+                        表形式のデータに対して、<br>
+                        「こういうデータをください」とか<br>
+                        「このデータを変更してください」といった<br>
+                        <strong style="font-size: 1.2em;">お願いをするための言葉</strong>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 15px; padding: 30px; margin-top: 30px;">
+                <h3 style="font-size: 1.3em; color: #92400e; margin-bottom: 20px; text-align: center;">
+                    🎯 重要なポイント
+                </h3>
+                <div style="background: white; border-radius: 10px; padding: 25px;">
+                    <p style="font-size: 1.05em; color: #333; line-height: 2;">
+                        SQLは<strong style="color: #7c3aed;">「データベース専用の命令文」</strong>です。<br><br>
+                        
+                        • HTMLのように画面を作るわけでもなく<br>
+                        • JavaScriptのようにブラウザで動くわけでもありません<br><br>
+                        
+                        あくまで、データベースに対して「こうしてください」とお願いするための、<br>
+                        <strong>専用の言語</strong>なんです。
+                    </p>
+                </div>
+            </div>
+            
+            <div class="key-point-box">
+                <div class="key-point-title">🚨 今日の講座で一番お伝えしたいポイント</div>
+                <div class="key-point-content">
+                    皆さんは別に、<br>
+                    <strong style="font-size: 1.3em;">このSQLを完璧に覚える必要はありません。</strong><br><br>
+                    
+                    なぜなら、<strong style="font-size: 1.4em; color: #7c3aed;">今はAIがあるからです。</strong><br><br>
+                    
+                    皆さんがやるべきことは、<br>
+                    「やりたいこと」を<strong>日本語できちんと整理すること</strong>。<br>
+                    それをAIに伝えれば、AIが適切なSQLに変換してくれます。
+                </div>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-radius: 15px; padding: 30px; margin-top: 30px; text-align: center;">
+                <strong style="font-size: 1.3em; color: #065f46; display: block; margin-bottom: 15px;">
+                    📚 今日のゴール
+                </strong>
+                <p style="font-size: 1.1em; color: #047857; line-height: 2;">
+                    「SQLを暗記する」ことがゴールではありません。<br><br>
+                    
+                    「SQLがどういう構造になっているか」<br>
+                    「何をしているのか」を、<strong>ざっくりと理解すること</strong>がゴールです。<br><br>
+                    
+                    そうすれば、AIが作ってくれたSQLを見て、<br>
+                    「ああ、こういうことをしているんだな」と理解できるようになります。
+                </p>
+            </div>
+        </div>
+        
+        <!-- 4つの基本命令 -->
+        <div class="commands-section">
+            <h2 class="section-title">🎮 SQLの4つの基本命令</h2>
+            
+            <div style="text-align: center; margin-bottom: 30px; padding: 20px; background: #f9fafb; border-radius: 10px;">
+                <p style="font-size: 1.15em; color: #333; line-height: 1.8;">
+                    SQLで何ができるのか？大きく分けて4つの代表的な命令があります
+                </p>
+            </div>
+            
+            <div class="commands-grid">
+                <!-- SELECT -->
+                <div class="command-card select">
+                    <div class="most-important">⭐ 最重要</div>
+                    <div class="command-icon">🔍</div>
+                    <div class="command-name select">SELECT</div>
+                    <div class="command-japanese">セレクト</div>
+                    <div class="command-desc">
+                        データを<strong>「読む」</strong>、つまり<strong>「取り出す」</strong>ための命令<br><br>
+                        
+                        「この条件に合うデータをください」というお願いをするときに使います
+                    </div>
+                    <div class="command-example">
+                        💬 例：「石川県に住んでいる顧客の一覧をください」
+                    </div>
+                </div>
+                
+                <!-- INSERT -->
+                <div class="command-card insert">
+                    <div class="command-icon">➕</div>
+                    <div class="command-name insert">INSERT</div>
+                    <div class="command-japanese">インサート</div>
+                    <div class="command-desc">
+                        新しいデータを<strong>「追加する」</strong>ための命令<br><br>
+                        
+                        「この新しい顧客情報を、顧客テーブルに1件追加してください」といったときに使います
+                    </div>
+                    <div class="command-example">
+                        💬 例：「新しい顧客『田中太郎さん』を登録してください」
+                    </div>
+                </div>
+                
+                <!-- UPDATE -->
+                <div class="command-card update">
+                    <div class="command-icon">✏️</div>
+                    <div class="command-name update">UPDATE</div>
+                    <div class="command-japanese">アップデート</div>
+                    <div class="command-desc">
+                        既に登録されているデータを<strong>「更新する」</strong>ための命令<br><br>
+                        
+                        「この顧客のメールアドレスを、新しいものに書き換えてください」といったときに使います
+                    </div>
+                    <div class="command-example">
+                        💬 例：「田中さんのメールアドレスを変更してください」
+                    </div>
+                </div>
+                
+                <!-- DELETE -->
+                <div class="command-card delete">
+                    <div class="command-icon">🗑️</div>
+                    <div class="command-name delete">DELETE</div>
+                    <div class="command-japanese">デリート</div>
+                    <div class="command-desc">
+                        データを<strong>「削除する」</strong>ための命令<br><br>
+                        
+                        「この注文データを消してください」といったときに使います
+                    </div>
+                    <div class="command-example">
+                        💬 例：「キャンセルされた注文を削除してください」
+                    </div>
+                </div>
+            </div>
+            
+            <div class="usage-note">
+                <div class="usage-note-title">📊 実務での使用頻度</div>
+                
+                <div class="usage-comparison">
+                    <div class="usage-box">
+                        <div class="usage-box-title usage-select">
+                            📖 SELECT（読む）
+                        </div>
+                        <div class="usage-content">
+                            <strong style="color: #1e3a8a;">実務で一番よく使う</strong><br><br>
+                            
+                            「先月、石川県から登録してくれた顧客は何人いるか知りたい」<br><br>
+                            
+                            「今日の注文で、金額が1万円以上のものだけ見たい」<br><br>
+                            
+                            こういった「条件を指定して、欲しいデータだけを取り出す」作業
+                        </div>
+                    </div>
+                    
+                    <div class="usage-box">
+                        <div class="usage-box-title usage-others">
+                            ✏️ INSERT / UPDATE / DELETE
+                        </div>
+                        <div class="usage-content">
+                            <strong style="color: #991b1b;">慎重に扱う必要がある</strong><br><br>
+                            
+                            間違って実行してしまうと大変なことになる可能性があるので、<br><br>
+                            
+                            実際の業務では、<strong>エンジニアやシステム管理者が慎重に扱う</strong>ことが多い<br><br>
+                            
+                            <strong>→ イメージを掴めばOK</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AIデモ -->
+        <div class="ai-demo-section">
+            <h2 class="section-title">🤖 AIに例えを作ってもらおう</h2>
+            
+            <div class="demo-intro">
+                SQLの4つの命令について、<br>
+                AIに「わかりやすい例え」を作ってもらいましょう
+            </div>
+            
+            <div class="prompt-box">
+                <div class="prompt-label">📤 プロンプト例：</div>
+                <div class="prompt-text">
+SQLのSELECT、INSERT、UPDATE、DELETEについて、<br>
+「スーパーの在庫管理」を例えにして説明してください。<br>
+小学生にもわかるレベルでお願いします。
+                </div>
+            </div>
+            
+            <div style="text-align: center; font-size: 3em; color: #7c3aed; margin: 20px 0;">
+                ⬇️
+            </div>
+            
+            <div class="ai-response">
+                <div class="response-label">🤖 AIの回答例</div>
+                <div class="response-content">
+                    スーパーの在庫管理で例えると...<br><br>
+                    
+                    <div class="analogy-item">
+                        <span class="analogy-command">🔍 SELECT</span>は<br>
+                        「今、<strong>トマトが何個あるか教えて</strong>」と倉庫に聞くこと
+                    </div>
+                    
+                    <div class="analogy-item">
+                        <span class="analogy-command">➕ INSERT</span>は<br>
+                        「新しく<strong>レタスを50個、棚に追加して</strong>」とお願いすること
+                    </div>
+                    
+                    <div class="analogy-item">
+                        <span class="analogy-command">✏️ UPDATE</span>は<br>
+                        「<strong>トマトの値段を、1個100円から120円に変更して</strong>」と指示すること
+                    </div>
+                    
+                    <div class="analogy-item">
+                        <span class="analogy-command">🗑️ DELETE</span>は<br>
+                        「<strong>賞味期限が切れたお肉を、棚から全部下げて</strong>」と伝えること
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 15px; padding: 30px; margin-top: 30px;">
+                <h3 style="font-size: 1.3em; color: #92400e; margin-bottom: 20px; text-align: center;">
+                    💡 AI時代のバックエンド学習の強み
+                </h3>
+                <div style="background: white; border-radius: 10px; padding: 25px; text-align: center;">
+                    <p style="font-size: 1.1em; color: #333; line-height: 2;">
+                        わからないことがあったら、<strong style="color: #7c3aed;">すぐAIに聞けばいい</strong>。<br>
+                        難しい専門用語も、<strong style="color: #7c3aed;">自分に合った言葉で説明してもらえる</strong>。<br><br>
+                        
+                        そして、このAIの説明を、<br>
+                        <strong>そのまま社内の説明資料に使うこともできる</strong>わけです。<br><br>
+                        
+                        これを活用しない手はありません！
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- まとめ -->
+        <div class="summary-section">
+            <h2 class="section-title" style="color: white; border-bottom-color: white;">📝 このセクションのまとめ</h2>
+            
+            <div class="summary-points">
+                <div class="summary-point">
+                    <strong>1️⃣ SQLとは：</strong><br>
+                    データベースに対して「こうしてください」とお願いするための専用言語
+                </div>
+                
+                <div class="summary-point">
+                    <strong>2️⃣ 4つの基本命令：</strong><br>
+                    SELECT（読む）、INSERT（追加）、UPDATE（更新）、DELETE（削除）
+                </div>
+                
+                <div class="summary-point">
+                    <strong>3️⃣ 特に重要なのは：</strong><br>
+                    SELECT（データを読む）命令 — 実務で最もよく使う
+                </div>
+                
+                <div class="summary-point">
+                    <strong>4️⃣ あなたがやること：</strong><br>
+                    「やりたいこと」を日本語で明確に整理する<br>
+                    AIに伝えれば、適切なSQLに変換してくれる
+                </div>
+            </div>
+            
+            <div class="reminder-box">
+                <div class="reminder-title">🎯 繰り返しになりますが</div>
+                <div class="reminder-content">
+                    皆さんは<strong style="font-size: 1.3em;">SQLを暗記する必要はありません。</strong><br><br>
+                    
+                    「こういう構造なんだな」<br>
+                    「こういうときに使うんだな」<br>
+                    という<strong style="font-size: 1.2em;">イメージを持つこと</strong>が、今日のゴールです。<br><br>
+                    
+                    実際に業務でSQLが必要になったときには、<br>
+                    AIに「こういう条件でデータを取りたいので、SQLを書いてください」と<br>
+                    お願いすればいいんです。
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px; font-size: 1.4em; font-weight: bold;">
+                それでは、次のセクションに進みましょう。<br>
+                ここからは、いよいよ<strong style="font-size: 1.2em;">SELECT文の中身</strong>を、<br>
+                具体的に見ていきます！ 🚀
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

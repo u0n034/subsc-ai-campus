@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第2回：テーブル同士の関係（ER図の超入門）- AIによるバックエンド開発とデータベース講座</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #0f766e;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #14b8a6;
+        }
+        
+        /* セクション1: なぜテーブルを分けるのか */
+        .intro-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .problem-demo {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 3px solid #ef4444;
+        }
+        
+        .demo-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #991b1b;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            font-size: 0.85em;
+        }
+        
+        .data-table th {
+            background: #334155;
+            color: white;
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #475569;
+            font-size: 0.9em;
+        }
+        
+        .data-table td {
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+        }
+        
+        .duplicate-data {
+            background: #fee2e2 !important;
+            font-weight: bold;
+        }
+        
+        .problem-list {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+        
+        .problem-list-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #991b1b;
+            margin-bottom: 15px;
+        }
+        
+        .problem-list ul {
+            padding-left: 25px;
+            line-height: 1.8;
+            color: #7f1d1d;
+        }
+        
+        .solution-demo {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 3px solid #10b981;
+        }
+        
+        .solution-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #065f46;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .split-tables {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 25px;
+        }
+        
+        .table-box {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .table-box-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #0f766e;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .foreign-key-highlight {
+            background: #fef3c7 !important;
+            font-weight: bold;
+            color: #92400e;
+        }
+        
+        .relationship-explanation {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        /* 1対多の関係 */
+        .one-to-many-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .relationship-definition {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 15px;
+            padding: 35px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .definition-text {
+            font-size: 1.2em;
+            color: #1e3a8a;
+            line-height: 1.8;
+            font-weight: bold;
+        }
+        
+        .relationship-visual {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .tables-relationship {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            margin: 30px 0;
+        }
+        
+        .table-card {
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            min-width: 200px;
+            text-align: center;
+        }
+        
+        .table-card-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .table-card-subtitle {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .arrow-one-to-many {
+            font-size: 4em;
+            color: #0f766e;
+            font-weight: bold;
+        }
+        
+        .notation {
+            background: #f0fdfa;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #14b8a6;
+        }
+        
+        .notation-code {
+            font-family: 'Courier New', monospace;
+            font-size: 1.5em;
+            color: #0f766e;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .example-card {
+            background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .example-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .example-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #5b21b6;
+            margin-bottom: 15px;
+        }
+        
+        .example-notation {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #6b21a8;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        
+        .key-points-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+        
+        .key-points-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .key-point {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 5px solid #f59e0b;
+        }
+        
+        .key-point-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+        
+        .key-point-desc {
+            font-size: 0.95em;
+            color: #78350f;
+            line-height: 1.6;
+        }
+        
+        /* 多対多の関係 */
+        .many-to-many-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .many-to-many-visual {
+            background: #fef2f2;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 30px 0;
+        }
+        
+        .many-to-many-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .entity-box {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            min-width: 180px;
+            text-align: center;
+        }
+        
+        .entity-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .entity-desc {
+            font-size: 0.85em;
+            opacity: 0.9;
+        }
+        
+        .arrow-both {
+            font-size: 3em;
+            color: #8b5cf6;
+            font-weight: bold;
+        }
+        
+        .problem-box {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 3px solid #ef4444;
+        }
+        
+        .problem-box-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #991b1b;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .problem-box-content {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            color: #7f1d1d;
+            line-height: 1.8;
+        }
+        
+        .intermediate-table-solution {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-radius: 15px;
+            padding: 35px;
+            margin: 30px 0;
+            border: 3px solid #10b981;
+        }
+        
+        .intermediate-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #065f46;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .three-tables-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .intermediate-table-card {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            border-radius: 15px;
+            padding: 25px;
+            color: white;
+            min-width: 160px;
+            text-align: center;
+        }
+        
+        .intermediate-card-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .arrow-small {
+            font-size: 2em;
+            color: #10b981;
+            font-weight: bold;
+        }
+        
+        /* AIデモセクション */
+        .ai-demo-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .er-diagram-intro {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .er-definition {
+            font-size: 1.2em;
+            color: #1e3a8a;
+            line-height: 1.8;
+            font-weight: bold;
+        }
+        
+        .ai-prompt-demo {
+            margin: 40px 0;
+        }
+        
+        .prompt-box {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            line-height: 1.8;
+        }
+        
+        .prompt-title {
+            color: #fbbf24;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .ai-response-box {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            border: 3px solid #10b981;
+        }
+        
+        .response-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #065f46;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .response-content {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            line-height: 2;
+            color: #333;
+        }
+        
+        /* まとめ */
+        .summary-section {
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .summary-points {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .summary-point-card {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        
+        .summary-point-number {
+            width: 50px;
+            height: 50px;
+            background: white;
+            color: #0f766e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+        
+        .summary-point-content {
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+        
+        .next-preview {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 35px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .next-preview-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .next-preview-content {
+            font-size: 1.2em;
+            line-height: 2;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 1200px) {
+            .tables-relationship {
+                flex-direction: column;
+            }
+            
+            .arrow-one-to-many {
+                transform: rotate(90deg);
+                margin: 20px 0;
+            }
+            
+            .many-to-many-diagram {
+                flex-direction: column;
+            }
+            
+            .arrow-both {
+                transform: rotate(90deg);
+                margin: 20px 0;
+            }
+            
+            .three-tables-diagram {
+                flex-direction: column;
+            }
+            
+            .arrow-small {
+                transform: rotate(90deg);
+                margin: 15px 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+            }
+            
+            .split-tables {
+                grid-template-columns: 1fr;
+            }
+            
+            .examples-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .summary-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">AIによるバックエンド開発とデータベース講座</h1>
+        <div class="subtitle">第2回：テーブル同士の関係（ER図の超入門）</div>
+        
+        <!-- セクション1: なぜテーブルを分けるのか -->
+        <div class="intro-section">
+            <h2 class="section-title">❓ なぜテーブルを分けるのか</h2>
+            
+            <div style="text-align: center; margin-bottom: 30px; padding: 20px; background: #f9fafb; border-radius: 10px;">
+                <p style="font-size: 1.15em; color: #333; line-height: 1.8;">
+                    実際の業務システムでは、<strong style="color: #0f766e;">テーブルが1つだけで完結することはほとんどありません。</strong><br><br>
+                    
+                    顧客管理システムといっても、顧客の情報だけでなく、<br>
+                    その顧客からの注文情報、問い合わせ履歴、担当営業の情報など、<br>
+                    さまざまなデータが関わってきます。<br><br>
+                    
+                    では、これら全部を1枚の大きな表にまとめてしまえばいいのでは？🤔
+                </p>
+            </div>
+            
+            <div class="problem-demo">
+                <div class="demo-title">❌ 問題：1枚の大きな表にまとめると...</div>
+                
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>顧客ID</th>
+                                <th>顧客名</th>
+                                <th>会社名</th>
+                                <th>電話番号</th>
+                                <th>メール</th>
+                                <th>注文ID</th>
+                                <th>注文日</th>
+                                <th>商品名</th>
+                                <th>金額</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="duplicate-data">1</td>
+                                <td class="duplicate-data">田中太郎</td>
+                                <td class="duplicate-data">A社</td>
+                                <td class="duplicate-data">03-1234-5678</td>
+                                <td class="duplicate-data">tanaka@a.com</td>
+                                <td>101</td>
+                                <td>2025-01-10</td>
+                                <td>ノートPC</td>
+                                <td>150,000</td>
+                            </tr>
+                            <tr>
+                                <td class="duplicate-data">1</td>
+                                <td class="duplicate-data">田中太郎</td>
+                                <td class="duplicate-data">A社</td>
+                                <td class="duplicate-data">03-1234-5678</td>
+                                <td class="duplicate-data">tanaka@a.com</td>
+                                <td>102</td>
+                                <td>2025-02-15</td>
+                                <td>マウス</td>
+                                <td>3,000</td>
+                            </tr>
+                            <tr>
+                                <td class="duplicate-data">1</td>
+                                <td class="duplicate-data">田中太郎</td>
+                                <td class="duplicate-data">A社</td>
+                                <td class="duplicate-data">03-1234-5678</td>
+                                <td class="duplicate-data">tanaka@a.com</td>
+                                <td>103</td>
+                                <td>2025-03-20</td>
+                                <td>キーボード</td>
+                                <td>8,000</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>鈴木花子</td>
+                                <td>B社</td>
+                                <td>06-9876-5432</td>
+                                <td>suzuki@b.com</td>
+                                <td>104</td>
+                                <td>2025-01-25</td>
+                                <td>モニター</td>
+                                <td>45,000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="problem-list">
+                    <div class="problem-list-title">🚫 2つの深刻な問題</div>
+                    <ul>
+                        <li><strong>データの無駄が多い：</strong>田中太郎さんの情報が3回も繰り返し登場。100回注文したら、同じ顧客情報が100行分記録される</li>
+                        <li><strong>修正の手間が膨大：</strong>田中さんが転職して会社名が変わったら、すべての行を修正しなければならない。修正漏れがあると、データが矛盾してしまう</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="solution-demo">
+                <div class="solution-title">✅ 解決策：テーブルを分けて、IDで紐付ける</div>
+                
+                <div class="split-tables">
+                    <div class="table-box">
+                        <div class="table-box-title">👥 顧客テーブル（customers）</div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>customer_id</th>
+                                    <th>name</th>
+                                    <th>company</th>
+                                    <th>phone</th>
+                                    <th>email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>田中太郎</td>
+                                    <td>A社</td>
+                                    <td>03-1234-5678</td>
+                                    <td>tanaka@a.com</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>鈴木花子</td>
+                                    <td>B社</td>
+                                    <td>06-9876-5432</td>
+                                    <td>suzuki@b.com</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div style="margin-top: 15px; font-size: 0.9em; color: #0f766e; text-align: center;">
+                            <strong>顧客情報は1回だけ記録</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="table-box">
+                        <div class="table-box-title">📦 注文テーブル（orders）</div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>order_id</th>
+                                    <th>customer_id</th>
+                                    <th>order_date</th>
+                                    <th>product</th>
+                                    <th>amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>101</td>
+                                    <td class="foreign-key-highlight">1</td>
+                                    <td>2025-01-10</td>
+                                    <td>ノートPC</td>
+                                    <td>150,000</td>
+                                </tr>
+                                <tr>
+                                    <td>102</td>
+                                    <td class="foreign-key-highlight">1</td>
+                                    <td>2025-02-15</td>
+                                    <td>マウス</td>
+                                    <td>3,000</td>
+                                </tr>
+                                <tr>
+                                    <td>103</td>
+                                    <td class="foreign-key-highlight">1</td>
+                                    <td>2025-03-20</td>
+                                    <td>キーボード</td>
+                                    <td>8,000</td>
+                                </tr>
+                                <tr>
+                                    <td>104</td>
+                                    <td class="foreign-key-highlight">2</td>
+                                    <td>2025-01-25</td>
+                                    <td>モニター</td>
+                                    <td>45,000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div style="margin-top: 15px; font-size: 0.9em; color: #92400e; text-align: center;">
+                            <strong>customer_id（黄色）で紐付け</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relationship-explanation">
+                    <strong style="display: block; font-size: 1.2em; color: #0f766e; margin-bottom: 15px;">
+                        💡 こうすることで
+                    </strong>
+                    <p style="font-size: 1.05em; color: #333; line-height: 1.8;">
+                        • 田中さんの情報は顧客テーブルに<strong>1行だけ</strong><br>
+                        • 会社名や電話番号が変わっても、顧客テーブルの<strong>1行だけを修正</strong>すればOK<br>
+                        • 注文テーブル側はcustomer_idで紐付いているだけなので、修正の必要なし<br><br>
+                        
+                        <strong style="color: #0f766e; font-size: 1.1em;">
+                        これが「テーブルを分けて、IDで紐付ける」という設計の基本です
+                        </strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション2: 1対多の関係 -->
+        <div class="one-to-many-section">
+            <h2 class="section-title">1️⃣ ↔️ ♾️ 1対多（1:N）の関係</h2>
+            
+            <div class="relationship-definition">
+                <div class="definition-text">
+                    1対多というのは、<br>
+                    <strong style="font-size: 1.2em;">片方のテーブルの1つのレコードに対して、<br>
+                    もう片方のテーブルに複数のレコードが対応している関係</strong>
+                </div>
+            </div>
+            
+            <div class="relationship-visual">
+                <h3 style="font-size: 1.3em; color: #0f766e; margin-bottom: 30px;">
+                    📊 具体例：顧客と注文の関係
+                </h3>
+                
+                <div class="tables-relationship">
+                    <div class="table-card">
+                        <div class="table-card-title">👥 customers</div>
+                        <div class="table-card-subtitle">顧客テーブル</div>
+                        <div style="margin-top: 20px; font-size: 2.5em;">1️⃣</div>
+                        <div style="margin-top: 10px; font-size: 0.9em;">1人の顧客</div>
+                    </div>
+                    
+                    <div class="arrow-one-to-many">──<</div>
+                    
+                    <div class="table-card">
+                        <div class="table-card-title">📦 orders</div>
+                        <div class="table-card-subtitle">注文テーブル</div>
+                        <div style="margin-top: 20px; font-size: 2.5em;">♾️</div>
+                        <div style="margin-top: 10px; font-size: 0.9em;">複数の注文</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; padding: 25px; background: #f0fdfa; border-radius: 10px;">
+                    <strong style="display: block; font-size: 1.2em; color: #0f766e; margin-bottom: 15px;">
+                        つまり...
+                    </strong>
+                    <p style="font-size: 1.1em; color: #333; line-height: 1.8;">
+                        <strong>顧客1人に対して、注文が複数ある</strong>という関係です。<br><br>
+                        
+                        別の言い方をすると、<strong style="color: #0f766e;">親子関係</strong>のようなもの。<br>
+                        親が1人いて、その子どもが何人もぶら下がっている。<br>
+                        親が「顧客」で、子が「注文」です。
+                    </p>
+                </div>
+            </div>
+            
+            <div class="notation">
+                <h3 style="font-size: 1.2em; color: #0f766e; margin-bottom: 20px; text-align: center;">
+                    📝 表記方法
+                </h3>
+                <div class="notation-code">
+                    customers(顧客) ──< orders(注文)
+                </div>
+                <p style="text-align: center; margin-top: 15px; color: #666;">
+                    「──<」という記号：左側が「1」、右側が「多」を意味します
+                </p>
+            </div>
+            
+            <h3 style="font-size: 1.4em; color: #0f766e; margin: 40px 0 25px 0; text-align: center;">
+                📚 1対多の関係は業務システムのあちこちに
+            </h3>
+            
+            <div class="examples-grid">
+                <div class="example-card">
+                    <div class="example-icon">👔</div>
+                    <div class="example-title">例1：社員と申請</div>
+                    <div style="font-size: 0.95em; color: #6b21a8; line-height: 1.6; margin-bottom: 15px;">
+                        1人の社員が複数の申請を出すことができる（経費精算、休暇申請など）
+                    </div>
+                    <div class="example-notation">
+                        employees ──< applications
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-icon">📦</div>
+                    <div class="example-title">例2：商品とレビュー</div>
+                    <div style="font-size: 0.95em; color: #6b21a8; line-height: 1.6; margin-bottom: 15px;">
+                        1つの商品に対して、複数のレビューが投稿される
+                    </div>
+                    <div class="example-notation">
+                        products ──< reviews
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-icon">📝</div>
+                    <div class="example-title">例3：ブログ記事とコメント</div>
+                    <div style="font-size: 0.95em; color: #6b21a8; line-height: 1.6; margin-bottom: 15px;">
+                        1つの記事に対して、複数のコメントがつくことができる
+                    </div>
+                    <div class="example-notation">
+                        posts ──< comments
+                    </div>
+                </div>
+            </div>
+            
+            <div class="key-points-box">
+                <div class="key-points-title">⭐ 1対多を実装するときの3つのポイント</div>
+                
+                <div class="key-point">
+                    <div class="key-point-title">ポイント1：子テーブルに親のIDを持たせる</div>
+                    <div class="key-point-desc">
+                        注文テーブルに<code>customer_id</code>を持たせたように、子側に親の主キーを記録します。<br>
+                        この<code>customer_id</code>のような列を、<strong>外部キー（Foreign Key / FK）</strong>と呼びます。<br>
+                        外部キーは、「他のテーブルの主キーを参照するための列」という意味です。
+                    </div>
+                </div>
+                
+                <div class="key-point">
+                    <div class="key-point-title">ポイント2：親は1行、子は何行でもOK</div>
+                    <div class="key-point-desc">
+                        親側のテーブルには、1つの対象（1人の顧客、1つの商品など）が1行だけ登録されます。<br>
+                        子側のテーブルには、その親に紐づくデータが何行あってもかまいません。<br>
+                        0行でもOKです（まだ1回も注文していない顧客がいても問題ありません）。
+                    </div>
+                </div>
+                
+                <div class="key-point">
+                    <div class="key-point-title">ポイント3：親を削除するときは注意</div>
+                    <div class="key-point-desc">
+                        顧客テーブルから田中さんを削除したとき、注文テーブルには田中さんの注文が残っています。<br>
+                        このとき、注文テーブルの<code>customer_id</code>は、存在しない顧客を指すことに...<br><br>
+                        <strong>対策：</strong>親を削除するときは、紐づく子のデータをどうするかを決めておく必要があります<br>
+                        （子も一緒に削除 / 親のIDを空にする / 削除自体を禁止する）
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション3: 多対多の関係 -->
+        <div class="many-to-many-section">
+            <h2 class="section-title">♾️ ↔️ ♾️ 多対多（N:N）の関係</h2>
+            
+            <div class="relationship-definition">
+                <div class="definition-text">
+                    多対多というのは、<br>
+                    <strong style="font-size: 1.2em;">両方のテーブルで、1つのレコードに対して<br>
+                    複数のレコードが対応している関係</strong>
+                </div>
+            </div>
+            
+            <div class="many-to-many-visual">
+                <h3 style="font-size: 1.3em; color: #8b5cf6; margin-bottom: 30px; text-align: center;">
+                    📊 具体例：受講者と講座の関係
+                </h3>
+                
+                <div class="many-to-many-diagram">
+                    <div class="entity-box">
+                        <div class="entity-title">👨‍🎓 students</div>
+                        <div class="entity-desc">受講者テーブル</div>
+                        <div style="margin-top: 20px; font-size: 0.9em;">
+                            1人の受講者は<br>
+                            <strong style="font-size: 1.3em;">複数の講座</strong>を<br>
+                            受講できる
+                        </div>
+                    </div>
+                    
+                    <div class="arrow-both">⇄</div>
+                    
+                    <div class="entity-box">
+                        <div class="entity-title">📚 courses</div>
+                        <div class="entity-desc">講座テーブル</div>
+                        <div style="margin-top: 20px; font-size: 0.9em;">
+                            1つの講座は<br>
+                            <strong style="font-size: 1.3em;">複数の受講者</strong>が<br>
+                            受講できる
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; padding: 25px; background: white; border-radius: 10px;">
+                    <strong style="display: block; font-size: 1.2em; color: #8b5cf6; margin-bottom: 15px; text-align: center;">
+                        どちら側から見ても「1対多」になっている！
+                    </strong>
+                    <ul style="padding-left: 25px; line-height: 2; color: #333; font-size: 1.05em;">
+                        <li>田中さんは「Python入門」も「Webデザイン基礎」も受講しているかもしれない</li>
+                        <li>「Python入門」は、田中さんも鈴木さんも佐藤さんも受講しているかもしれない</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.3em; color: #0f766e; margin: 40px 0 25px 0; text-align: center;">
+                📚 多対多の他の例
+            </h3>
+            
+            <div class="examples-grid">
+                <div class="example-card">
+                    <div class="example-icon">👥</div>
+                    <div class="example-title">社員とプロジェクト</div>
+                    <div style="font-size: 0.95em; color: #6b21a8; line-height: 1.6;">
+                        • 1人の社員は複数のプロジェクトに参加<br>
+                        • 1つのプロジェクトには複数の社員が参加
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-icon">🏷️</div>
+                    <div class="example-title">商品とタグ</div>
+                    <div style="font-size: 0.95em; color: #6b21a8; line-height: 1.6;">
+                        • 1つの商品に複数のタグをつけられる<br>
+                        • 1つのタグは複数の商品につけられる
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-icon">🏥</div>
+                    <div class="example-title">医者と患者</div>
+                    <div style="font-size: 0.95em; color: #6b21a8; line-height: 1.6;">
+                        • 1人の医者は複数の患者を診る<br>
+                        • 1人の患者は複数の医者にかかる
+                    </div>
+                </div>
+            </div>
+            
+            <div class="problem-box">
+                <div class="problem-box-title">🤔 ここで1つ問題が...</div>
+                <div class="problem-box-content">
+                    1対多の場合は、子テーブルに親のIDを持たせればよかったですよね。<br>
+                    注文テーブルに<code>customer_id</code>を持たせて、顧客とつなぐ、という具合に。<br><br>
+                    
+                    <strong>でも、多対多の場合はどうでしょう？</strong><br><br>
+                    
+                    受講者テーブルに講座IDを持たせる？<br>
+                    でも、1人の受講者が複数の講座を受講するので、講座IDを複数持たなければなりません。<br>
+                    「講座ID:1,5,12」みたいに、カンマ区切りで複数の値を1つの列に入れる？<br><br>
+                    
+                    ❌ これは先ほど「NGな表」のところで触れたように、データベースとしては好ましくありません。<br>
+                    検索や集計が非常に難しくなってしまいます。
+                </div>
+            </div>
+            
+            <div class="intermediate-table-solution">
+                <div class="intermediate-title">✅ 解決策：「中間テーブル」を作る</div>
+                
+                <div class="three-tables-diagram">
+                    <div class="entity-box">
+                        <div class="entity-title">👨‍🎓 students</div>
+                        <div class="entity-desc">受講者</div>
+                    </div>
+                    
+                    <div class="arrow-small">──<</div>
+                    
+                    <div class="intermediate-table-card">
+                        <div class="intermediate-card-title">🔗 enrollments</div>
+                        <div style="font-size: 0.85em; opacity: 0.9;">受講（中間テーブル）</div>
+                    </div>
+                    
+                    <div class="arrow-small">>──</div>
+                    
+                    <div class="entity-box">
+                        <div class="entity-title">📚 courses</div>
+                        <div class="entity-desc">講座</div>
+                    </div>
+                </div>
+                
+                <div style="background: white; border-radius: 10px; padding: 25px; margin-top: 30px;">
+                    <h4 style="font-size: 1.1em; color: #065f46; margin-bottom: 15px; text-align: center;">
+                        中間テーブルの例：enrollments（受講テーブル）
+                    </h4>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>enrollment_id</th>
+                                <th>student_id</th>
+                                <th>course_id</th>
+                                <th>enrolled_date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td class="foreign-key-highlight">1</td>
+                                <td class="foreign-key-highlight">101</td>
+                                <td>2025-01-10</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td class="foreign-key-highlight">1</td>
+                                <td class="foreign-key-highlight">105</td>
+                                <td>2025-01-15</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td class="foreign-key-highlight">2</td>
+                                <td class="foreign-key-highlight">101</td>
+                                <td>2025-01-12</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td class="foreign-key-highlight">3</td>
+                                <td class="foreign-key-highlight">112</td>
+                                <td>2025-02-01</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div style="margin-top: 20px; padding: 20px; background: #f0fdfa; border-radius: 8px;">
+                        <strong style="color: #065f46; display: block; margin-bottom: 10px;">💡 読み方</strong>
+                        <ul style="padding-left: 25px; line-height: 1.8; color: #333;">
+                            <li>enrollment_id=1 → 受講者ID=1の人が、講座ID=101を、2025年1月10日に受講開始</li>
+                            <li>enrollment_id=2 → 受講者ID=1の人が、講座ID=105を、2025年1月15日に受講開始</li>
+                            <li>つまり、受講者ID=1の田中さんは、講座101と講座105の<strong>2つを受講</strong>している</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div style="background: white; border-radius: 10px; padding: 25px; margin-top: 20px; text-align: center;">
+                    <strong style="display: block; font-size: 1.2em; color: #065f46; margin-bottom: 15px;">
+                        🎯 ポイント
+                    </strong>
+                    <p style="font-size: 1.05em; color: #333; line-height: 1.8;">
+                        中間テーブルを挟むことで、多対多の関係を<br>
+                        <strong style="font-size: 1.2em; color: #065f46;">2つの1対多の関係に分解</strong>できる！<br><br>
+                        
+                        受講者と受講は1対多。受講と講座も1対多。<br>
+                        この2つの1対多を組み合わせることで、受講者と講座の多対多を表現しています。
+                    </p>
+                </div>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 15px; padding: 30px; margin-top: 30px; text-align: center;">
+                <p style="font-size: 1.15em; color: #78350f; line-height: 2;">
+                    多対多の関係は、1対多に比べるとちょっとイメージしにくいかもしれません。<br><br>
+                    
+                    でも、ここで覚えておいていただきたいのは、<br>
+                    <strong style="font-size: 1.3em; color: #92400e; display: block; margin: 15px 0;">
+                    「多対多の場合は、間にもう1個テーブルが必要になる」
+                    </strong>
+                    ということです。<br><br>
+                    
+                    今すぐに完璧に理解する必要はありません。<br>
+                    <strong>「多対多っていう関係もあるんだな」というイメージ</strong>を<br>
+                    持ち帰っていただければOKです。
+                </p>
+            </div>
+        </div>
+        
+        <!-- セクション4: AIデモ -->
+        <div class="ai-demo-section">
+            <h2 class="section-title">🤖 AIに文章でER図を書かせるデモ</h2>
+            
+            <div class="er-diagram-intro">
+                <div class="er-definition">
+                    こういったテーブルの関係性を図で表したものを、<br>
+                    <strong style="font-size: 1.3em;">ER図（Entity-Relationship図）</strong>と呼びます。<br><br>
+                    
+                    非エンジニアの方は、最初から専用ツールを使いこなす必要はありません。<br>
+                    <strong style="color: #3b82f6; font-size: 1.2em;">文章でER図を説明する</strong>ことから始めても十分です。
+                </div>
+            </div>
+            
+            <div class="ai-prompt-demo">
+                <h3 style="font-size: 1.3em; color: #0f766e; margin-bottom: 25px; text-align: center;">
+                    📤 AIへのプロンプト例
+                </h3>
+                
+                <div class="prompt-box">
+<span class="prompt-title">プロンプト:</span>
+
+顧客テーブルと注文テーブルの関係を、ER図として文章で説明してください。
+
+- 顧客テーブル:customers
+- 注文テーブル:orders
+- 顧客1人に対して複数の注文がある(1対多)
+                </div>
+                
+                <div style="text-align: center; font-size: 3em; color: #8b5cf6; margin: 20px 0;">
+                    ⬇️
+                </div>
+                
+                <div class="ai-response-box">
+                    <div class="response-title">🤖 AIの回答例</div>
+                    <div class="response-content">
+                        <strong style="color: #0f766e; font-size: 1.1em;">customersテーブルとordersテーブルは1対多の関係にあります。</strong><br><br>
+                        
+                        <strong>具体的には:</strong><br>
+                        • 1人の顧客(customers)は、0件以上の複数の注文(orders)を持つことができます<br>
+                        • 1件の注文(orders)は、必ず1人の顧客(customers)に紐づきます<br>
+                        • ordersテーブルには、customersテーブルの主キーであるcustomer_idを外部キーとして持ちます<br><br>
+                        
+                        <strong>図式的には以下のようになります:</strong><br>
+                        <div style="font-family: 'Courier New', monospace; font-size: 1.3em; color: #0f766e; font-weight: bold; text-align: center; padding: 20px; background: #f0fdfa; border-radius: 10px; margin: 15px 0;">
+                            customers ──< orders
+                        </div>
+                        
+                        <strong style="color: #065f46;">この関係により、顧客情報を1箇所で管理しつつ、各顧客の注文履歴を効率的に追跡できます</strong>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border-radius: 15px; padding: 30px; margin-top: 30px;">
+                <h3 style="font-size: 1.3em; color: #1e3a8a; margin-bottom: 20px; text-align: center;">
+                    💡 ポイント
+                </h3>
+                <div style="background: white; border-radius: 10px; padding: 25px;">
+                    <p style="font-size: 1.05em; color: #333; line-height: 2;">
+                        文章だけでも、十分に関係性が理解できますよね。<br><br>
+                        
+                        もちろん、慣れてきたら、AIに「Mermaid記法でER図を書いて」とか<br>
+                        「図として出力して」とお願いすることもできます。<br><br>
+                        
+                        でも、最初は<strong style="color: #0f766e; font-size: 1.15em;">文章レベルで十分</strong>です。<br><br>
+                        
+                        <strong style="color: #1e3a8a;">大事なのは、「このテーブルとあのテーブルは、どういう関係性なのか」を<br>
+                        言葉で説明できることです。</strong><br><br>
+                        
+                        それができれば、AIが適切な設計を提案してくれますし、<br>
+                        エンジニアとの会話もスムーズになります。
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション5: まとめ -->
+        <div class="summary-section">
+            <h2 class="section-title" style="color: white; border-bottom-color: white;">📝 このセクションのまとめ</h2>
+            
+            <div class="summary-points">
+                <div class="summary-point-card">
+                    <div class="summary-point-number">1</div>
+                    <div class="summary-point-content">
+                        <strong style="display: block; font-size: 1.2em; margin-bottom: 15px;">
+                            テーブルを分けて、IDで紐付ける
+                        </strong>
+                        データの重複や矛盾を防げる。<br>
+                        1箇所を修正するだけで、すべてに反映される。
+                    </div>
+                </div>
+                
+                <div class="summary-point-card">
+                    <div class="summary-point-number">2</div>
+                    <div class="summary-point-content">
+                        <strong style="display: block; font-size: 1.2em; margin-bottom: 15px;">
+                            1対多の関係
+                        </strong>
+                        親1つに対して子が複数紐づく。<br>
+                        子テーブルに親のIDを持たせる（外部キー）。
+                    </div>
+                </div>
+                
+                <div class="summary-point-card">
+                    <div class="summary-point-number">3</div>
+                    <div class="summary-point-content">
+                        <strong style="display: block; font-size: 1.2em; margin-bottom: 15px;">
+                            多対多の関係
+                        </strong>
+                        間に中間テーブルを作って、<br>
+                        2つの1対多に分解する。
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.2); border-radius: 15px; padding: 35px; backdrop-filter: blur(10px); text-align: center; margin-top: 30px;">
+                <p style="font-size: 1.2em; line-height: 2;">
+                    そして、これらの関係性を<br>
+                    <strong style="font-size: 1.3em;">文章で説明できれば、AIがER図や設計案を提案してくれる</strong><br><br>
+                    
+                    図が苦手な方も、まずは文章から始めてみてください。<br>
+                    「顧客1人に対して、注文が複数ある」<br>
+                    「受講者と講座は多対多」<br>
+                    といった説明ができれば、それで十分スタートラインに立てています。
+                </p>
+            </div>
+            
+            <div class="next-preview">
+                <div class="next-preview-title">🚀 次回予告</div>
+                <div class="next-preview-content">
+                    次回の第3回では、今日整理したテーブルのデータを、<br>
+                    <strong style="font-size: 1.3em; color: #fbbf24;">SQLという命令文で「読む・書く」</strong>方法を学んでいきます。<br><br>
+                    
+                    実際にデータを検索したり、新しいレコードを追加したりする流れを、<br>
+                    AIと一緒に体験していきましょう。
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

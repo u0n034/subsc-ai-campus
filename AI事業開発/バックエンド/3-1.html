@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第3回：オープニング＆前回の振り返り - AIによるバックエンド開発とデータベース講座</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #7c3aed;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #a78bfa;
+        }
+        
+        /* オープニング */
+        .opening-section {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        
+        .opening-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #7c3aed;
+            margin-bottom: 30px;
+        }
+        
+        .opening-message {
+            font-size: 1.2em;
+            color: #333;
+            line-height: 2;
+            padding: 30px;
+            background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+            border-radius: 15px;
+        }
+        
+        .sql-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 2em;
+            font-weight: bold;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(124,58,237,0.3);
+        }
+        
+        /* 前回の振り返り */
+        .review-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .keywords-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+        
+        .keywords-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .keywords-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .keyword-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            color: #1e3a8a;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .review-concepts {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .review-concept {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 5px solid #f59e0b;
+        }
+        
+        .concept-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 15px;
+        }
+        
+        .concept-desc {
+            font-size: 1em;
+            color: #78350f;
+            line-height: 1.8;
+        }
+        
+        .relationship-diagram {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .table-boxes {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .table-box {
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            min-width: 200px;
+        }
+        
+        .table-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .table-fields {
+            font-size: 0.9em;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+        
+        .arrow {
+            font-size: 3em;
+            color: #0f766e;
+            font-weight: bold;
+        }
+        
+        /* 今日のポジション */
+        .position-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .journey-timeline {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 30px;
+            align-items: center;
+            margin: 40px 0;
+        }
+        
+        .journey-step {
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .journey-step.previous {
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+        }
+        
+        .journey-step.current {
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 10px 25px rgba(124,58,237,0.3);
+        }
+        
+        .step-label {
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+        
+        .step-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .step-desc {
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        .timeline-arrow {
+            font-size: 3em;
+            color: #7c3aed;
+            font-weight: bold;
+        }
+        
+        .sql-explanation {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 15px;
+            padding: 35px;
+            margin-top: 30px;
+        }
+        
+        .sql-metaphor {
+            font-size: 1.15em;
+            color: #78350f;
+            line-height: 2;
+            text-align: center;
+        }
+        
+        /* 今日のゴール */
+        .goals-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .goal-card {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            border: 3px solid #3b82f6;
+        }
+        
+        .goal-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+        
+        .goal-title {
+            font-size: 1.15em;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .goal-desc {
+            font-size: 0.95em;
+            color: #1e40af;
+            line-height: 1.6;
+        }
+        
+        .important-stance {
+            background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
+            border-radius: 15px;
+            padding: 35px;
+            margin-top: 40px;
+            border: 3px solid #ef4444;
+        }
+        
+        .stance-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #991b1b;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .stance-content {
+            font-size: 1.1em;
+            color: #7f1d1d;
+            line-height: 2;
+            text-align: center;
+        }
+        
+        .approach-boxes {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: center;
+            margin-top: 30px;
+        }
+        
+        .approach-box {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .approach-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .approach-you {
+            color: #991b1b;
+        }
+        
+        .approach-ai {
+            color: #7c3aed;
+        }
+        
+        .approach-content {
+            font-size: 1em;
+            line-height: 1.8;
+        }
+        
+        .plus-icon {
+            font-size: 2.5em;
+            color: #ef4444;
+        }
+        
+        /* まとめ */
+        .summary-section {
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            border-radius: 20px;
+            padding: 50px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .summary-message {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 35px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .summary-title {
+            font-size: 1.6em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .summary-content {
+            font-size: 1.15em;
+            line-height: 2;
+        }
+        
+        .key-points-list {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 35px;
+            backdrop-filter: blur(10px);
+            margin-top: 30px;
+        }
+        
+        .key-point-item {
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+        
+        .next-action {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 1.4em;
+            font-weight: bold;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 1200px) {
+            .goals-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .journey-timeline {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline-arrow {
+                transform: rotate(90deg);
+                margin: 20px 0;
+            }
+            
+            .table-boxes {
+                flex-direction: column;
+            }
+            
+            .arrow {
+                transform: rotate(90deg);
+                margin: 20px 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+            }
+            
+            .review-concepts {
+                grid-template-columns: 1fr;
+            }
+            
+            .approach-boxes {
+                grid-template-columns: 1fr;
+            }
+            
+            .plus-icon {
+                transform: rotate(90deg);
+                margin: 20px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">AIによるバックエンド開発とデータベース講座</h1>
+        <div class="subtitle">第3回：オープニング＆前回の振り返り</div>
+        
+        <!-- オープニング -->
+        <div class="opening-section">
+            <div class="opening-title">第3回へようこそ！</div>
+            
+            <div class="sql-badge">SQL入門</div>
+            
+            <div class="opening-message">
+                <strong style="font-size: 1.3em; color: #7c3aed; display: block; margin-bottom: 20px;">
+                    SQLという言葉、聞いたことはあるけれど...<br>
+                    「なんだか難しそう」「専門的すぎてよくわからない」
+                </strong>
+                
+                そんなイメージを持っている方も多いかもしれません。<br><br>
+                
+                でも、<strong style="color: #7c3aed; font-size: 1.2em;">安心してください。</strong><br><br>
+                
+                今日この講座が終わる頃には、<br>
+                SQLが何をするものなのか、どんな場面で使われているのか、<br>
+                そして何より、<strong style="color: #7c3aed; font-size: 1.15em;">AIを使ってSQLを自分の味方にする方法</strong>が、<br>
+                しっかりとイメージできるようになっているはずです。
+            </div>
+        </div>
+        
+        <!-- 前回の振り返り -->
+        <div class="review-section">
+            <h2 class="section-title">🔄 前回の振り返り</h2>
+            
+            <div style="text-align: center; margin-bottom: 30px; padding: 20px; background: #f9fafb; border-radius: 10px;">
+                <p style="font-size: 1.15em; color: #333; line-height: 1.8;">
+                    前回、第2回は<strong style="color: #7c3aed;">「データベースとは何か」「業務データを表にしてみる」</strong>というテーマでした
+                </p>
+            </div>
+            
+            <div class="keywords-box">
+                <div class="keywords-title">📝 前回のキーワード</div>
+                <div class="keywords-grid">
+                    <div class="keyword-item">テーブル</div>
+                    <div class="keyword-item">レコード</div>
+                    <div class="keyword-item">カラム</div>
+                    <div class="keyword-item">主キー</div>
+                    <div class="keyword-item">顧客テーブル</div>
+                    <div class="keyword-item">注文テーブル</div>
+                    <div class="keyword-item">ER図</div>
+                    <div class="keyword-item">1対多</div>
+                </div>
+            </div>
+            
+            <div class="review-concepts">
+                <div class="review-concept">
+                    <div class="concept-title">📊 データベースの構造</div>
+                    <div class="concept-desc">
+                        • <strong>テーブル</strong> = 「表」そのもの<br>
+                        • <strong>レコード</strong> = 「行」<br>
+                        • <strong>カラム</strong> = 「列」<br>
+                        • <strong>主キー</strong> = 各レコードを一意に識別する番号（背番号）
+                    </div>
+                </div>
+                
+                <div class="review-concept">
+                    <div class="concept-title">🔗 テーブルの関係性</div>
+                    <div class="concept-desc">
+                        顧客IDという共通の項目を使って、「この注文は誰が出したものか」という関係性を表現できる<br><br>
+                        これがER図（エンティティ・リレーションシップ図）の基本
+                    </div>
+                </div>
+            </div>
+            
+            <div class="relationship-diagram">
+                <h3 style="font-size: 1.2em; color: #0f766e; margin-bottom: 25px;">具体例：顧客と注文の関係</h3>
+                
+                <div class="table-boxes">
+                    <div class="table-box">
+                        <div class="table-name">👥 顧客テーブル</div>
+                        <div class="table-fields">
+                            • 顧客ID<br>
+                            • 名前<br>
+                            • メールアドレス<br>
+                            • 都道府県
+                        </div>
+                    </div>
+                    
+                    <div class="arrow">→</div>
+                    
+                    <div class="table-box">
+                        <div class="table-name">📦 注文テーブル</div>
+                        <div class="table-fields">
+                            • 注文ID<br>
+                            • 顧客ID<br>
+                            • 商品名<br>
+                            • 注文日<br>
+                            • 金額
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-radius: 15px; padding: 30px; margin-top: 30px; text-align: center;">
+                <strong style="font-size: 1.2em; color: #065f46; display: block; margin-bottom: 15px;">
+                    前回は何をした？
+                </strong>
+                <p style="font-size: 1.05em; color: #047857; line-height: 1.8;">
+                    実際に自社の業務データ（今Excelで管理している顧客情報や案件情報）を、<br>
+                    データベースのテーブルとして再構成してみるワークに取り組みました。<br><br>
+                    
+                    <strong>つまり、前回は「データをどう整理するか」「どんな箱を用意するか」という、<br>
+                    いわば設計図を描く段階でした。</strong>
+                </p>
+            </div>
+        </div>
+        
+        <!-- 今日のポジション -->
+        <div class="position-section">
+            <h2 class="section-title">🎯 今日のポジション</h2>
+            
+            <div style="text-align: center; margin-bottom: 40px; padding: 25px; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 15px;">
+                <p style="font-size: 1.2em; color: #78350f; line-height: 2;">
+                    設計図を描いたら、次は何をするか？<br><br>
+                    <strong style="font-size: 1.3em; color: #92400e;">
+                    実際にそのデータベースに対して、具体的な指示を出す段階です。
+                    </strong>
+                </p>
+            </div>
+            
+            <div class="journey-timeline">
+                <div class="journey-step previous">
+                    <div class="step-label">前回（第2回）</div>
+                    <div class="step-title">設計図を描く</div>
+                    <div class="step-desc">
+                        • データをどう整理するか<br>
+                        • どんな箱を用意するか<br>
+                        • テーブル構造の設計
+                    </div>
+                </div>
+                
+                <div class="timeline-arrow">→</div>
+                
+                <div class="journey-step current">
+                    <div class="step-label">今日（第3回）</div>
+                    <div class="step-title">指示を出す</div>
+                    <div class="step-desc">
+                        • データを入れる<br>
+                        • データを取り出す<br>
+                        • データを更新する<br>
+                        • データを削除する
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sql-explanation">
+                <div style="font-size: 1.4em; font-weight: bold; color: #92400e; margin-bottom: 20px; text-align: center;">
+                    その指示を出すための言葉、それがSQLなんです
+                </div>
+                
+                <div class="sql-metaphor">
+                    <strong style="color: #7c3aed; font-size: 1.2em;">イメージとしては...</strong><br><br>
+                    
+                    データベースという大きな<strong>図書館</strong>があって、<br>
+                    そこに「石川県に住んでいる顧客の情報を全部持ってきてください」とか<br>
+                    「この顧客のメールアドレスを新しいものに変更してください」といった<br>
+                    <strong>リクエストを出す</strong>。<br><br>
+                    
+                    その時に使う<strong style="color: #7c3aed; font-size: 1.2em;">共通言語が、SQL</strong>だと考えてください。
+                </div>
+            </div>
+        </div>
+        
+        <!-- 今日のゴール -->
+        <div class="goals-section">
+            <h2 class="section-title">🎯 今日のゴール</h2>
+            
+            <div class="goals-grid">
+                <div class="goal-card">
+                    <div class="goal-number">1</div>
+                    <div class="goal-title">
+                        SQLが何をする言語なのか、<br>
+                        ざっくりと説明できるようになる
+                    </div>
+                    <div class="goal-desc">
+                        SQLとは何か、どんな場面で使われているのか、<br>
+                        それを自分の言葉で人に説明できるレベルまで理解する
+                    </div>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-number">2</div>
+                    <div class="goal-title">
+                        SELECTという命令を使って、<br>
+                        欲しいデータを"読む"イメージを掴む
+                    </div>
+                    <div class="goal-desc">
+                        データベースからデータを取り出す、読み出す。<br>
+                        WHERE句で条件を指定したり、ORDER BYで並び替えたり、<br>
+                        基本的な組み合わせ方を学ぶ
+                    </div>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-number">3</div>
+                    <div class="goal-title">
+                        INSERT、UPDATE、DELETEの役割を理解し、<br>
+                        AIにSQLを書いてもらう体験をする
+                    </div>
+                    <div class="goal-desc">
+                        データを新しく追加する、既存のデータを更新する、削除する。<br>
+                        この3つの操作の意味と、実務での使われ方を理解する<br>
+                        （「削除フラグ」という考え方も）
+                    </div>
+                </div>
+            </div>
+            
+            <div class="important-stance">
+                <div class="stance-title">⚠️ とても大事なこと</div>
+                <div class="stance-content">
+                    この講座のゴールは、<br>
+                    みなさんが<strong style="font-size: 1.3em;">SQLを完璧に書けるようになること</strong>では、<br>
+                    <strong style="font-size: 1.4em; color: #dc2626;">ありません。</strong><br><br>
+                    
+                    そうではなくて...<br><br>
+                    
+                    <strong style="font-size: 1.3em;">
+                    「こういう条件でデータを取りたい」<br>
+                    「このデータを更新したい」<br>
+                    という要望を、まず日本語で明確に整理できるようになること。
+                    </strong>
+                </div>
+                
+                <div class="approach-boxes">
+                    <div class="approach-box">
+                        <div class="approach-title approach-you">あなたがやること</div>
+                        <div class="approach-content">
+                            「何がしたいか」を<br>
+                            <strong>日本語で正確に言語化</strong>する<br><br>
+                            
+                            例：「石川県に住んでいる顧客の一覧を、名前順に並べて表示したい」
+                        </div>
+                    </div>
+                    
+                    <div class="plus-icon">🤝</div>
+                    
+                    <div class="approach-box">
+                        <div class="approach-title approach-ai">AIがやること</div>
+                        <div class="approach-content">
+                            その日本語を<br>
+                            <strong>正確なSQLに翻訳</strong>する<br><br>
+                            
+                            例：<code style="background: #f3f4f6; padding: 3px 8px; border-radius: 3px;">SELECT * FROM customers WHERE prefecture = '石川県' ORDER BY name</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border-radius: 15px; padding: 30px; margin-top: 40px;">
+                <h3 style="font-size: 1.3em; color: #1e3a8a; margin-bottom: 20px; text-align: center;">
+                    💡 今日の実践内容
+                </h3>
+                <div style="background: white; border-radius: 10px; padding: 25px;">
+                    <p style="font-size: 1.05em; color: #333; line-height: 1.9;">
+                        今日の講座では、実際に<strong style="color: #3b82f6;">AIにSQLを書いてもらう場面を何度もお見せ</strong>します。<br><br>
+                        
+                        • どんなふうにプロンプトを投げるのか<br>
+                        • どんな情報を伝えれば正確なSQLが返ってくるのか<br>
+                        • 返ってきたSQLをどう読めばいいのか<br>
+                        • エラーが出たらどうするか<br><br>
+                        
+                        そういった<strong style="color: #3b82f6;">実践的なコツ</strong>を、一緒に体験しながら学んでいきましょう。
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- まとめ -->
+        <div class="summary-section">
+            <h2 class="section-title" style="color: white; border-bottom-color: white;">📝 今日身につけていただきたいこと</h2>
+            
+            <div class="summary-message">
+                <div class="summary-title">SQLの文法を丸暗記することではなく...</div>
+                <div class="summary-content">
+                    <strong style="font-size: 1.3em; display: block; margin: 20px 0;">
+                    「データベースとの対話の仕方」<br>
+                    「AIを使ったSQL操作の流れ」<br>
+                    を体で理解すること
+                    </strong>
+                </div>
+            </div>
+            
+            <div class="key-points-list">
+                <div style="font-size: 1.3em; font-weight: bold; margin-bottom: 25px; text-align: center;">
+                    🔑 重要なポイント
+                </div>
+                
+                <div class="key-point-item">
+                    <strong>✓ プログラマーやデータベースエンジニア：</strong><br>
+                    SQLを自分で書けなければいけない
+                </div>
+                
+                <div class="key-point-item">
+                    <strong>✓ 非エンジニアの立場（あなた）：</strong><br>
+                    「何がしたいか」を正確に言語化できれば、それで十分<br>
+                    あとはAIが、その日本語を正確なSQLに翻訳してくれる
+                </div>
+                
+                <div class="key-point-item">
+                    <strong>✓ エラーが出たら：</strong><br>
+                    「あなたにはできない」という意味ではなく、<br>
+                    「ここがおかしいよ」というコンピュータからのヒント<br>
+                    そのエラーメッセージをAIに見せれば、すぐに解決策が返ってくる
+                </div>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.2); border-radius: 15px; padding: 35px; backdrop-filter: blur(10px); text-align: center; margin-top: 30px;">
+                <p style="font-size: 1.2em; line-height: 2;">
+                    難しく感じたら、いつでも動画を止めて、何度でも見返してください。<br>
+                    この講座は収録版なので、<strong style="font-size: 1.3em;">自分のペースで進められるのが最大の強み</strong>です。
+                </p>
+            </div>
+            
+            <div class="next-action">
+                それでは、次のセクションから、<br>
+                いよいよ本題に入っていきましょう！ 🚀
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

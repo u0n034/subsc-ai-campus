@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第1回：Webの基本構造 - AIによるバックエンド開発とデータベース講座</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #1e3a8a;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #3b82f6;
+        }
+        
+        /* セクション1: 3層構造の全体像 */
+        .architecture-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .three-layer-diagram {
+            display: grid;
+            grid-template-columns: 1fr 80px 1fr 80px 1fr;
+            gap: 0;
+            margin-top: 30px;
+            align-items: center;
+        }
+        
+        .layer-box {
+            border-radius: 15px;
+            padding: 35px;
+            color: white;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .client-layer {
+            background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+        }
+        
+        .server-layer {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+        }
+        
+        .database-layer {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+        }
+        
+        .layer-icon {
+            font-size: 4em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .layer-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .layer-role {
+            font-size: 1.1em;
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .layer-description {
+            font-size: 0.95em;
+            line-height: 1.8;
+        }
+        
+        .layer-features {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .layer-features ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .layer-features li {
+            padding: 8px 0 8px 25px;
+            position: relative;
+        }
+        
+        .layer-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+        
+        .arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            color: #3b82f6;
+        }
+        
+        .important-note {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+        }
+        
+        .important-note-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .important-note-content {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+        
+        /* セクション2: 処理の流れ */
+        .flow-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .flow-example {
+            margin-top: 40px;
+        }
+        
+        .flow-example-title {
+            font-size: 1.5em;
+            color: #1e3a8a;
+            font-weight: bold;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .flow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .flow-step {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+        
+        .step-number {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5em;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            background: #f9fafb;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .step-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+        
+        .step-description {
+            font-size: 0.95em;
+            line-height: 1.8;
+            color: #333;
+        }
+        
+        .step-highlight {
+            margin-top: 10px;
+            padding: 15px;
+            background: #dbeafe;
+            border-radius: 8px;
+            font-size: 0.9em;
+            color: #1e3a8a;
+        }
+        
+        .step-location {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .location-client {
+            background: #fce7f3;
+            color: #ec4899;
+        }
+        
+        .location-server {
+            background: #ede9fe;
+            color: #8b5cf6;
+        }
+        
+        .location-database {
+            background: #d1fae5;
+            color: #10b981;
+        }
+        
+        .flow-visual {
+            margin: 30px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .flow-visual-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 20px;
+        }
+        
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .flow-node {
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            color: white;
+            min-width: 120px;
+        }
+        
+        .flow-arrow-text {
+            font-size: 2em;
+            color: #3b82f6;
+        }
+        
+        /* セクション3: AI活用 */
+        .ai-visualization-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .ai-demo-box {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            border-radius: 15px;
+            padding: 35px;
+            color: white;
+            margin-top: 30px;
+        }
+        
+        .ai-demo-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .ai-prompt-box {
+            background: rgba(255,255,255,0.95);
+            color: #1f2937;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.8;
+        }
+        
+        .ai-benefits {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .ai-benefit {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        
+        .ai-benefit-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        
+        .ai-benefit-text {
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        /* セクション4: まとめ */
+        .summary-section {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .summary-point {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .summary-point-icon {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .summary-point-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .summary-point-content {
+            font-size: 0.95em;
+            line-height: 1.8;
+        }
+        
+        .key-takeaway {
+            margin-top: 30px;
+            padding: 30px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        
+        .key-takeaway-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .key-takeaway-content {
+            font-size: 1.1em;
+            line-height: 2;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 1024px) {
+            .three-layer-diagram {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .arrow {
+                transform: rotate(90deg);
+                margin: 20px 0;
+            }
+            
+            .ai-benefits {
+                grid-template-columns: 1fr;
+            }
+            
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+            }
+            
+            .flow-step {
+                grid-template-columns: 1fr;
+            }
+            
+            .step-number {
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">AIによるバックエンド開発とデータベース講座</h1>
+        <div class="subtitle">第1回：Webの基本構造（クライアント/サーバー/データベース）</div>
+        
+        <!-- セクション1: 3層構造の全体像 -->
+        <div class="architecture-section">
+            <h2 class="section-title">🏗️ Webシステムの3層構造</h2>
+            <p style="font-size: 1.1em; color: #333; text-align: center; margin-bottom: 30px;">
+                Webサービスが動く時、裏側ではこの3つの層が連携して処理を行っています
+            </p>
+            
+            <div class="three-layer-diagram">
+                <div class="layer-box client-layer">
+                    <div>
+                        <div class="layer-icon">💻</div>
+                        <div class="layer-title">クライアント</div>
+                        <div class="layer-role">「お願いする側」</div>
+                    </div>
+                    
+                    <div>
+                        <div class="layer-description">
+                            皆さんが普段使っている、ブラウザやスマホアプリのことです。
+                        </div>
+                        
+                        <div class="layer-features">
+                            <strong>役割：</strong>
+                            <ul>
+                                <li>ユーザーが操作する場所</li>
+                                <li>画面の表示と入力受付</li>
+                                <li>サーバーにリクエストを送る</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="layer-features">
+                            <strong>具体例：</strong>
+                            <ul>
+                                <li>Chrome、Safari、Firefox</li>
+                                <li>iPhone/Androidアプリ</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow">→</div>
+                
+                <div class="layer-box server-layer">
+                    <div>
+                        <div class="layer-icon">⚙️</div>
+                        <div class="layer-title">サーバー<br><span style="font-size: 0.7em;">(バックエンド)</span></div>
+                        <div class="layer-role">「判断して処理する側」</div>
+                    </div>
+                    
+                    <div>
+                        <div class="layer-description">
+                            リクエストを受け取って処理する「頭脳」の役割を担っています。
+                        </div>
+                        
+                        <div class="layer-features">
+                            <strong>役割：</strong>
+                            <ul>
+                                <li>認証・認可の判断</li>
+                                <li>ビジネスロジックの実行</li>
+                                <li>データベースアクセス</li>
+                                <li>外部サービス連携</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="layer-features">
+                            <strong>重要：</strong><br>
+                            クライアントとデータベースの間に立って、セキュリティを確保します
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow">→</div>
+                
+                <div class="layer-box database-layer">
+                    <div>
+                        <div class="layer-icon">🗄️</div>
+                        <div class="layer-title">データベース</div>
+                        <div class="layer-role">「データを保管する側」</div>
+                    </div>
+                    
+                    <div>
+                        <div class="layer-description">
+                            データを保管しておく場所。「図書館の書庫」のようなものです。
+                        </div>
+                        
+                        <div class="layer-features">
+                            <strong>役割：</strong>
+                            <ul>
+                                <li>データの永続化</li>
+                                <li>高速な検索・取得</li>
+                                <li>データの整合性維持</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="layer-features">
+                            <strong>保存されるデータ：</strong>
+                            <ul>
+                                <li>顧客情報、商品情報</li>
+                                <li>注文履歴、在庫数</li>
+                                <li>レビュー、評価など</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="important-note">
+                <div class="important-note-title">🔒 絶対に覚えておいてほしいこと</div>
+                <div class="important-note-content">
+                    <strong>「クライアントとデータベースは、直接やり取りしない」</strong><br><br>
+                    必ず、サーバーを経由します。<br>
+                    これがセキュリティ上、非常に重要なポイントです。
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション2-1: ログインの流れ -->
+        <div class="flow-section">
+            <h2 class="section-title">🔐 具体例1：ログインの処理の流れ</h2>
+            <p style="font-size: 1.1em; color: #333; text-align: center; margin-bottom: 20px;">
+                普段、何気なく行っているログイン。その裏側で、どんな処理が起きているのか見ていきましょう。
+            </p>
+            
+            <div class="flow-example">
+                <div class="flow-example-title">📧 tanaka@example.com でログインする場合</div>
+                
+                <div class="flow-steps">
+                    <div class="flow-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-location location-client">クライアント</div>
+                            <div class="step-title">ユーザーが情報を入力</div>
+                            <div class="step-description">
+                                メールアドレスとパスワードを入力フォームに入力します。<br>
+                                例：tanaka@example.com / pass1234
+                            </div>
+                            <div class="step-highlight">
+                                まだブラウザの中だけで処理が行われています。サーバーには何も送られていません。
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-location location-client">クライアント</div>
+                            <div class="step-title">ログインボタンをクリック</div>
+                            <div class="step-description">
+                                クライアントは、入力された情報をサーバーに送信します。<br>
+                                「tanaka@example.comとpass1234でログインしたいです」というリクエストを送ります。
+                            </div>
+                            <div class="step-highlight">
+                                💡 パスワードは暗号化(HTTPS)されて送られます。通信内容を盗み見られても安全です。
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-location location-server">サーバー</div>
+                            <div class="step-title">リクエストを受け取り、判断開始</div>
+                            <div class="step-description">
+                                サーバーは、クライアントからのリクエストを受け取ります。<br>
+                                「このユーザーは、本当に正しい情報を入力しているのか？」と判断を開始します。
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-location location-server">サーバー → データベース</div>
+                            <div class="step-title">データベースに問い合わせ</div>
+                            <div class="step-description">
+                                サーバーは、データベースに対して問い合わせます。<br>
+                                「tanaka@example.comというメールアドレスのユーザー情報を教えてください」
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <div class="step-location location-database">データベース → サーバー</div>
+                            <div class="step-title">ユーザーデータを返す</div>
+                            <div class="step-description">
+                                データベースは、該当するユーザーのデータをサーバーに返します。<br>
+                                このデータには、ユーザーID、氏名、そして<strong>ハッシュ化されたパスワード</strong>が含まれています。
+                            </div>
+                            <div class="step-highlight">
+                                💡 ハッシュ化：パスワードを暗号のような文字列に変換すること。<br>
+                                「pass1234」→「3e7d8f92a1b4c5d6e7f8a9b0c1d2e3f4」<br>
+                                万が一データが漏れても、元のパスワードは分からないようにしています。
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <div class="step-location location-server">サーバー</div>
+                            <div class="step-title">パスワードを照合する</div>
+                            <div class="step-description">
+                                サーバーは、ユーザーが入力した「pass1234」を同じ方法でハッシュ化します。<br>
+                                そして、データベースから取得したハッシュと比較します。
+                            </div>
+                            <div class="step-highlight">
+                                データベースのハッシュ：「3e7d8f92a1b4c5d6e7f8a9b0c1d2e3f4」<br>
+                                入力パスワードのハッシュ：「3e7d8f92a1b4c5d6e7f8a9b0c1d2e3f4」<br>
+                                → ✅ 一致！パスワードは正しい
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">7</div>
+                        <div class="step-content">
+                            <div class="step-location location-server">サーバー → クライアント</div>
+                            <div class="step-title">ログイン成功の結果を返す</div>
+                            <div class="step-description">
+                                パスワードが正しいことが確認できたので、サーバーは「ログイン成功」という結果をクライアントに返します。<br><br>
+                                この時、「セッション」や「トークン」という仕組みを使って、「このユーザーは今ログインしている状態ですよ」という情報を渡します。
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">8</div>
+                        <div class="step-content">
+                            <div class="step-location location-client">クライアント</div>
+                            <div class="step-title">画面がマイページに切り替わる</div>
+                            <div class="step-description">
+                                クライアントは、「ログイン成功」の結果を受け取ると、画面を切り替えます。<br>
+                                ログイン画面から、マイページへ。「田中様、ようこそ」といった表示が出ます。
+                            </div>
+                            <div class="step-highlight">
+                                ✅ ログイン処理完了！（所要時間：約1〜3秒）
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flow-visual">
+                    <div class="flow-visual-title">処理の流れ全体像</div>
+                    <div class="flow-diagram">
+                        <div class="flow-node" style="background: #ec4899;">クライアント<br>入力</div>
+                        <div class="flow-arrow-text">→</div>
+                        <div class="flow-node" style="background: #8b5cf6;">サーバー<br>受取</div>
+                        <div class="flow-arrow-text">→</div>
+                        <div class="flow-node" style="background: #10b981;">DB<br>検索</div>
+                        <div class="flow-arrow-text">→</div>
+                        <div class="flow-node" style="background: #8b5cf6;">サーバー<br>照合</div>
+                        <div class="flow-arrow-text">→</div>
+                        <div class="flow-node" style="background: #ec4899;">クライアント<br>表示</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション2-2: 商品検索の流れ -->
+        <div class="flow-section">
+            <h2 class="section-title">🔍 具体例2：商品検索の処理の流れ</h2>
+            <p style="font-size: 1.1em; color: #333; text-align: center; margin-bottom: 20px;">
+                ECサイトで「ノートパソコン」と検索すると、一瞬で何百、何千という商品が表示されます。<br>
+                その裏側で、何が起きているのか見ていきましょう。
+            </p>
+            
+            <div class="flow-example">
+                <div class="flow-example-title">💻 「ノートパソコン」で商品を検索する場合</div>
+                
+                <div class="flow-steps">
+                    <div class="flow-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-location location-client">クライアント</div>
+                            <div class="step-title">検索ワードを入力</div>
+                            <div class="step-description">
+                                検索窓に「ノートパソコン」と入力します。<br>
+                                まだエンターキーは押していません。
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-location location-client">クライアント</div>
+                            <div class="step-title">検索ボタンをクリック</div>
+                            <div class="step-description">
+                                クライアントはサーバーに対してリクエストを送ります。<br>
+                                「『ノートパソコン』という言葉を含む商品データを、全て取得してください」<br><br>
+                                他の条件も一緒に送られます：
+                            </div>
+                            <div class="step-highlight">
+                                • 並び順：価格の安い順<br>
+                                • フィルター：評価が4以上<br>
+                                • 条件：在庫があるものだけ
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-location location-server">サーバー</div>
+                            <div class="step-title">リクエストを受け取り、処理開始</div>
+                            <div class="step-description">
+                                サーバーは、リクエストの内容を整理します。<br>
+                                そして、データベースへの問い合わせ文（SQLクエリ）を作ります。
+                            </div>
+                            <div class="step-highlight">
+                                条件の整理：<br>
+                                ✓ 検索ワード：「ノートパソコン」<br>
+                                ✓ 並び順：価格の安い順<br>
+                                ✓ 評価：4以上<br>
+                                ✓ 在庫：1以上
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-location location-server">サーバー → データベース</div>
+                            <div class="step-title">データベースに問い合わせ</div>
+                            <div class="step-description">
+                                サーバーは、SQLという言語でデータベースに問い合わせます。
+                            </div>
+                            <div class="step-highlight" style="font-family: 'Courier New', monospace; font-size: 0.9em;">
+                                「商品テーブルから、商品名に『ノートパソコン』を含むもので、<br>
+                                評価が4以上、在庫が1以上のものを全て取得してください。<br>
+                                そして、価格の安い順に並べてください」
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <div class="step-location location-database">データベース</div>
+                            <div class="step-title">検索を実行</div>
+                            <div class="step-description">
+                                データベースは、この問い合わせを受けて検索を実行します。<br><br>
+                                商品データが10万件あったとしても、その中から「ノートパソコン」を含むものを一瞬で探し出します。<br>
+                                さらに、条件でフィルターをかけ、価格順に並び替えます。
+                            </div>
+                            <div class="step-highlight">
+                                ⚡ データベースの処理速度は驚異的！<br>
+                                10万件から検索しても1秒もかかりません
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <div class="step-location location-database">データベース → サーバー</div>
+                            <div class="step-title">検索結果を返す</div>
+                            <div class="step-description">
+                                検索が完了すると、データベースは該当する商品データのリストをサーバーに返します。<br><br>
+                                例：500件の商品がヒット<br>
+                                各商品のデータ：商品ID、商品名、価格、在庫数、評価、画像URL、商品説明など
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">7</div>
+                        <div class="step-content">
+                            <div class="step-location location-server">サーバー</div>
+                            <div class="step-title">追加の処理を行う</div>
+                            <div class="step-description">
+                                サーバーは、データベースから受け取った500件のデータに対して、さらに処理を加えます。
+                            </div>
+                            <div class="step-highlight">
+                                追加処理の例：<br>
+                                • セール対象商品に「セール中」タグを追加<br>
+                                • お気に入り商品にハートマークを追加<br>
+                                • 最初の30件だけ送る（ページネーション）<br>
+                                → 残りは「もっと見る」ボタンで取得
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">8</div>
+                        <div class="step-content">
+                            <div class="step-location location-server">サーバー → クライアント</div>
+                            <div class="step-title">検索結果を返す</div>
+                            <div class="step-description">
+                                サーバーは、処理が完了したら結果をクライアントに返します。<br>
+                                「検索結果は全部で500件。最初の30件分のデータを送ります」<br><br>
+                                このデータは、JSON(ジェイソン)という形式で送られます。
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">9</div>
+                        <div class="step-content">
+                            <div class="step-location location-client">クライアント</div>
+                            <div class="step-title">画面に表示</div>
+                            <div class="step-description">
+                                クライアントは、サーバーから受け取ったデータを画面に表示します。<br><br>
+                                商品の画像、商品名、価格、評価の星マーク。<br>
+                                これらをレイアウトして、見やすい形で並べます。
+                            </div>
+                            <div class="step-highlight">
+                                ✅ 検索結果の表示完了！（所要時間：約1〜2秒）
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flow-visual">
+                    <div class="flow-visual-title">処理の流れ全体像</div>
+                    <div class="flow-diagram">
+                        <div class="flow-node" style="background: #ec4899;">クライアント<br>入力</div>
+                        <div class="flow-arrow-text">→</div>
+                        <div class="flow-node" style="background: #8b5cf6;">サーバー<br>整理</div>
+                        <div class="flow-arrow-text">→</div>
+                        <div class="flow-node" style="background: #10b981;">DB<br>検索</div>
+                        <div class="flow-arrow-text">→</div>
+                        <div class="flow-node" style="background: #8b5cf6;">サーバー<br>加工</div>
+                        <div class="flow-arrow-text">→</div>
+                        <div class="flow-node" style="background: #ec4899;">クライアント<br>表示</div>
+                    </div>
+                    <p style="margin-top: 20px; font-size: 1em; color: #1e3a8a;">
+                        たったの1〜2秒の出来事。その裏側では、3層が連携してこれだけの処理を行っています！
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション3: AIで図解してもらう -->
+        <div class="ai-visualization-section">
+            <h2 class="section-title">🤖 AIを使って処理の流れを図解する</h2>
+            <p style="font-size: 1.1em; color: #333; text-align: center; margin-bottom: 20px;">
+                複雑な仕組みを理解するには、「図」があると分かりやすいですよね。<br>
+                AIに頼めば、処理の流れを図にして可視化してくれます！
+            </p>
+            
+            <div class="ai-demo-box">
+                <div class="ai-demo-title">💡 AIに質問してみよう</div>
+                
+                <div class="ai-prompt-box">
+                    <strong>プロンプト例：</strong><br><br>
+                    ECサイトで商品をカートに入れる処理について、<br>
+                    クライアント・サーバー・データベースの3層で処理の流れを<br>
+                    図解してください。Mermaid記法で出力してください。
+                </div>
+                
+                <div style="text-align: center; margin: 25px 0; font-size: 1.1em; line-height: 1.8;">
+                    「Mermaid記法」を指定すると、AIが図を作りやすくなります。<br>
+                    Mermaid Live Editorなどのツールで、視覚的な図として表示できます！
+                </div>
+                
+                <div class="ai-benefits">
+                    <div class="ai-benefit">
+                        <div class="ai-benefit-icon">📊</div>
+                        <div class="ai-benefit-text">
+                            <strong>視覚的に理解</strong><br>
+                            矢印で繋がった図で、処理の流れが一目で分かる
+                        </div>
+                    </div>
+                    
+                    <div class="ai-benefit">
+                        <div class="ai-benefit-icon">🎯</div>
+                        <div class="ai-benefit-text">
+                            <strong>頭の中が整理</strong><br>
+                            「こういう順番で進んでいくんだな」と明確に
+                        </div>
+                    </div>
+                    
+                    <div class="ai-benefit">
+                        <div class="ai-benefit-icon">✨</div>
+                        <div class="ai-benefit-text">
+                            <strong>簡単に作成</strong><br>
+                            AIに頼めば、複雑な図も簡単に作れる
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; padding: 25px; background: rgba(255,255,255,0.2); border-radius: 10px; backdrop-filter: blur(10px);">
+                    <strong style="display: block; font-size: 1.2em; margin-bottom: 15px; text-align: center;">🎓 試してみよう！</strong>
+                    <div style="line-height: 1.8;">
+                        ぜひ、動画を一時停止して、実際にAIに質問してみてください。<br><br>
+                        
+                        <strong>質問例：</strong><br>
+                        • 「Uber Eatsで注文する流れを図解してください」<br>
+                        • 「YouTubeで動画を再生する流れを図解してください」<br>
+                        • 「経費精算システムの承認フローを図解してください」<br><br>
+                        
+                        自分の言葉で質問して、自分なりに理解を深めてみましょう。<br>
+                        <strong>AIは、複雑な技術的な仕組みを分かりやすく説明してくれる強力なパートナーです！</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション4: まとめ -->
+        <div class="summary-section">
+            <h2 class="section-title" style="color: white; border-bottom-color: white;">📝 このセクションのまとめ</h2>
+            
+            <div class="summary-grid">
+                <div class="summary-point">
+                    <div class="summary-point-icon">💻</div>
+                    <div class="summary-point-title">クライアント</div>
+                    <div class="summary-point-content">
+                        「お願いする側」<br><br>
+                        • ユーザーが操作する場所<br>
+                        • 画面の表示と入力受付<br>
+                        • サーバーにリクエストを送る
+                    </div>
+                </div>
+                
+                <div class="summary-point">
+                    <div class="summary-point-icon">⚙️</div>
+                    <div class="summary-point-title">サーバー</div>
+                    <div class="summary-point-content">
+                        「判断して処理する側」<br><br>
+                        • 認証・認可の判断<br>
+                        • ビジネスロジックの実行<br>
+                        • データベースアクセス<br>
+                        • 外部サービス連携
+                    </div>
+                </div>
+                
+                <div class="summary-point">
+                    <div class="summary-point-icon">🗄️</div>
+                    <div class="summary-point-title">データベース</div>
+                    <div class="summary-point-content">
+                        「データを保管する側」<br><br>
+                        • データの永続化<br>
+                        • 高速な検索・取得<br>
+                        • データの整合性維持<br>
+                        • サーバーの指示で出し入れ
+                    </div>
+                </div>
+            </div>
+            
+            <div class="key-takeaway">
+                <div class="key-takeaway-title">🔑 重要なポイント</div>
+                <div class="key-takeaway-content">
+                    <strong>クライアントとデータベースは、直接やり取りしない</strong><br>
+                    必ず、サーバーを経由する（セキュリティ上重要）<br><br>
+                    
+                    <strong>実際の処理の流れは「リクエスト→処理→レスポンス」</strong><br>
+                    この基本パターンで全てのWeb処理が進む<br><br>
+                    
+                    <strong>AIを使えば、複雑な流れを図解して視覚的に理解できる</strong><br>
+                    Mermaid記法を指定すると、分かりやすい図が作れる
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px; padding: 30px; background: rgba(255,255,255,0.2); border-radius: 15px; backdrop-filter: blur(10px); text-align: center;">
+                <h3 style="font-size: 1.5em; margin-bottom: 15px;">🚀 次のステップへ</h3>
+                <p style="font-size: 1.1em; line-height: 1.8;">
+                    この基本を押さえておけば、次回以降の講座で<br>
+                    データベースやAPIについて学ぶ時に、<br>
+                    「ああ、あの3層構造の中で、こういう役割を果たしているんだな」と<br>
+                    スムーズに理解できるようになります。<br><br>
+                    <strong style="font-size: 1.2em;">3層構造は、Webシステムの基本中の基本です！</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+

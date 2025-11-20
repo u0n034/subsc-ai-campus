@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第1回：バックエンドの役割まとめ - AIによるバックエンド開発とデータベース講座</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #1e3a8a;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #3b82f6;
+        }
+        
+        /* セクション1: 4大機能 */
+        .four-functions-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .functions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .function-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .function-header {
+            padding: 30px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .function-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .function-1 {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+        }
+        
+        .function-2 {
+            background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+        }
+        
+        .function-3 {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+        }
+        
+        .function-4 {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+        }
+        
+        .function-number {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .function-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .function-subtitle {
+            font-size: 1em;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .function-content {
+            background: white;
+            padding: 30px;
+        }
+        
+        .function-description {
+            font-size: 1em;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .function-examples {
+            background: #f9fafb;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        
+        .function-examples-title {
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+        
+        .function-examples ul {
+            padding-left: 20px;
+            color: #333;
+        }
+        
+        .function-examples li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+        
+        .function-why {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        
+        .function-why-title {
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+        
+        .function-why-content {
+            color: #333;
+            line-height: 1.8;
+        }
+        
+        /* セクション2: AI時代の変化 */
+        .transformation-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .before-after {
+            display: grid;
+            grid-template-columns: 1fr 80px 1fr;
+            gap: 0;
+            margin-top: 30px;
+            align-items: stretch;
+        }
+        
+        .before-box {
+            background: #f5f5f5;
+            border: 3px dashed #999;
+            border-radius: 15px;
+            padding: 35px;
+        }
+        
+        .after-box {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            border-radius: 15px;
+            padding: 35px;
+            color: white;
+        }
+        
+        .ba-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .ba-title-before {
+            color: #666;
+        }
+        
+        .ba-content {
+            font-size: 1em;
+            line-height: 1.8;
+        }
+        
+        .ba-content ul {
+            padding-left: 20px;
+            margin-top: 15px;
+        }
+        
+        .ba-content li {
+            margin: 10px 0;
+        }
+        
+        .before-box .ba-content {
+            color: #666;
+        }
+        
+        .transformation-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .arrow-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .arrow-icon {
+            font-size: 3em;
+            color: #3b82f6;
+        }
+        
+        .arrow-label {
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #1e3a8a;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+        }
+        
+        .new-roles {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .new-role {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 10px;
+            padding: 25px;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .new-role-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .new-role-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+        
+        .new-role-description {
+            font-size: 0.95em;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* セクション3: AIディレクター */
+        .ai-director-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .ai-director-intro {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+            border-radius: 15px;
+            padding: 35px;
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .ai-director-intro-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .ai-director-intro-subtitle {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+        
+        .ai-director-roles {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .ai-director-role {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .role-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .role-number {
+            width: 40px;
+            height: 40px;
+            background: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 0 auto 15px;
+        }
+        
+        .role-name {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+        
+        .role-desc {
+            font-size: 0.9em;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .course-goal {
+            margin-top: 30px;
+            padding: 30px;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 15px;
+            border-left: 5px solid #f59e0b;
+        }
+        
+        .course-goal-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 15px;
+        }
+        
+        .course-goal-content {
+            font-size: 1.05em;
+            color: #78350f;
+            line-height: 1.8;
+        }
+        
+        /* セクション4: まとめ */
+        .summary-section {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .summary-boxes {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .summary-box {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .summary-box-icon {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .summary-box-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .summary-box-content {
+            font-size: 0.95em;
+            line-height: 1.8;
+        }
+        
+        .final-message {
+            margin-top: 30px;
+            padding: 30px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        
+        .final-message-content {
+            font-size: 1.2em;
+            line-height: 2;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 1200px) {
+            .functions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .ai-director-roles {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+            }
+            
+            .before-after {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .transformation-arrow {
+                transform: rotate(90deg);
+                margin: 20px 0;
+            }
+            
+            .new-roles {
+                grid-template-columns: 1fr;
+            }
+            
+            .ai-director-roles {
+                grid-template-columns: 1fr;
+            }
+            
+            .summary-boxes {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">AIによるバックエンド開発とデータベース講座</h1>
+        <div class="subtitle">第1回：バックエンドの役割まとめ</div>
+        
+        <!-- セクション1: バックエンドの4大機能 -->
+        <div class="four-functions-section">
+            <h2 class="section-title">⚙️ バックエンドの4大機能</h2>
+            <p style="font-size: 1.1em; color: #333; text-align: center; margin-bottom: 30px;">
+                この4つを理解しておけば、どんなWebサービスやシステムを見ても、<br>
+                「あ、ここはバックエンドがこういう処理をしているんだな」と想像できるようになります。
+            </p>
+            
+            <div class="functions-grid">
+                <!-- 機能1: 認証・認可 -->
+                <div class="function-card">
+                    <div class="function-header function-1">
+                        <div class="function-number">1</div>
+                        <div class="function-title">認証・認可</div>
+                        <div class="function-subtitle">Authentication & Authorization</div>
+                    </div>
+                    <div class="function-content">
+                        <div class="function-description">
+                            <strong>「あなたは誰？」と「あなたは何ができる？」を確認する仕組み</strong>
+                        </div>
+                        
+                        <div class="function-examples">
+                            <div class="function-examples-title">🔐 認証（Authentication）</div>
+                            「あなたは本当に本人ですか？」を確認すること
+                            <ul>
+                                <li>ログイン（メールアドレス＋パスワード）</li>
+                                <li>二段階認証（スマホに送られる6桁のコード）</li>
+                                <li>生体認証（指紋、顔認証）</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="function-examples">
+                            <div class="function-examples-title">✅ 認可（Authorization）</div>
+                            「あなたは何ができますか？」を判断すること
+                            <ul>
+                                <li>一般社員：自分の経費を申請できる</li>
+                                <li>部長：経費を承認できる</li>
+                                <li>有料会員：限定記事を閲覧できる</li>
+                                <li>投稿者：自分が書いた記事だけ編集できる</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="function-why">
+                            <div class="function-why-title">💡 なぜ重要なのか</div>
+                            <div class="function-why-content">
+                                セキュリティの要です。これが機能していないと、誰でも他人のアカウントに入れたり、本来触れてはいけない情報にアクセスできてしまいます。情報漏えいやデータ改ざんといった深刻な問題につながります。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 機能2: ビジネスロジック -->
+                <div class="function-card">
+                    <div class="function-header function-2">
+                        <div class="function-number">2</div>
+                        <div class="function-title">ビジネスロジック</div>
+                        <div class="function-subtitle">Business Logic</div>
+                    </div>
+                    <div class="function-content">
+                        <div class="function-description">
+                            <strong>「もし◯◯なら、△△する」というビジネス上のルールや判断を処理すること</strong>
+                        </div>
+                        
+                        <div class="function-examples">
+                            <div class="function-examples-title">🛒 ECサイトの例</div>
+                            <ul>
+                                <li>在庫が0なら、購入ボタンを非表示にする</li>
+                                <li>合計金額が1万円以上なら、送料無料にする</li>
+                                <li>クーポンコードが入力されたら、割引を適用する</li>
+                                <li>同じ商品を5個以上買おうとしたら、「大量購入の場合はお問い合わせください」と表示</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="function-examples">
+                            <div class="function-examples-title">📅 予約システムの例</div>
+                            <ul>
+                                <li>同じ時間帯に、同じ人が複数の予約を入れることはできない</li>
+                                <li>キャンセルは、予約日の3日前までに限る</li>
+                                <li>予約人数が定員を超えたら、「満席」と表示</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="function-examples">
+                            <div class="function-examples-title">🎁 ポイントシステムの例</div>
+                            <ul>
+                                <li>購入金額の5%をポイントとして付与する</li>
+                                <li>ただし、誕生月は10%にアップする</li>
+                                <li>ポイントは、次回の買い物で1ポイント=1円として使える</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="function-why">
+                            <div class="function-why-title">💡 なぜバックエンドで処理するのか</div>
+                            <div class="function-why-content">
+                                フロントエンド側だけで処理すると、改ざんされるリスクがあります。ブラウザの開発者ツールを使えば、画面上の価格や在庫数を書き換えることができてしまいます。<br><br>
+                                重要な計算や判断は、必ずバックエンド側で行います。バックエンドは、ユーザーから直接操作されることがないので、改ざんのリスクが低いのです。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 機能3: データベースアクセス -->
+                <div class="function-card">
+                    <div class="function-header function-3">
+                        <div class="function-number">3</div>
+                        <div class="function-title">データベースアクセス</div>
+                        <div class="function-subtitle">Database Access</div>
+                    </div>
+                    <div class="function-content">
+                        <div class="function-description">
+                            <strong>データベースに対して、データの読み書きをする役割</strong>
+                        </div>
+                        
+                        <div class="function-examples">
+                            <div class="function-examples-title">📊 CRUD（クラッド）という概念</div>
+                            データベースに対する操作は、大きく4つに分けられます
+                            <ul>
+                                <li><strong>C: Create（作成）</strong> – 新しいデータを登録する</li>
+                                <li><strong>R: Read（読取）</strong> – データを検索して取得する</li>
+                                <li><strong>U: Update（更新）</strong> – 既存のデータを修正する</li>
+                                <li><strong>D: Delete（削除）</strong> – データを削除する</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="function-examples">
+                            <div class="function-examples-title">💡 具体例</div>
+                            <ul>
+                                <li>会員登録 → データを<strong>Create（作成）</strong></li>
+                                <li>ログイン → データを<strong>Read（読取）</strong>して照合</li>
+                                <li>プロフィール変更 → データを<strong>Update（更新）</strong></li>
+                                <li>退会 → データを<strong>Delete（削除）</strong></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="function-examples">
+                            <div class="function-examples-title">🔧 複雑な処理の例</div>
+                            <ul>
+                                <li>複数のテーブルを結合して検索</li>
+                                <li>集計（今月の売上合計、平均購入金額など）</li>
+                                <li>条件抽出（「東京都に住んでいる30代の女性で、過去3ヶ月以内に購入履歴がある人」など）</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="function-why">
+                            <div class="function-why-title">💡 ポイント</div>
+                            <div class="function-why-content">
+                                ユーザーが画面上で行う操作の裏側では、バックエンドがデータベースに対して、CRUDのいずれかの処理を実行しています。<br><br>
+                                次回の講座では、このデータベースについて、さらに詳しく学んでいきます。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 機能4: 外部サービス連携 -->
+                <div class="function-card">
+                    <div class="function-header function-4">
+                        <div class="function-number">4</div>
+                        <div class="function-title">外部サービス連携</div>
+                        <div class="function-subtitle">External API Integration</div>
+                    </div>
+                    <div class="function-content">
+                        <div class="function-description">
+                            <strong>自社のシステムだけでは完結しない機能を、外部のサービスと連携して実現すること</strong>
+                        </div>
+                        
+                        <div class="function-examples">
+                            <div class="function-examples-title">🔗 代表的な連携先</div>
+                            <ul>
+                                <li><strong>決済サービス：</strong>Stripe、PayPal<br>クレジットカード決済や電子決済</li>
+                                <li><strong>メール配信：</strong>SendGrid、Amazon SES<br>会員登録、パスワード再設定、注文確定のメール</li>
+                                <li><strong>SMS送信：</strong>Twilio<br>二段階認証の6桁コード送信</li>
+                                <li><strong>地図・位置情報：</strong>Google Maps API<br>店舗の位置表示、配達ルート表示</li>
+                                <li><strong>その他：</strong>天気情報、株価情報など</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="function-why">
+                            <div class="function-why-title">💡 なぜバックエンドで連携するのか</div>
+                            <div class="function-why-content">
+                                <strong>理由1: セキュリティ</strong><br>
+                                外部サービスとやり取りするには「APIキー」という秘密の認証情報が必要です。これをフロントエンド（ブラウザ）に置いてしまうと、誰でも見ることができてしまいます。<br><br>
+                                バックエンドにAPIキーを保管しておいて、バックエンドが代わりに外部サービスとやり取りします。<br><br>
+                                
+                                <strong>理由2: 処理の一貫性</strong><br>
+                                決済処理の途中でエラーが起きたとき、「お金は引き落とされたけど、注文データは保存されていない」といった不整合が起きないように、バックエンド側で一括して管理します。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 40px; padding: 30px; background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border-radius: 15px; text-align: center;">
+                <h3 style="font-size: 1.5em; color: #1e3a8a; margin-bottom: 15px;">📌 4つの機能のまとめ</h3>
+                <div style="font-size: 1.1em; color: #333; line-height: 1.8;">
+                    <strong>1. 認証・認可</strong> – 「あなたは誰？」「あなたは何ができる？」を管理<br>
+                    <strong>2. ビジネスロジック</strong> – 「もし〜なら〜する」というルールを実行<br>
+                    <strong>3. データベースアクセス</strong> – データの読み書き、CRUD操作<br>
+                    <strong>4. 外部サービス連携</strong> – 決済、メール、SMS、地図などの外部機能を利用<br><br>
+                    <strong style="font-size: 1.15em; color: #1e3a8a;">どんなWebサービスやシステムでも、この4つのうち、いくつかは必ず行っています！</strong>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション2: AI時代の変化 -->
+        <div class="transformation-section">
+            <h2 class="section-title">🚀 AI時代のバックエンドの捉え方</h2>
+            
+            <div class="before-after">
+                <div class="before-box">
+                    <div class="ba-title ba-title-before">📚 従来の状況</div>
+                    <div class="ba-content">
+                        <strong>バックエンドは「ブラックボックス」</strong><br><br>
+                        
+                        バックエンドは、プログラマーやエンジニアの専門領域でした。<br><br>
+                        
+                        <strong>非エンジニアの課題：</strong>
+                        <ul>
+                            <li>コードが書けないと、何もできない</li>
+                            <li>「こういうシステムが欲しい」とお願いするだけ</li>
+                            <li>実際に作るのは、すべてエンジニアに任せるしかない</li>
+                            <li>「何ができて、何ができないのか」が分からない</li>
+                            <li>コミュニケーションが噛み合わないことも</li>
+                        </ul>
+                        
+                        <strong>エンジニアと非エンジニアの間には、大きな壁がありました。</strong>
+                    </div>
+                </div>
+                
+                <div class="transformation-arrow">
+                    <div class="arrow-content">
+                        <div class="arrow-icon">→</div>
+                        <div class="arrow-label">AI時代</div>
+                    </div>
+                </div>
+                
+                <div class="after-box">
+                    <div class="ba-title">✨ これからの変化</div>
+                    <div class="ba-content">
+                        <strong>AIがコードを書く時代</strong><br><br>
+                        
+                        ChatGPT、GitHub Copilot、Cursorといったツールが登場し、「AIがコードを書く」ことが現実に。<br><br>
+                        
+                        <strong>新しい可能性：</strong>
+                        <ul>
+                            <li>自然言語でAIに伝えるだけで、コードを生成してくれる</li>
+                            <li>「たたき台」は簡単に作れる</li>
+                            <li>細かい部分を修正すれば、実際に動くシステムに</li>
+                        </ul>
+                        
+                        <strong>求められる人材の変化：</strong>
+                        <ul>
+                            <li>コードを書けるエンジニア → 引き続き重要</li>
+                            <li>新たに価値が出る人 → AIディレクター</li>
+                        </ul>
+                        
+                        <strong>非エンジニアにも、新しい役割が生まれています！</strong>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 40px;">
+                <h3 style="font-size: 1.5em; color: #1e3a8a; margin-bottom: 25px; text-align: center;">💼 新たに価値が出てくる人材</h3>
+                
+                <div class="new-roles">
+                    <div class="new-role">
+                        <div class="new-role-icon">📝</div>
+                        <div class="new-role-title">「何を作るべきか」を言語化できる人</div>
+                        <div class="new-role-description">
+                            「こういう機能が欲しい」「こういう処理が必要」と、具体的に整理して伝えられる人。要件定義ができる人。
+                        </div>
+                    </div>
+                    
+                    <div class="new-role">
+                        <div class="new-role-icon">🧩</div>
+                        <div class="new-role-title">「こういう処理が必要」を構造化できる人</div>
+                        <div class="new-role-description">
+                            「ユーザーがログインする」という一つの動作の裏側で、「認証処理が必要」「セッション管理が必要」「データベースへの問い合わせが必要」と、構造的に分解して考えられる人。
+                        </div>
+                    </div>
+                    
+                    <div class="new-role">
+                        <div class="new-role-icon">🔍</div>
+                        <div class="new-role-title">AIが生成したコードを評価・修正指示できる人</div>
+                        <div class="new-role-description">
+                            AIが書いたコードを見て、「ここはこうした方がいいよね」「この処理、セキュリティ的に問題ないか確認して」と、的確に指示できる人。
+                        </div>
+                    </div>
+                    
+                    <div class="new-role">
+                        <div class="new-role-icon">💬</div>
+                        <div class="new-role-title">エンジニアと円滑にコミュニケーションできる人</div>
+                        <div class="new-role-description">
+                            技術的な用語を理解して、エンジニアと対等に会話できる人。「バックエンドで認証処理を追加してください」「このAPIのレスポンスが遅いので、データベースのクエリを最適化できませんか」といった、具体的な会話ができる人。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション3: AIディレクターの役割 -->
+        <div class="ai-director-section">
+            <h2 class="section-title">🎯 AIディレクターの役割</h2>
+            
+            <div class="ai-director-intro">
+                <div class="ai-director-intro-title">🤖 AIディレクターとは？</div>
+                <div class="ai-director-intro-subtitle">
+                    コードは書かないけれど、AIとエンジニアを「ディレクション（指揮・監督）」できる人<br><br>
+                    <strong>これからの時代に求められる、非エンジニアの新しい役割です</strong>
+                </div>
+            </div>
+            
+            <div class="ai-director-roles">
+                <div class="ai-director-role">
+                    <div class="role-number">1</div>
+                    <div class="role-icon">📋</div>
+                    <div class="role-name">要件定義</div>
+                    <div class="role-desc">
+                        「こういうシステムが欲しい」を明確に言語化。<br><br>
+                        • 誰が使うのか<br>
+                        • 何のために使うのか<br>
+                        • どんな機能が必要か<br>
+                        • どんなデータを扱うのか
+                    </div>
+                </div>
+                
+                <div class="ai-director-role">
+                    <div class="role-number">2</div>
+                    <div class="role-icon">🏗️</div>
+                    <div class="role-name">設計支援</div>
+                    <div class="role-desc">
+                        大まかな設計を考える。<br><br>
+                        完璧な設計図を描く必要はありません。AIに「この業務をシステム化するには、どんなテーブルとAPIが必要？」と聞いて、一緒に考えていけばOK。
+                    </div>
+                </div>
+                
+                <div class="ai-director-role">
+                    <div class="role-number">3</div>
+                    <div class="role-icon">💡</div>
+                    <div class="role-name">AIへの指示</div>
+                    <div class="role-desc">
+                        適切なプロンプト（指示文）を書いて、AIから欲しいアウトプットを引き出す。<br><br>
+                        「このテーブル設計に対応するAPIを、RESTful設計で作ってください」といった、具体的な指示ができることが重要。
+                    </div>
+                </div>
+                
+                <div class="ai-director-role">
+                    <div class="role-number">4</div>
+                    <div class="role-icon">✅</div>
+                    <div class="role-name">評価と修正</div>
+                    <div class="role-desc">
+                        AIが生成したコードや設計を見て、改善指示を出す。<br><br>
+                        完璧なコードを自分で書けなくても、「ここ、セキュリティ的に大丈夫？」「この処理、もっと効率化できない？」と質問できることが大事。
+                    </div>
+                </div>
+                
+                <div class="ai-director-role">
+                    <div class="role-number">5</div>
+                    <div class="role-icon">🤝</div>
+                    <div class="role-name">エンジニアとの橋渡し</div>
+                    <div class="role-desc">
+                        エンジニアと対等に会話できる技術的な知識を持つ。<br><br>
+                        「バックエンドでこういう処理をお願いします」「このAPIのエンドポイント設計、こうしませんか？」といった、具体的なコミュニケーション。
+                    </div>
+                </div>
+            </div>
+            
+            <div class="course-goal">
+                <div class="course-goal-title">🎓 この講座のゴール</div>
+                <div class="course-goal-content">
+                    この講座の最終的なゴールは、皆さんを<strong>「AIディレクター」として活躍できる人材</strong>に育てることです。<br><br>
+                    
+                    コードを書けるようになる必要はありません。<br>
+                    でも、「バックエンドって何をしているのか」「データベースって何なのか」「APIってどういう仕組みなのか」を理解していれば、AIに的確な指示を出せるようになります。<br>
+                    そして、エンジニアとも対等に会話できるようになります。<br><br>
+                    
+                    <strong style="font-size: 1.15em;">それが、これからの時代に求められる、非エンジニアの新しい役割です。</strong>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション4: まとめ -->
+        <div class="summary-section">
+            <h2 class="section-title" style="color: white; border-bottom-color: white;">📝 このセクションのまとめ</h2>
+            
+            <div class="summary-boxes">
+                <div class="summary-box">
+                    <div class="summary-box-icon">⚙️</div>
+                    <div class="summary-box-title">バックエンドは「システムの心臓」</div>
+                    <div class="summary-box-content">
+                        ユーザーからは直接見えないけれど、バックエンドがなければ、どんなサービスも動きません。<br><br>
+                        
+                        <strong>4つの主要機能：</strong><br>
+                        • 認証・認可<br>
+                        • ビジネスロジック<br>
+                        • データベース操作<br>
+                        • 外部サービス連携
+                    </div>
+                </div>
+                
+                <div class="summary-box">
+                    <div class="summary-box-icon">🎯</div>
+                    <div class="summary-box-title">4つの機能を理解すれば全体像が掴める</div>
+                    <div class="summary-box-content">
+                        この4つを知っておくだけで、どんなサービスを見ても、「ああ、ここはバックエンドでこういう処理をしているんだな」と想像できるようになります。<br><br>
+                        
+                        完璧に理解する必要はありません。<br>
+                        「こういう役割があるんだな」と、大枠を掴んでおくことが大事です。
+                    </div>
+                </div>
+                
+                <div class="summary-box">
+                    <div class="summary-box-icon">🤖</div>
+                    <div class="summary-box-title">AI時代は、コードが書けなくてもバックエンドに関われる</div>
+                    <div class="summary-box-content">
+                        AIがコードを書いてくれる時代になりました。<br><br>
+                        
+                        だからこそ、求められる人材：<br>
+                        • 「何を作るべきか」を言語化できる人<br>
+                        • AIに的確な指示を出せる人<br>
+                        • エンジニアと対等に会話できる人<br><br>
+                        
+                        <strong>= AIディレクター</strong>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="final-message">
+                <div class="final-message-content">
+                    この講座を通して、皆さんが<br>
+                    <strong style="font-size: 1.3em;">「AIディレクター」として活躍できる人材</strong><br>
+                    になれるように、一緒に学んでいきましょう。<br><br>
+                    
+                    <strong style="font-size: 1.2em;">🚀 次のステップへ進みましょう！</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

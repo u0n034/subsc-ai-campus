@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第1回：フロントエンド vs バックエンド - AIによるバックエンド開発とデータベース講座</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #1e3a8a;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #3b82f6;
+        }
+        
+        /* セクション1: 身近な例から理解する */
+        .examples-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .example-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .example-header {
+            padding: 25px;
+            color: white;
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        
+        .example-amazon {
+            background: linear-gradient(135deg, #ff9900 0%, #ff6b00 100%);
+        }
+        
+        .example-ubereats {
+            background: linear-gradient(135deg, #06c167 0%, #05a757 100%);
+        }
+        
+        .example-expense {
+            background: linear-gradient(135deg, #5468ff 0%, #3b4ec7 100%);
+        }
+        
+        .example-content {
+            background: white;
+            padding: 25px;
+        }
+        
+        .example-description {
+            font-size: 0.95em;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        /* セクション2: 見える部分 vs 見えない部分 */
+        .comparison-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .comparison-box {
+            border-radius: 15px;
+            padding: 30px;
+        }
+        
+        .frontend-box {
+            background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+            color: white;
+        }
+        
+        .backend-box {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+            color: white;
+        }
+        
+        .comparison-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .comparison-subtitle {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .comparison-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .comparison-list li {
+            padding: 10px 0 10px 30px;
+            position: relative;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        .comparison-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        /* セクション3: レストランの例え */
+        .restaurant-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .restaurant-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 30px;
+        }
+        
+        .restaurant-card {
+            border-radius: 15px;
+            padding: 35px;
+            text-align: center;
+        }
+        
+        .restaurant-frontend {
+            background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+            color: white;
+        }
+        
+        .restaurant-backend {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+            color: white;
+        }
+        
+        .restaurant-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+        
+        .restaurant-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .restaurant-description {
+            font-size: 1em;
+            line-height: 1.8;
+        }
+        
+        .restaurant-items {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            text-align: left;
+        }
+        
+        .restaurant-items li {
+            margin: 8px 0;
+        }
+        
+        /* セクション4: フロントエンドの役割 */
+        .frontend-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .frontend-points {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .frontend-point {
+            background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            text-align: center;
+        }
+        
+        .point-number {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+        
+        .point-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .point-description {
+            font-size: 0.95em;
+            line-height: 1.8;
+        }
+        
+        /* セクション5: バックエンドの役割 */
+        .backend-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .backend-roles {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .backend-role {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+        }
+        
+        .role-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .role-number {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .role-title {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        
+        .role-description {
+            font-size: 0.95em;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        
+        .role-examples {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .role-examples-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .role-examples ul {
+            padding-left: 20px;
+        }
+        
+        .role-examples li {
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+        
+        /* セクション6: 重要なポイント */
+        .important-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .important-box {
+            background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+            border-radius: 15px;
+            padding: 35px;
+            color: white;
+            text-align: center;
+        }
+        
+        .important-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        
+        .important-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .important-content {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+        
+        .important-reason {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+            text-align: left;
+        }
+        
+        /* セクション7: AI活用 */
+        .ai-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .ai-demo {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            border-radius: 15px;
+            padding: 35px;
+            color: white;
+            margin-top: 30px;
+        }
+        
+        .ai-demo-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .ai-question-box {
+            background: rgba(255,255,255,0.9);
+            color: #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            font-size: 1em;
+            line-height: 1.8;
+        }
+        
+        .ai-tips {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 25px;
+        }
+        
+        .ai-tip {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        
+        .ai-tip-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .ai-tip-text {
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        /* セクション8: まとめ */
+        .summary-section {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .summary-card {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .summary-card-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .summary-card-content {
+            font-size: 1em;
+            line-height: 1.8;
+        }
+        
+        .next-section-box {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        
+        .next-section-box h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+        
+        .next-section-box p {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 1024px) {
+            .examples-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .frontend-points {
+                grid-template-columns: 1fr;
+            }
+            
+            .backend-roles {
+                grid-template-columns: 1fr;
+            }
+            
+            .ai-tips {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+            }
+            
+            .comparison-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .restaurant-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">AIによるバックエンド開発とデータベース講座</h1>
+        <div class="subtitle">第1回：フロントエンド vs バックエンド</div>
+        
+        <!-- セクション1: 身近な例から理解する -->
+        <div class="examples-section">
+            <h2 class="section-title">🌟 身近な例から理解する</h2>
+            <p style="font-size: 1.1em; color: #333; line-height: 1.8; margin-bottom: 20px;">
+                皆さんが普段使っているWebサービス、スマホアプリ。<br>
+                これらは全て、「見える部分」と「見えない部分」、つまり<strong>フロントエンドとバックエンドの2つで成り立っています。</strong>
+            </p>
+            
+            <div class="examples-grid">
+                <div class="example-card">
+                    <div class="example-header example-amazon">
+                        🛒 Amazon
+                    </div>
+                    <div class="example-content">
+                        <div class="example-description">
+                            <strong>流れ：</strong><br>
+                            商品を検索 → カートに入れる → 注文ボタンを押す → 確認メールが届く
+                        </div>
+                        <div style="padding: 15px; background: #fff5e6; border-radius: 8px; font-size: 0.9em;">
+                            この一連の流れ、当たり前のように感じていますが、実は「見えている部分」と「見えない部分」に分かれているんです。
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-header example-ubereats">
+                        🍔 Uber Eats
+                    </div>
+                    <div class="example-content">
+                        <div class="example-description">
+                            <strong>流れ：</strong><br>
+                            お店を選ぶ → メニューを決める → 注文する → 配達員をリアルタイム追跡
+                        </div>
+                        <div style="padding: 15px; background: #e6f7f0; border-radius: 8px; font-size: 0.9em;">
+                            画面に表示されている部分と、裏側で動いている部分がある。
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-header example-expense">
+                        💼 経費精算システム
+                    </div>
+                    <div class="example-content">
+                        <div class="example-description">
+                            <strong>流れ：</strong><br>
+                            申請を出す → 上司が承認 → 経理が確認 → 振り込まれる
+                        </div>
+                        <div style="padding: 15px; background: #e6f0ff; border-radius: 8px; font-size: 0.9em;">
+                            入力画面と、裏側の承認ワークフローに分かれています。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション2: 見える部分 vs 見えない部分 -->
+        <div class="comparison-section">
+            <h2 class="section-title">👀 「見える部分」と「見えない部分」</h2>
+            
+            <div class="comparison-container">
+                <div class="comparison-box frontend-box">
+                    <div class="comparison-title">👁️ 見える部分<br>= フロントエンド</div>
+                    
+                    <div class="comparison-subtitle">Amazon の場合</div>
+                    <ul class="comparison-list">
+                        <li>商品の写真</li>
+                        <li>価格表示</li>
+                        <li>「カートに入れる」ボタン</li>
+                        <li>検索窓</li>
+                        <li>メニューバー</li>
+                    </ul>
+                    
+                    <div class="comparison-subtitle" style="margin-top: 20px;">Uber Eats の場合</div>
+                    <ul class="comparison-list">
+                        <li>店舗の一覧</li>
+                        <li>料理の写真</li>
+                        <li>カートに追加するボタン</li>
+                        <li>配達先入力フォーム</li>
+                        <li>配達員の現在地マップ</li>
+                    </ul>
+                    
+                    <div style="margin-top: 25px; padding: 20px; background: rgba(255,255,255,0.2); border-radius: 10px; backdrop-filter: blur(10px); text-align: center;">
+                        <strong style="font-size: 1.2em;">ユーザーが直接触れる、見える部分</strong>
+                    </div>
+                </div>
+                
+                <div class="comparison-box backend-box">
+                    <div class="comparison-title">🔧 見えない部分<br>= バックエンド</div>
+                    
+                    <div class="comparison-subtitle">Amazon の場合</div>
+                    <ul class="comparison-list">
+                        <li>在庫チェック</li>
+                        <li>カート情報をデータベースに保存</li>
+                        <li>クレジットカード決済処理</li>
+                        <li>注文データの記録</li>
+                        <li>在庫を減らす処理</li>
+                        <li>確認メール自動送信</li>
+                        <li>配送業者システムへの連携</li>
+                    </ul>
+                    
+                    <div class="comparison-subtitle" style="margin-top: 20px;">Uber Eats の場合</div>
+                    <ul class="comparison-list">
+                        <li>お店に注文を送信</li>
+                        <li>配達員の自動マッチング</li>
+                        <li>決済処理</li>
+                        <li>注文IDの発行</li>
+                        <li>GPS位置情報の更新</li>
+                        <li>通知の送信</li>
+                    </ul>
+                    
+                    <div style="margin-top: 25px; padding: 20px; background: rgba(255,255,255,0.2); border-radius: 10px; backdrop-filter: blur(10px); text-align: center;">
+                        <strong style="font-size: 1.2em;">ユーザーからは見えない裏側の処理</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション3: レストランの例え -->
+        <div class="restaurant-section">
+            <h2 class="section-title">🍽️ レストランで例えると...</h2>
+            <p style="font-size: 1.1em; color: #333; text-align: center; margin-bottom: 20px;">
+                この例え、とても分かりやすいですよね!
+            </p>
+            
+            <div class="restaurant-container">
+                <div class="restaurant-card restaurant-frontend">
+                    <div class="restaurant-icon">🏪</div>
+                    <div class="restaurant-title">フロントエンド = 客席エリア</div>
+                    <div class="restaurant-description">
+                        お客様が直接体験する部分
+                    </div>
+                    <div class="restaurant-items">
+                        <ul style="list-style: none; padding: 0;">
+                            <li>✓ お客様が座る客席</li>
+                            <li>✓ メニュー</li>
+                            <li>✓ 店内の雰囲気</li>
+                            <li>✓ 接客スタッフ</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="restaurant-card restaurant-backend">
+                    <div class="restaurant-icon">👨‍🍳</div>
+                    <div class="restaurant-title">バックエンド = 厨房・バックヤード</div>
+                    <div class="restaurant-description">
+                        お客様からは見えないけれど不可欠な部分
+                    </div>
+                    <div class="restaurant-items">
+                        <ul style="list-style: none; padding: 0;">
+                            <li>✓ 厨房での調理</li>
+                            <li>✓ 在庫管理</li>
+                            <li>✓ 仕入れ業務</li>
+                            <li>✓ 経理業務</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション4: フロントエンドの役割 -->
+        <div class="frontend-section">
+            <h2 class="section-title">🎨 フロントエンドの役割</h2>
+            <p style="font-size: 1.1em; color: #333; text-align: center; margin-bottom: 10px;">
+                <strong>ユーザーが直接触れる「見た目」と「操作感」を担当する部分</strong>
+            </p>
+            <p style="font-size: 0.95em; color: #666; text-align: center; margin-bottom: 30px;">
+                技術: HTML、CSS、JavaScript を組み合わせて作られています
+            </p>
+            
+            <div class="frontend-points">
+                <div class="frontend-point">
+                    <div class="point-number">1</div>
+                    <div class="point-title">デザインの美しさ</div>
+                    <div class="point-description">
+                        色使い、レイアウト、フォント、余白。<br><br>
+                        視覚的な要素が洗練されていると、ユーザーは「使いたい」と感じます。<br><br>
+                        逆に、デザインが古臭かったり、色がバラバラだったりすると、「なんか使いづらそう」と感じてしまいます。
+                    </div>
+                </div>
+                
+                <div class="frontend-point">
+                    <div class="point-number">2</div>
+                    <div class="point-title">使いやすさ (UI/UX)</div>
+                    <div class="point-description">
+                        <strong>UI:</strong> ユーザーインターフェース<br>
+                        ボタンの配置や画面の構成<br><br>
+                        <strong>UX:</strong> ユーザーエクスペリエンス<br>
+                        ユーザーが感じる体験全体<br><br>
+                        「戻る」ボタンがどこにあるか分かりやすい、エラーメッセージが明確、次に何をすればいいか迷わない。
+                    </div>
+                </div>
+                
+                <div class="frontend-point">
+                    <div class="point-number">3</div>
+                    <div class="point-title">表示速度と操作感</div>
+                    <div class="point-description">
+                        ボタンを押したときに一瞬で反応する、ページの読み込みが速い、スクロールがなめらか。<br><br>
+                        こういった「サクサク動く感じ」も、フロントエンドの重要な役割です。<br><br>
+                        いくら見た目が綺麗でも、5秒も待たされたらイライラしますよね。
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション5: バックエンドの役割 -->
+        <div class="backend-section">
+            <h2 class="section-title">⚙️ バックエンドの役割</h2>
+            <p style="font-size: 1.1em; color: #333; text-align: center; margin-bottom: 30px;">
+                <strong>ユーザーからは見えない「裏側の処理」を担当する部分</strong><br>
+                「接客担当」(フロントエンド) に対して、「厨房や経理や在庫管理を全部やる裏方担当」(バックエンド)
+            </p>
+            
+            <div class="backend-roles">
+                <div class="backend-role">
+                    <div class="role-header">
+                        <div class="role-number">1</div>
+                        <div class="role-title">データ管理</div>
+                    </div>
+                    <div class="role-description">
+                        「誰が」「いつ」「何を」注文したのか。「どの商品が」「何個」在庫として残っているのか。<br><br>
+                        こういった情報を、全てデータベースに記録し、必要なときに取り出せるようにする。
+                    </div>
+                    <div class="role-examples">
+                        <div class="role-examples-title">具体例:</div>
+                        <ul>
+                            <li>Amazonの過去の注文履歴</li>
+                            <li>在庫が残り1個の同時購入制御</li>
+                            <li>ユーザーの登録情報の保管</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="backend-role">
+                    <div class="role-header">
+                        <div class="role-number">2</div>
+                        <div class="role-title">ビジネスロジックの実行</div>
+                    </div>
+                    <div class="role-description">
+                        ビジネスロジック = 「もし◯◯なら△△する」というビジネス上のルールや判断
+                    </div>
+                    <div class="role-examples">
+                        <div class="role-examples-title">ECサイトの例:</div>
+                        <ul>
+                            <li>在庫が0なら購入ボタンを押せない</li>
+                            <li>合計1万円以上なら送料無料</li>
+                            <li>初回購入者には10%オフ</li>
+                        </ul>
+                        <div class="role-examples-title" style="margin-top: 10px;">予約システムの例:</div>
+                        <ul>
+                            <li>同じ時間帯に複数予約は不可</li>
+                            <li>キャンセルは3日前まで</li>
+                            <li>満席なら予約ボタン非表示</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="backend-role">
+                    <div class="role-header">
+                        <div class="role-number">3</div>
+                        <div class="role-title">データベースアクセス</div>
+                    </div>
+                    <div class="role-description">
+                        データベースに対して操作を行う部分。専門用語で「CRUD」と言います。
+                    </div>
+                    <div class="role-examples">
+                        <div class="role-examples-title">CRUDの4つの操作:</div>
+                        <ul>
+                            <li><strong>C</strong>reate (作成) - データを保存する</li>
+                            <li><strong>R</strong>ead (読取) - データを取り出す</li>
+                            <li><strong>U</strong>pdate (更新) - データを更新する</li>
+                            <li><strong>D</strong>elete (削除) - データを削除する</li>
+                        </ul>
+                        <div class="role-examples-title" style="margin-top: 10px;">複雑な処理の例:</div>
+                        <ul>
+                            <li>「石川県で購入金額5万円以上の顧客を抽出」</li>
+                            <li>「今年の売上合計を計算」</li>
+                            <li>「各商品の平均評価を算出」</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="backend-role">
+                    <div class="role-header">
+                        <div class="role-number">4</div>
+                        <div class="role-title">外部サービスとの連携</div>
+                    </div>
+                    <div class="role-description">
+                        現代のWebシステムは、様々な外部サービスと連携して機能を実現しています。
+                    </div>
+                    <div class="role-examples">
+                        <div class="role-examples-title">代表的な外部サービス:</div>
+                        <ul>
+                            <li>決済: Stripe、PayPal</li>
+                            <li>メール配信: SendGrid、Amazon SES</li>
+                            <li>SMS送信: Twilio</li>
+                            <li>地図表示: Google Maps API</li>
+                            <li>天気情報、株価情報など</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション6: 重要なポイント -->
+        <div class="important-section">
+            <h2 class="section-title">⚠️ なぜバックエンドで処理する必要があるのか？</h2>
+            
+            <div class="important-box">
+                <div class="important-icon">🔒</div>
+                <div class="important-title">セキュリティと正確性の確保</div>
+                <div class="important-content">
+                    フロントエンドだけで処理すると、改ざんされるリスクがあります。<br>
+                    ブラウザの開発者ツールを使えば、画面上の金額を書き換えることができてしまいます。
+                </div>
+                <div class="important-reason">
+                    <strong style="display: block; margin-bottom: 10px; font-size: 1.1em;">🎯 Webシステムの鉄則:</strong>
+                    <ul style="padding-left: 20px; margin-top: 10px;">
+                        <li>フロントエンド: 「ユーザーにとって便利な表示」を担当</li>
+                        <li>バックエンド: 「正確な処理と判断」を担当</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-size: 1.05em;">
+                        <strong>最終的な判断や計算は、必ずバックエンドで行う</strong><br>
+                        この役割分担が、セキュリティの面でも非常に重要です。
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション7: AIに質問してみる -->
+        <div class="ai-section">
+            <h2 class="section-title">🤖 AIを活用して理解を深める</h2>
+            
+            <div class="ai-demo">
+                <div class="ai-demo-title">💡 実際にAIに質問してみよう</div>
+                
+                <div class="ai-question-box">
+                    <strong>質問例:</strong><br><br>
+                    「Amazonで商品を購入する際、フロントエンドとバックエンドでそれぞれどんな処理が行われていますか? ステップごとにわかりやすく説明してください。」
+                </div>
+                
+                <div style="text-align: center; margin: 25px 0;">
+                    <div style="font-size: 1.2em; line-height: 1.8;">
+                        具体的なサービス名を出して、「ステップごとに」と指定すると、<br>
+                        AIは非常に分かりやすく整理して答えてくれます。<br><br>
+                        <strong style="font-size: 1.15em;">AIは皆さんの「技術コンシェルジュ」として活用できるんです!</strong>
+                    </div>
+                </div>
+                
+                <div class="ai-tips">
+                    <div class="ai-tip">
+                        <div class="ai-tip-icon">🍔</div>
+                        <div class="ai-tip-text">
+                            「Uber Eatsで注文から配達までの流れを、フロントエンドとバックエンドに分けて説明してください」
+                        </div>
+                    </div>
+                    
+                    <div class="ai-tip">
+                        <div class="ai-tip-icon">💼</div>
+                        <div class="ai-tip-text">
+                            「経費精算システムで、申請から承認、振込までの裏側の処理を教えてください」
+                        </div>
+                    </div>
+                    
+                    <div class="ai-tip">
+                        <div class="ai-tip-icon">📺</div>
+                        <div class="ai-tip-text">
+                            「YouTubeで動画を再生するとき、バックエンドではどんな処理が行われていますか?」
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; padding: 25px; background: rgba(255,255,255,0.2); border-radius: 10px; backdrop-filter: blur(10px);">
+                    <strong style="display: block; font-size: 1.2em; margin-bottom: 15px; text-align: center;">🎓 AIを使う際の心構え</strong>
+                    <ul style="padding-left: 30px; line-height: 1.8;">
+                        <li>AIの回答をそのまま鵜呑みにするのではなく、自分の理解を深めるツールとして使う</li>
+                        <li>説明を読んで「なるほど」と理解し、次の疑問を持つ</li>
+                        <li>そしてまたAIに聞いてみる</li>
+                        <li>この繰り返しが、皆さんの理解を深めていきます</li>
+                    </ul>
+                    <p style="margin-top: 20px; text-align: center; font-size: 1.1em;">
+                        <strong>AIは24時間いつでも答えてくれます。何度聞いても嫌な顔をしません。<br>
+                        遠慮せずにどんどん質問して、技術的な理解を深めていってください!</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション8: まとめ -->
+        <div class="summary-section">
+            <h2 class="section-title" style="color: white; border-bottom-color: white;">📝 このセクションのまとめ</h2>
+            
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-card-title">🎨 フロントエンド</div>
+                    <div class="summary-card-content">
+                        <strong>「見える部分」</strong><br><br>
+                        ユーザーが直接触れる画面や操作感を担当<br><br>
+                        • デザインの美しさ<br>
+                        • 使いやすさ (UI/UX)<br>
+                        • 表示速度と操作感
+                    </div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="summary-card-title">⚙️ バックエンド</div>
+                    <div class="summary-card-content">
+                        <strong>「見えない部分」</strong><br><br>
+                        データ管理、ビジネスロジック、外部連携を担当<br><br>
+                        • データ管理<br>
+                        • ビジネスロジックの実行<br>
+                        • データベースアクセス<br>
+                        • 外部サービスとの連携
+                    </div>
+                </div>
+            </div>
+            
+            <div class="next-section-box">
+                <h3>🔜 次のセクションへ</h3>
+                <p>
+                    この2つが<strong>どのように連携しているのか</strong>、<br>
+                    つまり「Webの基本構造」について、さらに詳しく見ていきます。<br><br>
+                    <strong>クライアント、サーバー、データベース</strong><br>
+                    この3つの関係性を図解しながら、情報の流れを追っていきましょう。
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+

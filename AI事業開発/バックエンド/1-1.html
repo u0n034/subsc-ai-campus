@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第1回：オープニング - AIによるバックエンド開発とデータベース講座</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+            margin-bottom: 50px;
+        }
+        
+        /* セクション1: 講座の位置づけ */
+        .positioning-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #1e3a8a;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #3b82f6;
+        }
+        
+        .not-this-box {
+            background: #f5f5f5;
+            border: 3px dashed #999;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .not-this-title {
+            font-size: 1.5em;
+            color: #666;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .not-this-content {
+            font-size: 1.1em;
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        .but-this-box {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .but-this-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .but-this-content {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .skill-card {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .skill-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .skill-text {
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        /* セクション2: 8回の講座ロードマップ */
+        .roadmap-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .roadmap-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .roadmap-item {
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .roadmap-phase1 {
+            background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+            color: white;
+        }
+        
+        .roadmap-phase2 {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+            color: white;
+        }
+        
+        .roadmap-phase3 {
+            background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+            color: white;
+        }
+        
+        .roadmap-phase4 {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            color: white;
+        }
+        
+        .roadmap-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            opacity: 0.3;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+        }
+        
+        .roadmap-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .roadmap-content {
+            font-size: 0.9em;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .roadmap-highlight {
+            grid-column: span 1;
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            color: white;
+            border: 4px solid #fbbf24;
+            box-shadow: 0 8px 20px rgba(16,185,129,0.4);
+        }
+        
+        /* セクション3: 第1回のゴール */
+        .goals-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .goal-card {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .goal-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .goal-number {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .goal-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .goal-content {
+            font-size: 0.95em;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .goal-example {
+            background: rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 0.9em;
+            font-style: italic;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* セクション4: 得られるもの */
+        .benefits-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .benefits-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .benefit-card {
+            border-radius: 15px;
+            padding: 30px;
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .benefit-icon {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+        }
+        
+        .benefit-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .benefit-description {
+            font-size: 0.95em;
+            line-height: 1.8;
+        }
+        
+        .benefit-examples {
+            background: rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            text-align: left;
+            font-size: 0.9em;
+            backdrop-filter: blur(10px);
+        }
+        
+        .benefit-examples ul {
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .benefit-examples li {
+            margin: 5px 0;
+        }
+        
+        /* セクション5: 準備するもの */
+        .preparation-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .preparation-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .preparation-card {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            text-align: center;
+        }
+        
+        .preparation-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        
+        .preparation-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .preparation-content {
+            font-size: 1em;
+            line-height: 1.8;
+        }
+        
+        /* セクション6: まとめ */
+        .summary-section {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .summary-content {
+            text-align: center;
+            font-size: 1.2em;
+            line-height: 2;
+        }
+        
+        .summary-highlight {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 30px 0;
+            padding: 25px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 1024px) {
+            .roadmap-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .goals-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .benefits-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+            }
+            
+            .roadmap-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .preparation-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">AIによるバックエンド開発とデータベース講座</h1>
+        <div class="subtitle">第1回：オープニング - 全体像をAIと一緒に掴む</div>
+        
+        <!-- セクション1: 講座の位置づけ -->
+        <div class="positioning-section">
+            <h2 class="section-title">🎯 この講座の位置づけ</h2>
+            
+            <div class="not-this-box">
+                <div class="not-this-title">
+                    <span>❌</span>
+                    <span>これではありません</span>
+                </div>
+                <div class="not-this-content">
+                    エンジニアを育成する講座<br>
+                    プログラミング言語を一から学ぶ<br>
+                    自分でコードをゴリゴリ書けるようになる
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <div style="font-size: 3em; color: #3b82f6;">↓</div>
+            </div>
+            
+            <div class="but-this-box">
+                <div class="but-this-title">
+                    <span>✅</span>
+                    <span>目指すのはこちら</span>
+                </div>
+                <div class="but-this-content">
+                    <strong style="font-size: 1.3em; display: block; margin-bottom: 20px;">
+                        「仕組みを理解し、AIと協働しながら価値を生み出せる人材」
+                    </strong>
+                    
+                    <div class="skills-grid">
+                        <div class="skill-card">
+                            <div class="skill-icon">💬</div>
+                            <div class="skill-text">
+                                エンジニアと対等に<br>会話ができる
+                            </div>
+                        </div>
+                        
+                        <div class="skill-card">
+                            <div class="skill-icon">🤖</div>
+                            <div class="skill-text">
+                                AIツールに適切な<br>指示を出せる
+                            </div>
+                        </div>
+                        
+                        <div class="skill-card">
+                            <div class="skill-icon">📐</div>
+                            <div class="skill-text">
+                                システムの設計や<br>要件定義ができる
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px; padding: 25px; background: #f0f7ff; border-radius: 10px; border-left: 5px solid #3b82f6;">
+                <strong style="color: #1e3a8a; font-size: 1.2em;">コードのレベル感</strong>
+                <p style="margin-top: 10px; color: #333; line-height: 1.8;">
+                    ❌ 一から書けなくてもOK<br>
+                    ✅ 「読める」「意味が理解できる」「指示できる」<br><br>
+                    <strong>これが、AI時代の「AIディレクター」に求められるスキルです。</strong>
+                </p>
+            </div>
+        </div>
+        
+        <!-- セクション2: 8回の講座ロードマップ -->
+        <div class="roadmap-section">
+            <h2 class="section-title">🗺️ 全8回の講座ロードマップ</h2>
+            
+            <div class="roadmap-grid">
+                <div class="roadmap-item roadmap-highlight">
+                    <div class="roadmap-number">1</div>
+                    <div class="roadmap-title">全体像の把握</div>
+                    <div class="roadmap-content">
+                        バックエンドとは何か<br>
+                        Webシステムの基本構造<br>
+                        フロントエンドとの違い
+                    </div>
+                </div>
+                
+                <div class="roadmap-item roadmap-phase2">
+                    <div class="roadmap-number">2</div>
+                    <div class="roadmap-title">データベース</div>
+                    <div class="roadmap-content">
+                        データの保存と管理<br>
+                        データベースの基本
+                    </div>
+                </div>
+                
+                <div class="roadmap-item roadmap-phase2">
+                    <div class="roadmap-number">3</div>
+                    <div class="roadmap-title">SQL</div>
+                    <div class="roadmap-content">
+                        データベース操作言語<br>
+                        AIと一緒に学ぶSQL
+                    </div>
+                </div>
+                
+                <div class="roadmap-item roadmap-phase2">
+                    <div class="roadmap-number">4</div>
+                    <div class="roadmap-title">API</div>
+                    <div class="roadmap-content">
+                        フロントとバックエンドを<br>
+                        つなぐ重要な仕組み
+                    </div>
+                </div>
+                
+                <div class="roadmap-item roadmap-phase3">
+                    <div class="roadmap-number">5</div>
+                    <div class="roadmap-title">実践編①</div>
+                    <div class="roadmap-content">
+                        要件整理<br>
+                        データベース設計<br>
+                        AIで設計補助
+                    </div>
+                </div>
+                
+                <div class="roadmap-item roadmap-phase3">
+                    <div class="roadmap-number">6</div>
+                    <div class="roadmap-title">実践編②</div>
+                    <div class="roadmap-content">
+                        API構造設計<br>
+                        コード生成体験<br>
+                        動作確認
+                    </div>
+                </div>
+                
+                <div class="roadmap-item roadmap-phase4">
+                    <div class="roadmap-number">7</div>
+                    <div class="roadmap-title">運用とセキュリティ</div>
+                    <div class="roadmap-content">
+                        システムの守り方<br>
+                        管理の視点<br>
+                        セキュリティ基礎
+                    </div>
+                </div>
+                
+                <div class="roadmap-item roadmap-phase4">
+                    <div class="roadmap-number">8</div>
+                    <div class="roadmap-title">自社業務への応用</div>
+                    <div class="roadmap-content">
+                        学んだ知識を活かす<br>
+                        自分だけの構想を描く<br>
+                        AIと一緒に企画
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px; padding: 25px; background: #f0f7ff; border-radius: 10px; text-align: center;">
+                <strong style="color: #1e3a8a; font-size: 1.2em;">この8回で実現すること</strong>
+                <p style="margin-top: 15px; color: #333; font-size: 1.1em; line-height: 1.8;">
+                    「バックエンドのことが全くわからない」状態<br>
+                    <span style="font-size: 2em; color: #3b82f6;">↓</span><br>
+                    「自分の業務にバックエンドの考え方を活かせる」レベル
+                </p>
+            </div>
+        </div>
+        
+        <!-- セクション3: 第1回のゴール -->
+        <div class="goals-section">
+            <h2 class="section-title">🎯 第1回で達成する3つのゴール</h2>
+            
+            <div class="goals-grid">
+                <div class="goal-card">
+                    <div class="goal-number">1</div>
+                    <div class="goal-title">フロントエンドとバックエンドの違いを説明できる</div>
+                    <div class="goal-content">
+                        この2つの違いを理解することが、バックエンド学習の第一歩。<br><br>
+                        誰かに聞かれたら、自信を持って答えられる状態を目指します。
+                    </div>
+                    <div class="goal-example">
+                        「フロントエンドは画面に表示される部分。バックエンドはその裏側で動いている処理のこと。データを保存したり、計算したり、セキュリティをチェックしたり...」
+                    </div>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-number">2</div>
+                    <div class="goal-title">Webの基本的な流れを図で理解できる</div>
+                    <div class="goal-content">
+                        「クライアント」「サーバー」「データベース」の3層構造。<br><br>
+                        リクエストが送られて、処理されて、レスポンスが返ってくる一連の流れを理解します。
+                    </div>
+                    <div class="goal-example">
+                        この流れを理解すると、どんなWebサービスでも「裏側で何が起きているか」が想像できるようになります!
+                    </div>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-number">3</div>
+                    <div class="goal-title">AIに質問して技術概念を可視化する方法を習得</div>
+                    <div class="goal-content">
+                        どんなプロンプトを入力すると、どんな答えが返ってくるのか。<br><br>
+                        AIをどう活用すれば、難しい技術概念を理解しやすくできるのか。
+                    </div>
+                    <div class="goal-example">
+                        「この技術がよくわからない」→すぐにAIに聞く。<br>
+                        この習慣が、これからの学習で強力な武器になります!
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション4: 講座で得られるもの -->
+        <div class="benefits-section">
+            <h2 class="section-title">✨ この講座で得られる3つの変化</h2>
+            
+            <div class="benefits-container">
+                <div class="benefit-card">
+                    <div class="benefit-icon">💬</div>
+                    <div class="benefit-title">エンジニアとの会話がスムーズに</div>
+                    <div class="benefit-description">
+                        共通言語を持つことで、プロジェクトの進行が格段にスムーズになります。
+                    </div>
+                    <div class="benefit-examples">
+                        質問できるようになること:
+                        <ul>
+                            <li>バックエンドの構造は?</li>
+                            <li>テーブル設計は?</li>
+                            <li>APIのエンドポイントの役割は?</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">🤖</div>
+                    <div class="benefit-title">AIツールをより効果的に使える</div>
+                    <div class="benefit-description">
+                        的確な指示を出せるようになることで、AIから引き出せる価値が大きく変わります。
+                    </div>
+                    <div class="benefit-examples">
+                        指示できるようになること:
+                        <ul>
+                            <li>テーブル設計案を出して</li>
+                            <li>エラーの原因と対策を教えて</li>
+                            <li>API設計を提案して</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">💼</div>
+                    <div class="benefit-title">自社業務をシステム視点で捉えられる</div>
+                    <div class="benefit-description">
+                        業務改善の提案や、新しいシステムの企画が自分でできるようになります。
+                    </div>
+                    <div class="benefit-examples">
+                        考えられるようになること:
+                        <ul>
+                            <li>どんなデータを扱っているか</li>
+                            <li>データ同士の関係は?</li>
+                            <li>システム化に必要な機能は?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション5: 準備するもの -->
+        <div class="preparation-section">
+            <h2 class="section-title">🎒 準備していただきたいもの</h2>
+            
+            <div class="preparation-grid">
+                <div class="preparation-card">
+                    <div class="preparation-icon">🤖</div>
+                    <div class="preparation-title">AIツール</div>
+                    <div class="preparation-content">
+                        ChatGPT、Claude など<br>
+                        お好きなものをご用意ください<br><br>
+                        <strong>無料版で十分です!</strong>
+                    </div>
+                </div>
+                
+                <div class="preparation-card">
+                    <div class="preparation-icon">📝</div>
+                    <div class="preparation-title">メモを取るもの</div>
+                    <div class="preparation-content">
+                        紙のノート、デジタルメモアプリ<br>
+                        何でも構いません<br><br>
+                        気づいたこと、疑問、<br>
+                        試してみたいことをメモ!<br><br>
+                        <strong>第8回の最終課題で役立ちます</strong>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px; padding: 25px; background: #f0f7ff; border-radius: 10px; border-left: 5px solid #f59e0b;">
+                <strong style="color: #1e3a8a; font-size: 1.2em;">📹 講座の進め方</strong>
+                <p style="margin-top: 10px; color: #333; line-height: 1.8;">
+                    この講座は収録形式でお届けします。<br>
+                    ご自身のペースで学習を進めていただけます。<br><br>
+                    「ここで動画を一時停止して、実際に手を動かしてみてください」という場面が何度か出てきます。<br>
+                    そのときは、ぜひ実際に手を動かしてみてください。<br><br>
+                    <strong>見るだけでなく、自分で試すことで、理解が格段に深まります!</strong>
+                </p>
+            </div>
+        </div>
+        
+        <!-- セクション6: まとめ -->
+        <div class="summary-section">
+            <h2 class="section-title" style="color: white; border-bottom-color: white;">🚀 さあ、始めましょう!</h2>
+            
+            <div class="summary-content">
+                準備が整いましたら、早速、本編に入っていきましょう。
+                
+                <div class="summary-highlight">
+                    第1回<br>
+                    「バックエンドとは何か。全体像をAIと一緒に掴む」
+                </div>
+                
+                <p style="font-size: 1.3em;">
+                    非エンジニアの皆さんでも、<br>
+                    AIと一緒なら、バックエンドの世界を理解できます。<br><br>
+                    <strong style="font-size: 1.2em;">一緒に学んでいきましょう!</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
