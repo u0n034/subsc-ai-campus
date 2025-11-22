@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第3回：まとめ＆自己チェック＆次回予告 - AIによるバックエンド開発とデータベース講座</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #7c3aed;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #a78bfa;
+        }
+        
+        /* セクション1: 本日のまとめ */
+        .summary-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .summary-intro {
+            font-size: 1.1em;
+            color: #333;
+            line-height: 2;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .summary-topics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .summary-topic {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            border-radius: 15px;
+            padding: 30px;
+            border-left: 5px solid #a78bfa;
+        }
+        
+        .summary-topic-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .summary-topic-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #7c3aed;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .summary-topic-content {
+            color: #333;
+            line-height: 1.8;
+        }
+        
+        .key-learning {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            border-radius: 15px;
+            padding: 35px;
+            color: white;
+            margin-top: 40px;
+        }
+        
+        .key-learning-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .key-learning-content {
+            font-size: 1.1em;
+            line-height: 2;
+            text-align: center;
+        }
+        
+        /* セクション2: 自己チェック */
+        .check-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .check-intro {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .check-intro-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 15px;
+        }
+        
+        .check-intro-text {
+            color: #78350f;
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+        
+        .check-questions {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .check-question {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            border-radius: 15px;
+            padding: 30px;
+            border-left: 5px solid #a78bfa;
+        }
+        
+        .question-number {
+            display: inline-block;
+            width: 45px;
+            height: 45px;
+            background: #a78bfa;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 45px;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-right: 15px;
+        }
+        
+        .question-text {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #7c3aed;
+            margin-bottom: 15px;
+        }
+        
+        .question-hint {
+            color: #666;
+            line-height: 1.8;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
+        .study-tips {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+        
+        .study-tips-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #1e40af;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .study-tips-content {
+            color: #333;
+            line-height: 2;
+        }
+        
+        /* セクション3: 次回予告 */
+        .preview-section {
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .preview-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .preview-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .preview-title {
+            font-size: 2.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .preview-subtitle {
+            font-size: 1.3em;
+            opacity: 0.9;
+        }
+        
+        .preview-content {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 35px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+        }
+        
+        .preview-content-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .preview-content-text {
+            font-size: 1.1em;
+            line-height: 2;
+        }
+        
+        .preview-topics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .preview-topic {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        
+        .preview-topic-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .preview-topic-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .closing-message {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 35px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            font-size: 1.2em;
+            line-height: 2;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 1200px) {
+            .preview-topics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+            }
+            
+            .summary-topics {
+                grid-template-columns: 1fr;
+            }
+            
+            .preview-topics {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">AIによるバックエンド開発とデータベース講座</h1>
+        <div class="subtitle">第3回：まとめ＆自己チェック＆次回予告</div>
+        
+        <!-- セクション1: 本日のまとめ -->
+        <div class="summary-section">
+            <h2 class="section-title">📚 本日のまとめ</h2>
+            
+            <div class="summary-intro">
+                第3回の講座、お疲れ様でした！<br>
+                今日学んだ内容を振り返っていきましょう
+            </div>
+            
+            <div class="summary-topics">
+                <div class="summary-topic">
+                    <div class="summary-topic-icon">🔍</div>
+                    <div class="summary-topic-title">SQLとは</div>
+                    <div class="summary-topic-content">
+                        <strong>Structured Query Language</strong><br>
+                        「構造化問い合わせ言語」<br><br>
+                        
+                        難しそうな名前ですが、実際には<br>
+                        <strong>「データベースへの命令文」</strong><br>
+                        「表データに対するお願いの言葉」<br>
+                        くらいの理解で十分！
+                    </div>
+                </div>
+                
+                <div class="summary-topic">
+                    <div class="summary-topic-icon">📖</div>
+                    <div class="summary-topic-title">SELECT：データを読む</div>
+                    <div class="summary-topic-content">
+                        <strong>基本の4つのキーワード：</strong><br><br>
+                        
+                        • <strong>SELECT：</strong>何を取得するか<br>
+                        • <strong>FROM：</strong>どのテーブルから<br>
+                        • <strong>WHERE：</strong>どんな条件で<br>
+                        • <strong>ORDER BY：</strong>どう並べるか<br><br>
+                        
+                        この組み合わせがデータ取り出しの基本パターン
+                    </div>
+                </div>
+                
+                <div class="summary-topic">
+                    <div class="summary-topic-icon">✍️</div>
+                    <div class="summary-topic-title">データを書き込む3つの命令</div>
+                    <div class="summary-topic-content">
+                        • <strong>INSERT：</strong>新しいデータを追加<br>
+                        • <strong>UPDATE：</strong>既存データを書き換え<br>
+                        • <strong>DELETE：</strong>データを削除<br><br>
+                        
+                        <strong style="color: #ef4444;">WHERE句は必須！</strong><br>
+                        ないと全件に影響してしまう
+                    </div>
+                </div>
+                
+                <div class="summary-topic">
+                    <div class="summary-topic-icon">🏷️</div>
+                    <div class="summary-topic-title">論理削除の文化</div>
+                    <div class="summary-topic-content">
+                        実務では、データを本当に消すのではなく<br>
+                        <strong>「削除フラグ」を立てる</strong>方法が主流<br><br>
+                        
+                        • is_deleted = 1<br>
+                        • deleted_at = 削除日時<br><br>
+                        
+                        これにより、必要なときに復旧できる<br>
+                        安全なシステム設計の基本
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%); border-radius: 15px; padding: 30px; margin-top: 40px;">
+                <div style="font-size: 1.4em; font-weight: bold; color: #7c3aed; margin-bottom: 20px; text-align: center;">
+                    🐛 エラーへの向き合い方
+                </div>
+                <div style="color: #333; line-height: 2; font-size: 1.05em;">
+                    SQLは、ちょっとしたスペルミスでもエラーになります。<br>
+                    でも、エラーが出ることは「できない証拠」ではなく、<br>
+                    <strong>「ここがおかしいよ」というヒント</strong>なんです。<br><br>
+                    
+                    エラーメッセージをそのままAIに貼り付けて、<br>
+                    「これはどういう意味ですか？どう直せばいいですか？」と聞けば、<br>
+                    AIがだいたい教えてくれます。
+                </div>
+            </div>
+            
+            <div class="key-learning">
+                <div class="key-learning-title">🎯 最も重要なこと</div>
+                <div class="key-learning-content">
+                    皆さんに求められているのは、<br>
+                    <strong style="font-size: 1.3em;">完璧なSQLを書けるようになることではありません</strong><br><br>
+                    
+                    重要なのは：<br><br>
+                    
+                    ✅ <strong>「こういうデータが欲しい」という業務上の要求を、<br>
+                    きちんと日本語で言語化できること</strong><br><br>
+                    
+                    ✅ <strong>それをAIに伝えてSQLに変換してもらい、<br>
+                    エラーが出たらAIと一緒に直していく</strong><br><br>
+                    
+                    このスタンスを持っていれば、<br>
+                    <strong style="font-size: 1.3em;">エンジニアとの会話もぐっとスムーズになります</strong>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション2: 自己チェック -->
+        <div class="check-section">
+            <h2 class="section-title">✅ 自己チェック</h2>
+            
+            <div class="check-intro">
+                <div class="check-intro-title">📝 理解度を確認してみましょう</div>
+                <div class="check-intro-text">
+                    今日学んだことが、本当に自分の中に定着しているか<br>
+                    簡単に確認してみましょう<br><br>
+                    
+                    ぜひ、一度動画を止めて、ご自身で考えてみてください
+                </div>
+            </div>
+            
+            <div class="check-questions">
+                <div class="check-question">
+                    <div>
+                        <span class="question-number">Q1</span>
+                        <span class="question-text">
+                            SELECT * FROM customers;
+                        </span>
+                    </div>
+                    <div style="margin: 20px 0 15px 60px; color: #333; font-size: 1.1em;">
+                        このSQLが何をしているか、自分の言葉で説明できますか？
+                    </div>
+                    <div class="question-hint">
+                        <strong>💡 ヒント：</strong><br>
+                        完璧な言葉でなくて構いません。<br>
+                        「customersという表から、全部のデータを取ってくる」<br>
+                        くらいのイメージで説明できれば十分です。
+                    </div>
+                </div>
+                
+                <div class="check-question">
+                    <div>
+                        <span class="question-number">Q2</span>
+                        <span class="question-text">
+                            石川県の顧客だけを取り出したい
+                        </span>
+                    </div>
+                    <div style="margin: 20px 0 15px 60px; color: #333; font-size: 1.1em;">
+                        この要求があったとき、AIにSQL化してもらえそうですか？
+                    </div>
+                    <div class="question-hint">
+                        <strong>💡 ヒント：</strong><br>
+                        実際にSQLを書ける必要はありません。<br><br>
+                        
+                        「顧客テーブルのprefectureカラムが『石川県』のデータだけを<br>
+                        取得するSQLを書いてください」<br><br>
+                        
+                        というように、<strong>日本語で依頼できるイメージ</strong>が持てていればOKです。
+                    </div>
+                </div>
+                
+                <div class="check-question">
+                    <div>
+                        <span class="question-number">Q3</span>
+                        <span class="question-text">
+                            INSERT、UPDATE、DELETEの役割
+                        </span>
+                    </div>
+                    <div style="margin: 20px 0 15px 60px; color: #333; font-size: 1.1em;">
+                        それぞれ何をする命令か、ざっくり説明できますか？
+                    </div>
+                    <div class="question-hint">
+                        <strong>💡 ヒント：</strong><br>
+                        • <strong>INSERT</strong> = 追加<br>
+                        • <strong>UPDATE</strong> = 更新<br>
+                        • <strong>DELETE</strong> = 削除<br><br>
+                        
+                        この3つの役割が頭に入っていれば大丈夫です。<br><br>
+                        
+                        そして、<strong>「実務では削除フラグを使うこともある」</strong>ということも、<br>
+                        ちょっと覚えておいていただけると嬉しいです。
+                    </div>
+                </div>
+            </div>
+            
+            <div class="study-tips">
+                <div class="study-tips-title">📖 復習のコツ</div>
+                <div class="study-tips-content">
+                    もし、これらの質問に対して<br>
+                    「まだちょっと自信がないな」と感じる部分があれば、<br>
+                    ぜひもう一度、該当するセクションを見直してみてください。<br><br>
+                    
+                    <strong>動画のいいところは、何度でも繰り返し見られること</strong>です。<br><br>
+                    
+                    そして、動画を見るだけでなく、<br>
+                    <strong>ご自身の言葉でノートに書いてみる</strong>こともおすすめします。<br><br>
+                    
+                    「SELECTとは〇〇だ」「WHEREとは〇〇だ」と<br>
+                    自分の言葉でメモを取ることで、<br>
+                    記憶にも定着しやすくなりますし、<br>
+                    あとで見返したときにも分かりやすくなります。
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション3: 次回予告 -->
+        <div class="preview-section">
+            <div class="preview-header">
+                <div class="preview-badge">NEXT</div>
+                <div class="preview-title">第4回</div>
+                <div class="preview-subtitle">APIとバックエンドの役割</div>
+            </div>
+            
+            <div class="preview-content">
+                <div class="preview-content-title">🌐 次回のテーマ</div>
+                <div class="preview-content-text">
+                    今日の講座では、SQLを使って<br>
+                    「データベースに対して、データを読んだり書いたりする」という部分に焦点を当ててきました。<br><br>
+                    
+                    でも、実際のWebサービスでは、<br>
+                    皆さんがブラウザやスマホアプリで操作すると、<br>
+                    その裏側でバックエンドがSQLを実行して、データベースとやり取りをしています。<br><br>
+                    
+                    では、フロントエンド（画面側）から、バックエンドに対して<br>
+                    「こういうデータが欲しい」「このデータを保存してほしい」というお願いは、<br>
+                    <strong style="font-size: 1.2em;">どうやって届けられているのでしょうか？</strong><br><br>
+                    
+                    その橋渡しをしているのが<strong style="font-size: 1.2em;">「API」</strong>という仕組みです。
+                </div>
+            </div>
+            
+            <div class="preview-topics">
+                <div class="preview-topic">
+                    <div class="preview-topic-icon">🔌</div>
+                    <div class="preview-topic-title">API<br>とは何か</div>
+                </div>
+                
+                <div class="preview-topic">
+                    <div class="preview-topic-icon">🌐</div>
+                    <div class="preview-topic-title">HTTP<br>の基本</div>
+                </div>
+                
+                <div class="preview-topic">
+                    <div class="preview-topic-icon">📡</div>
+                    <div class="preview-topic-title">REST<br>の考え方</div>
+                </div>
+                
+                <div class="preview-topic">
+                    <div class="preview-topic-icon">📋</div>
+                    <div class="preview-topic-title">JSON<br>データ形式</div>
+                </div>
+            </div>
+            
+            <div class="preview-content">
+                <div class="preview-content-title">🎓 こんなことを学びます</div>
+                <div class="preview-content-text">
+                    • <strong>HTTP：</strong>インターネット上でデータをやり取りするときの「約束事」<br><br>
+                    
+                    • <strong>REST：</strong>APIを設計するときの「お作法」の一つ<br><br>
+                    
+                    • <strong>GET / POST：</strong>「データをください」と「データを送ります」の違い<br><br>
+                    
+                    • <strong>JSON：</strong>{ "name": "田中", "age": 35 } というデータの表現方法<br>
+                    &nbsp;&nbsp;人が読んでも分かりやすく、機械も処理しやすいので、APIでよく使われる<br><br>
+                    
+                    今日学んだ「SQLでデータを読む・書く」という処理を、<br>
+                    <strong>フロントエンドからどうやって呼び出すのか</strong>、という視点で<br>
+                    全体像を見ていくことで、<br>
+                    バックエンドとデータベースとフロントエンドの関係が、<br>
+                    より立体的に理解できるようになります。
+                </div>
+            </div>
+            
+            <div class="closing-message">
+                <strong style="font-size: 1.4em; display: block; margin-bottom: 20px;">
+                    🤖 もちろん、次回もAIを活用！
+                </strong>
+                
+                「自分で難しいコードを書かなきゃいけないのかな」という心配は無用です。<br><br>
+                
+                AIに「顧客管理システムのAPI一覧を提案して」と依頼して、<br>
+                どんな答えが返ってくるのかを一緒に見ていく、<br>
+                というスタイルで進めていきます。<br><br>
+                
+                <strong style="font-size: 1.3em;">第4回も、楽しみながら学んでいきましょう！</strong><br><br>
+                
+                それでは、今日の講座はこれで終了です。<br>
+                <strong style="font-size: 1.4em;">お疲れさまでした！</strong>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

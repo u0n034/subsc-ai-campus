@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第4回-6：ミニワーク - AIによるバックエンド開発とデータベース講座</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #ea580c;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #f97316;
+        }
+        
+        /* ワーク説明セクション */
+        .work-intro-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .work-goal {
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .goal-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .goal-content {
+            font-size: 1.2em;
+            line-height: 1.8;
+        }
+        
+        .work-steps {
+            display: grid;
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .work-step {
+            background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+            border-radius: 15px;
+            padding: 30px;
+            border-left: 6px solid #ea580c;
+        }
+        
+        .step-number {
+            background: #ea580c;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .step-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #9a3412;
+            margin-bottom: 15px;
+        }
+        
+        .step-desc {
+            font-size: 1.05em;
+            color: #7c2d12;
+            line-height: 1.8;
+        }
+        
+        .format-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .format-table thead {
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+            color: white;
+        }
+        
+        .format-table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        .format-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .theme-examples {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .theme-card {
+            background: #f9fafb;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #ea580c;
+        }
+        
+        .theme-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #ea580c;
+            margin-bottom: 15px;
+        }
+        
+        .theme-apis {
+            font-size: 0.95em;
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        .encouragement-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 15px;
+            padding: 35px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .encourage-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 20px;
+        }
+        
+        .encourage-content {
+            font-size: 1.1em;
+            color: #78350f;
+            line-height: 1.8;
+        }
+        
+        /* ワーク時間セクション */
+        .work-time-section {
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            border-radius: 20px;
+            padding: 60px 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            color: white;
+        }
+        
+        .work-time-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+        
+        .work-time-title {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .work-time-desc {
+            font-size: 1.2em;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+        
+        .timer-display {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            font-size: 3em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        /* ブラッシュアップセクション */
+        .brushup-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .demo-intro {
+            background: #f9fafb;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .prompt-example {
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 35px;
+            margin: 30px 0;
+        }
+        
+        .prompt-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .prompt-content {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 25px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.8;
+            backdrop-filter: blur(10px);
+            font-size: 1.05em;
+        }
+        
+        .points-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .point-card {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .point-number {
+            background: #3b82f6;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .point-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+        
+        .point-desc {
+            font-size: 0.95em;
+            color: #1e40af;
+            line-height: 1.6;
+        }
+        
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .result-table thead {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            color: white;
+        }
+        
+        .result-table th {
+            padding: 12px;
+            text-align: left;
+            font-size: 0.95em;
+        }
+        
+        .result-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 0.9em;
+        }
+        
+        .result-table code {
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #ea580c;
+        }
+        
+        /* まとめセクション */
+        .summary-section {
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+            border-radius: 20px;
+            padding: 50px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .summary-recap {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 35px;
+            backdrop-filter: blur(10px);
+            margin: 30px 0;
+        }
+        
+        .recap-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .recap-items {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .recap-item {
+            background: rgba(255,255,255,0.2);
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            line-height: 1.7;
+        }
+        
+        .next-steps {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 35px;
+            backdrop-filter: blur(10px);
+            margin-top: 30px;
+        }
+        
+        .next-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .next-content {
+            font-size: 1.15em;
+            line-height: 2;
+            text-align: center;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 1200px) {
+            .theme-examples {
+                grid-template-columns: 1fr;
+            }
+            
+            .points-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">AIによるバックエンド開発とデータベース講座</h1>
+        <div class="subtitle">第4回-6：ミニワーク – 自社業務の『欲しいAPI』を3つ考える</div>
+        
+        <!-- ワーク説明 -->
+        <div class="work-intro-section">
+            <h2 class="section-title">✏️ ワークの説明</h2>
+            
+            <div class="work-goal">
+                <div class="goal-title">今日学んだ内容を、自分の業務に落とし込む!</div>
+                <div class="goal-content">
+                    自社や身近な業務から、<br>
+                    実際に「こんなAPIがあったら便利だな」というものを<br>
+                    <strong style="font-size: 1.3em;">3つ考えていただきます</strong>
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.4em; color: #ea580c; margin: 40px 0 25px 0; text-align: center;">
+                ワークの進め方
+            </h3>
+            
+            <div class="work-steps">
+                <div class="work-step">
+                    <div class="step-number">1</div>
+                    <div class="step-title">テーマを1つ選ぶ</div>
+                    <div class="step-desc">
+                        自社や身近な業務から、テーマを1つだけ選んでください。<br><br>
+                        
+                        例: 顧客管理、案件管理、予約管理、問い合わせ管理、勤怠管理、在庫管理など<br><br>
+                        
+                        「うちの会社は小さいし...」と思わなくてOK!<br>
+                        今Excelで管理している顧客リスト、紙の台帳で管理している予約情報、<br>
+                        メールで回している社内申請など、どんなものでも構いません。<br><br>
+                        
+                        <strong>むしろ、今アナログで管理しているものほど、APIで整理する価値があります!</strong>
+                    </div>
+                </div>
+                
+                <div class="work-step">
+                    <div class="step-number">2</div>
+                    <div class="step-title">「APIがあったら便利そうな操作」を3つ考える</div>
+                    <div class="step-desc">
+                        その業務で「APIがあったら便利そうな操作」を3つ考えてください。<br><br>
+                        
+                        <strong>1番目:</strong> 基本的に「一覧を取得する」操作<br>
+                        → GETメソッド、例: <code>GET /customers</code><br><br>
+                        
+                        <strong>2番目:</strong> 「新しく登録する」操作<br>
+                        → POSTメソッド、例: <code>POST /customers</code><br><br>
+                        
+                        <strong>3番目:</strong> 「更新する」または「削除する」操作<br>
+                        → PUTやDELETEメソッド、例: <code>PUT /customers/{id}</code>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.3em; color: #ea580c; margin: 40px 0 25px 0; text-align: center;">
+                書き出すフォーマット
+            </h3>
+            
+            <table class="format-table">
+                <thead>
+                    <tr>
+                        <th style="width: 10%;">No</th>
+                        <th style="width: 15%;">HTTPメソッド</th>
+                        <th style="width: 30%;">パス</th>
+                        <th>何をしたいAPIか</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>GET</td>
+                        <td>/customers</td>
+                        <td>顧客一覧を取得したい</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>POST</td>
+                        <td>/customers</td>
+                        <td>新しい顧客を登録したい</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>PUT</td>
+                        <td>/customers/{id}</td>
+                        <td>既存の顧客情報を更新したい</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="encouragement-box">
+                <div class="encourage-title">💡 大事なこと</div>
+                <div class="encourage-content">
+                    HTTPメソッドやパスの書き方がよくわからなくても、全く問題ありません!<br><br>
+                    
+                    まずは日本語で「何をしたいか」を書いてみてください。<br>
+                    「石川県の顧客だけ取得したい」「予約のステータスを変更したい」など<br><br>
+                    
+                    メソッドやパスの正式な書き方は、この後、AIに聞いて補ってもらえます。<br><br>
+                    
+                    <strong style="font-size: 1.2em;">
+                    完璧な設計書を作ることが目的ではありません。<br>
+                    「REST APIの形で業務を表現する」という感覚を掴むことが目標です!
+                    </strong>
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.3em; color: #ea580c; margin: 40px 0 25px 0; text-align: center;">
+                テーマの例
+            </h3>
+            
+            <div class="theme-examples">
+                <div class="theme-card">
+                    <div class="theme-title">📋 顧客管理システム</div>
+                    <div class="theme-apis">
+                        • 顧客一覧の取得<br>
+                        • 新規顧客の登録<br>
+                        • 顧客情報の更新
+                    </div>
+                </div>
+                
+                <div class="theme-card">
+                    <div class="theme-title">📊 案件管理システム</div>
+                    <div class="theme-apis">
+                        • 案件一覧の取得<br>
+                        • 新規案件の作成<br>
+                        • 案件のステータス変更
+                    </div>
+                </div>
+                
+                <div class="theme-card">
+                    <div class="theme-title">📅 予約管理システム</div>
+                    <div class="theme-apis">
+                        • 予約一覧の取得<br>
+                        • 新規予約の登録<br>
+                        • 予約のキャンセル
+                    </div>
+                </div>
+                
+                <div class="theme-card">
+                    <div class="theme-title">💬 問い合わせ管理システム</div>
+                    <div class="theme-apis">
+                        • 問い合わせ一覧の取得<br>
+                        • 新規問い合わせの登録<br>
+                        • 対応ステータスの更新
+                    </div>
+                </div>
+                
+                <div class="theme-card">
+                    <div class="theme-title">⏰ 勤怠管理システム</div>
+                    <div class="theme-apis">
+                        • 勤怠データの一覧取得<br>
+                        • 出退勤の記録<br>
+                        • 勤怠データの修正
+                    </div>
+                </div>
+                
+                <div class="theme-card">
+                    <div class="theme-title">📦 在庫管理システム</div>
+                    <div class="theme-apis">
+                        • 在庫一覧の取得<br>
+                        • 入荷の記録<br>
+                        • 在庫数の更新
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-radius: 15px; padding: 35px; margin-top: 40px; text-align: center;">
+                <p style="font-size: 1.15em; color: #047857; line-height: 1.8;">
+                    <strong style="font-size: 1.2em; color: #065f46;">準備はいいでしょうか?</strong><br><br>
+                    
+                    それでは、このタイミングで動画を一時停止して、<br>
+                    <strong>5分から10分ほど、実際に手を動かして考えてみてください。</strong><br><br>
+                    
+                    紙に書いても、パソコンのメモ帳に打ち込んでも、どちらでもOKです。<br><br>
+                    
+                    完璧を目指さなくて大丈夫。<br>
+                    まずは、自分なりの3つの操作を言葉にしてみることが大切です!
+                </p>
+            </div>
+        </div>
+        
+        <!-- ワーク時間 -->
+        <div class="work-time-section">
+            <div class="work-time-icon">✏️</div>
+            <div class="work-time-title">ワーク中</div>
+            <div class="work-time-desc">
+                動画を一時停止して、<br>
+                自社業務の「欲しいAPI」を3つ考えてみましょう
+            </div>
+            <div class="timer-display">5〜10分</div>
+            <div style="font-size: 1.1em; opacity: 0.9;">
+                完璧を目指さず、まずは言葉にしてみることが大切!
+            </div>
+        </div>
+        
+        <!-- AIでブラッシュアップ -->
+        <div class="brushup-section">
+            <h2 class="section-title">🤖 AIでブラッシュアップするデモ</h2>
+            
+            <div class="demo-intro">
+                <p style="font-size: 1.15em; color: #333; line-height: 1.8;">
+                    お疲れさまでした!3つの操作、書き出せましたでしょうか。<br><br>
+                    
+                    ここからは、皆さんが考えた内容を、<br>
+                    <strong style="color: #ea580c;">AIを使ってさらにブラッシュアップしていく方法</strong>をお見せします。
+                </p>
+            </div>
+            
+            <h3 style="font-size: 1.3em; color: #ea580c; margin: 40px 0 25px 0; text-align: center;">
+                デモ例: 問い合わせ管理システム
+            </h3>
+            
+            <div class="prompt-example">
+                <div class="prompt-title">📝 AIへのプロンプト例</div>
+                <div class="prompt-content">
+次のような業務のAPIを設計したいです。
+
+業務内容:
+- 社内の問い合わせを登録・管理する
+- 対応状況(未対応／対応中／完了)を持っている
+- 一覧表示・詳細表示・ステータス変更をしたい
+
+非エンジニアにもわかるように、REST APIの一覧を表形式で提案してください。
+
+表には以下の項目を含めてください:
+- HTTPメソッド
+- パス(エンドポイント)
+- 何をするAPIか(日本語で説明)
+- 主な入力項目
+- 主な出力項目
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.3em; color: #ea580c; margin: 40px 0 25px 0; text-align: center;">
+                プロンプトの3つのポイント
+            </h3>
+            
+            <div class="points-grid">
+                <div class="point-card">
+                    <div class="point-number">1</div>
+                    <div class="point-title">業務内容を具体的に書く</div>
+                    <div class="point-desc">
+                        「問い合わせ管理」とだけ書くより、<br>
+                        「登録・管理する」「ステータスを持っている」<br>
+                        など、やりたいことを箇条書きで並べる
+                    </div>
+                </div>
+                
+                <div class="point-card">
+                    <div class="point-number">2</div>
+                    <div class="point-title">「非エンジニアにもわかるように」と明示</div>
+                    <div class="point-desc">
+                        これを入れることで、<br>
+                        AIは難しい専門用語を避けて、<br>
+                        わかりやすい説明をしてくれる
+                    </div>
+                </div>
+                
+                <div class="point-card">
+                    <div class="point-number">3</div>
+                    <div class="point-title">出力形式を指定する</div>
+                    <div class="point-desc">
+                        「表形式で」「次の項目を含めて」<br>
+                        と具体的にお願いすると、<br>
+                        欲しい形で回答が返ってくる
+                    </div>
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.3em; color: #ea580c; margin: 40px 0 25px 0; text-align: center;">
+                ✨ AIが返してくれる回答例
+            </h3>
+            
+            <table class="result-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>メソッド</th>
+                        <th>パス</th>
+                        <th>何をするAPIか</th>
+                        <th>主な入力項目</th>
+                        <th>主な出力項目</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><code>GET</code></td>
+                        <td><code>/inquiries</code></td>
+                        <td>問い合わせの一覧を取得</td>
+                        <td>status, keyword</td>
+                        <td>問い合わせID、タイトル、ステータスのリスト</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><code>GET</code></td>
+                        <td><code>/inquiries/{id}</code></td>
+                        <td>特定の問い合わせの詳細を取得</td>
+                        <td>なし(URLのidで指定)</td>
+                        <td>問い合わせの全情報</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><code>POST</code></td>
+                        <td><code>/inquiries</code></td>
+                        <td>新しい問い合わせを登録</td>
+                        <td>タイトル、本文、作成者名</td>
+                        <td>登録成功メッセージ、問い合わせID</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><code>PUT</code></td>
+                        <td><code>/inquiries/{id}/status</code></td>
+                        <td>問い合わせのステータスを変更</td>
+                        <td>新しいステータス</td>
+                        <td>更新成功メッセージ</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td><code>PUT</code></td>
+                        <td><code>/inquiries/{id}</code></td>
+                        <td>問い合わせの内容を更新</td>
+                        <td>タイトル、本文</td>
+                        <td>更新後の問い合わせ情報</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td><code>DELETE</code></td>
+                        <td><code>/inquiries/{id}</code></td>
+                        <td>問い合わせを削除</td>
+                        <td>なし(URLのidで指定)</td>
+                        <td>削除成功メッセージ</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div style="padding: 30px; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 15px; margin-top: 40px;">
+                <h3 style="font-size: 1.3em; color: #92400e; margin-bottom: 20px; text-align: center;">
+                    💡 この表を見て...
+                </h3>
+                <div style="font-size: 1.05em; color: #78350f; line-height: 1.8;">
+                    • 最初に書いた3つの操作と比べて、どうですか?<br>
+                    • 「こんなAPIもあった方がいいな」というアイデアが出てきませんか?<br><br>
+                    
+                    <strong>例:</strong><br>
+                    • 担当者を変更するAPI<br>
+                    • メモを追加するAPI<br>
+                    • 添付ファイルをアップロードするAPI<br><br>
+                    
+                    <strong style="font-size: 1.15em; color: #92400e;">
+                    自分のメモをAIに渡して整形してもらう。<br>
+                    「これをREST APIの一覧にして」「不足している操作があれば追加して」とお願いする。<br>
+                    これが、AIとの協働の使い方です!
+                    </strong>
+                </div>
+            </div>
+            
+            <div style="padding: 30px; background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-radius: 15px; margin-top: 30px;">
+                <h3 style="font-size: 1.3em; color: #065f46; margin-bottom: 20px; text-align: center;">
+                    🔗 API設計とデータベース設計の関係
+                </h3>
+                <div style="font-size: 1.05em; color: #047857; line-height: 1.8;">
+                    この表を見ると、「入力項目」と「出力項目」が明確に書かれていますよね。<br><br>
+                    
+                    <strong>この入力項目と出力項目こそが、<br>
+                    第2回で学んだ「テーブルのカラム」に対応している!</strong><br><br>
+                    
+                    例: 「問い合わせを登録するAPI」の入力項目<br>
+                    → タイトル、本文、作成者名、カテゴリ<br>
+                    ということは、問い合わせテーブルには、少なくともこれらのカラムが必要<br><br>
+                    
+                    <strong style="font-size: 1.15em;">
+                    つまり、API設計をすることで、<br>
+                    自然とデータベースの設計も見えてくる!
+                    </strong>
+                </div>
+            </div>
+        </div>
+        
+        <!-- まとめ -->
+        <div class="summary-section">
+            <h2 class="section-title" style="color: white; border-bottom-color: white;">📝 第4回のまとめ</h2>
+            
+            <div class="summary-recap">
+                <div class="recap-title">今日学んだこと</div>
+                <div class="recap-items">
+                    <div class="recap-item">
+                        <strong>📬 HTTP:</strong> Webの会話のルール。URLやメソッド、ステータスコードを使って、リクエストとレスポンスをやり取りする
+                    </div>
+                    <div class="recap-item">
+                        <strong>🔌 REST API:</strong> 決まった入口からシステムにお願いする仕組み。エンドポイントという形で、わかりやすく整理されている
+                    </div>
+                    <div class="recap-item">
+                        <strong>📄 JSON:</strong> テーブルデータの別の見せ方。人にも機械にも読める形式で、APIのやり取りに使われる
+                    </div>
+                    <div class="recap-item">
+                        <strong>🔄 バックエンドの4ステップ:</strong> リクエストを受け取る → ビジネスルールを適用 → DBを操作 → JSONで返す
+                    </div>
+                    <div class="recap-item">
+                        <strong>✏️ 今日のワーク:</strong> 自分の業務を「API」という形で表現する第一歩を踏み出した!
+                    </div>
+                </div>
+            </div>
+            
+            <div class="next-steps">
+                <div class="next-title">🚀 次回予告 – 第5回</div>
+                <div class="next-content">
+                    今日のワークで考えたAPI設計をもとに、<br>
+                    <strong style="font-size: 1.3em;">データベースの設計</strong>に踏み込んでいきます!<br><br>
+                    
+                    テーブルとカラムを決めて、ER図を描いて、<br>
+                    AIと一緒に実務に近い設計を体験していきましょう。<br><br>
+                    
+                    今日のワークの内容を、メモとして残しておいてください。<br>
+                    それが次回の出発点になります!<br><br>
+                    
+                    <strong style="font-size: 1.4em;">
+                    第4回、お疲れさまでした! 🎉
+                    </strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

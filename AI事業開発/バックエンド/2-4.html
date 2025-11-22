@@ -623,6 +623,12 @@
             }
         }
         
+        @media (max-width: 968px) {
+            .two-questions {
+                grid-template-columns: 1fr;
+            }
+        }
+        
         @media (max-width: 768px) {
             .title {
                 font-size: 1.8em;
@@ -637,10 +643,6 @@
             }
             
             .workflow-steps {
-                grid-template-columns: 1fr;
-            }
-            
-            .two-questions {
                 grid-template-columns: 1fr;
             }
             
@@ -810,6 +812,119 @@
 - sales_person(担当営業)
 - status(ステータス:見込み/受注/失注 等)
 - notes(備考メモ)
+            </div>
+            
+            <h3 style="font-size: 1.4em; color: #0f766e; margin: 50px 0 25px 0; text-align: center;">
+                📋 案件管理と予約管理の例も見てみましょう
+            </h3>
+            
+            <div style="text-align: center; margin-bottom: 30px; padding: 20px; background: #f0fdfa; border-radius: 10px;">
+                <p style="font-size: 1.05em; color: #0f766e; line-height: 1.8;">
+                    では、顧客管理以外の例も簡単に見ておきましょう。<br>
+                    <strong>管理したい対象が変わっても、「1行=1件」「必要な項目を洗い出す」という考え方は共通しています。</strong>
+                </p>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
+                <!-- 案件管理の例 -->
+                <div style="background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%); border-radius: 15px; padding: 30px; border: 3px solid #8b5cf6;">
+                    <h4 style="font-size: 1.3em; color: #5b21b6; margin-bottom: 20px; text-align: center;">
+                        📋 案件管理の場合
+                    </h4>
+                    
+                    <div style="background: white; border-radius: 10px; padding: 20px; margin-bottom: 15px;">
+                        <div style="font-weight: bold; color: #5b21b6; margin-bottom: 10px;">
+                            テーブル名：
+                        </div>
+                        <div style="font-family: 'Courier New', monospace; color: #333;">
+                            projects（案件）
+                        </div>
+                    </div>
+                    
+                    <div style="background: white; border-radius: 10px; padding: 20px; margin-bottom: 15px;">
+                        <div style="font-weight: bold; color: #5b21b6; margin-bottom: 10px;">
+                            1行 = 
+                        </div>
+                        <div style="font-size: 1.1em; color: #333;">
+                            <strong>1件の案件</strong>
+                        </div>
+                    </div>
+                    
+                    <div style="background: white; border-radius: 10px; padding: 20px;">
+                        <div style="font-weight: bold; color: #5b21b6; margin-bottom: 15px;">
+                            欲しいカラム（項目）：
+                        </div>
+                        <div style="font-family: 'Courier New', monospace; font-size: 0.9em; line-height: 2; color: #333;">
+                            • 案件ID (project_id) <span style="color: #8b5cf6;">← 主キー</span><br>
+                            • 案件名 (project_name)<br>
+                            • 顧客ID (customer_id)<br>
+                            <span style="color: #666; font-size: 0.85em;">  └ 顧客テーブルとの紐付け</span><br>
+                            • 担当者 (person_in_charge)<br>
+                            • ステータス (status)<br>
+                            <span style="color: #666; font-size: 0.85em;">  └ 提案中/受注/完了/失注など</span><br>
+                            • 開始予定日 (start_date)<br>
+                            • 終了予定日 (end_date)<br>
+                            • 受注金額 (amount)<br>
+                            • 備考 (notes)
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 予約管理の例 -->
+                <div style="background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%); border-radius: 15px; padding: 30px; border: 3px solid #ec4899;">
+                    <h4 style="font-size: 1.3em; color: #9f1239; margin-bottom: 20px; text-align: center;">
+                        📅 予約管理の場合
+                    </h4>
+                    
+                    <div style="background: white; border-radius: 10px; padding: 20px; margin-bottom: 15px;">
+                        <div style="font-weight: bold; color: #9f1239; margin-bottom: 10px;">
+                            テーブル名：
+                        </div>
+                        <div style="font-family: 'Courier New', monospace; color: #333;">
+                            reservations（予約）
+                        </div>
+                    </div>
+                    
+                    <div style="background: white; border-radius: 10px; padding: 20px; margin-bottom: 15px;">
+                        <div style="font-weight: bold; color: #9f1239; margin-bottom: 10px;">
+                            1行 = 
+                        </div>
+                        <div style="font-size: 1.1em; color: #333;">
+                            <strong>1件の予約</strong>
+                        </div>
+                    </div>
+                    
+                    <div style="background: white; border-radius: 10px; padding: 20px;">
+                        <div style="font-weight: bold; color: #9f1239; margin-bottom: 15px;">
+                            欲しいカラム（項目）：
+                        </div>
+                        <div style="font-family: 'Courier New', monospace; font-size: 0.9em; line-height: 2; color: #333;">
+                            • 予約ID (reservation_id) <span style="color: #ec4899;">← 主キー</span><br>
+                            • 予約者名 (customer_name)<br>
+                            • メールアドレス (email)<br>
+                            • 電話番号 (phone)<br>
+                            • 予約日時 (reservation_datetime)<br>
+                            • 予約内容 (reservation_type)<br>
+                            <span style="color: #666; font-size: 0.85em;">  └ セミナーA/面談/施設利用など</span><br>
+                            • 人数 (number_of_people)<br>
+                            • ステータス (status)<br>
+                            <span style="color: #666; font-size: 0.85em;">  └ 予約済み/キャンセル/完了など</span><br>
+                            • 備考 (notes)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border-radius: 15px; padding: 30px; margin-top: 30px; text-align: center;">
+                <div style="font-size: 1.2em; font-weight: bold; color: #1e3a8a; margin-bottom: 15px;">
+                    💡 共通する考え方
+                </div>
+                <div style="font-size: 1.05em; color: #1e40af; line-height: 2;">
+                    管理したい対象が変わっても、<br>
+                    <strong style="font-size: 1.15em;">「1行=1件」「必要な項目を洗い出す」という考え方は共通しています。</strong><br><br>
+                    
+                    どんな業務データであっても、この基本原則は変わりません。
+                </div>
             </div>
             
             <div class="key-points">

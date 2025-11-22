@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第4回-3：REST APIの基本 - AIによるバックエンド開発とデータベース講座</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #ea580c;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #f97316;
+        }
+        
+        /* REST APIとは */
+        .api-intro-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .api-definition {
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .api-def-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .api-def-content {
+            font-size: 1.3em;
+            line-height: 1.8;
+        }
+        
+        .api-reasons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .api-reason {
+            background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .reason-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .reason-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #9a3412;
+            margin-bottom: 15px;
+        }
+        
+        .reason-desc {
+            font-size: 0.95em;
+            color: #7c2d12;
+            line-height: 1.7;
+        }
+        
+        /* エンドポイントとリソース */
+        .endpoint-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .endpoint-examples {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .endpoint-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .endpoint-header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .endpoint-method {
+            background: #10b981;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .endpoint-method.post {
+            background: #3b82f6;
+        }
+        
+        .endpoint-method.put {
+            background: #f59e0b;
+        }
+        
+        .endpoint-method.delete {
+            background: #ef4444;
+        }
+        
+        .endpoint-path {
+            font-family: 'Courier New', monospace;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        
+        .endpoint-body {
+            background: white;
+            padding: 25px 30px;
+        }
+        
+        .endpoint-purpose {
+            font-size: 1.15em;
+            font-weight: bold;
+            color: #ea580c;
+            margin-bottom: 15px;
+        }
+        
+        .endpoint-desc {
+            font-size: 1em;
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        .resource-concept {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 15px;
+            padding: 35px;
+            margin-top: 30px;
+        }
+        
+        .resource-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .resource-content {
+            font-size: 1.1em;
+            color: #78350f;
+            line-height: 2;
+            text-align: center;
+        }
+        
+        .rest-principles {
+            background: #f9fafb;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+        
+        .principle-item {
+            background: white;
+            border-left: 5px solid #ea580c;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+        
+        .principle-title {
+            font-weight: bold;
+            color: #ea580c;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        /* 経営・業務視点 */
+        .business-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .api-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .api-table thead {
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+            color: white;
+        }
+        
+        .api-table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        .api-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .api-table tbody tr:hover {
+            background: #fef3c7;
+        }
+        
+        .api-table code {
+            background: #f3f4f6;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #ea580c;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .benefit-card {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 15px;
+            padding: 25px;
+        }
+        
+        .benefit-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        
+        .benefit-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 15px;
+        }
+        
+        .benefit-desc {
+            font-size: 0.95em;
+            color: #1e40af;
+            line-height: 1.7;
+        }
+        
+        /* AIデモ */
+        .ai-demo-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .prompt-box {
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+        
+        .prompt-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .prompt-content {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.8;
+            backdrop-filter: blur(10px);
+        }
+        
+        .ai-tips {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+        
+        .tips-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #065f46;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .tip-item {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            color: #047857;
+        }
+        
+        /* まとめ */
+        .summary-section {
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+            border-radius: 20px;
+            padding: 50px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .summary-points {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .summary-point {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .point-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            opacity: 0.5;
+            margin-bottom: 15px;
+        }
+        
+        .point-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .point-desc {
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 1200px) {
+            .api-reasons {
+                grid-template-columns: 1fr;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .summary-points {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">AIによるバックエンド開発とデータベース講座</h1>
+        <div class="subtitle">第4回-3：REST APIの基本 – エンドポイントと『資源』の考え方</div>
+        
+        <!-- REST APIとは -->
+        <div class="api-intro-section">
+            <h2 class="section-title">🔌 REST APIとは?</h2>
+            
+            <div class="api-definition">
+                <div class="api-def-title">REST API = システム同士が会話するための「窓口」</div>
+                <div class="api-def-content">
+                    決まった形でお願いできる入口<br>
+                    Webの設計ルールに則った、標準的な仕組み
+                </div>
+            </div>
+            
+            <div style="padding: 25px; background: #f9fafb; border-radius: 10px; margin: 30px 0;">
+                <h3 style="font-size: 1.3em; color: #ea580c; margin-bottom: 20px; text-align: center;">
+                    💡 コンビニのレジのイメージ
+                </h3>
+                <p style="font-size: 1.05em; color: #333; line-height: 1.8; text-align: center;">
+                    コンビニに行ったとき、「商品を渡す→お金を払う→レシートをもらう」という決まった流れがありますよね。<br><br>
+                    
+                    この「レジ」がまさにAPI。<br>
+                    裏側でどんな在庫管理システムが動いているかは客には見えないけれど、<br>
+                    レジという「窓口」を通じて、決まった形でやり取りができる。
+                </p>
+            </div>
+            
+            <h3 style="font-size: 1.4em; color: #ea580c; margin: 40px 0 25px 0; text-align: center;">
+                なぜAPIが必要なのか?
+            </h3>
+            
+            <div class="api-reasons">
+                <div class="api-reason">
+                    <div class="reason-icon">🔒</div>
+                    <div class="reason-title">1. 安全性</div>
+                    <div class="reason-desc">
+                        直接データベースにアクセスするのは危険。<br><br>
+                        
+                        APIを通せば、「この操作だけは許可」「この範囲のデータだけ見せる」という制御ができる。<br><br>
+                        
+                        銀行のATMと同じ役割。
+                    </div>
+                </div>
+                
+                <div class="api-reason">
+                    <div class="reason-icon">♻️</div>
+                    <div class="reason-title">2. 再利用性</div>
+                    <div class="reason-desc">
+                        一度APIを作っておけば、Webサイトからも、スマホアプリからも、社内の別のシステムからも、同じAPIを使える。<br><br>
+                        
+                        それぞれのシステムごとに別々の仕組みを作る必要がない。
+                    </div>
+                </div>
+                
+                <div class="api-reason">
+                    <div class="reason-icon">💪</div>
+                    <div class="reason-title">3. 変更への強さ</div>
+                    <div class="reason-desc">
+                        データベースの構造を変更しても、API自体の見た目はそのままにできる。<br><br>
+                        
+                        使う側のシステムは何も変更しなくていい。<br><br>
+                        
+                        長く保守していく上で重要なポイント。
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- エンドポイントとリソース -->
+        <div class="endpoint-section">
+            <h2 class="section-title">📍 エンドポイントとリソースのイメージ</h2>
+            
+            <div style="text-align: center; margin-bottom: 30px; padding: 25px; background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%); border-radius: 10px;">
+                <p style="font-size: 1.15em; color: #7c2d12; line-height: 1.8;">
+                    <strong style="font-size: 1.2em; color: #9a3412;">エンドポイント = APIにお願いするときのURL</strong><br><br>
+                    郵便を送るときの宛先住所と同じ。<br>
+                    「この住所にお願いを届ける」というイメージ
+                </p>
+            </div>
+            
+            <h3 style="font-size: 1.3em; color: #ea580c; margin-bottom: 25px;">
+                顧客管理システムのAPI例
+            </h3>
+            
+            <div class="endpoint-examples">
+                <div class="endpoint-card">
+                    <div class="endpoint-header">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/customers</div>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-purpose">📖 顧客の一覧をください</div>
+                        <div class="endpoint-desc">
+                            システムに登録されているすべての顧客のデータが返ってくる。<br>
+                            完全なURLで書くと: <code>https://api.example.com/customers</code><br><br>
+                            
+                            通常はページング(ページ分け)を使って、少しずつデータを取得する。
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="endpoint-card">
+                    <div class="endpoint-header">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/customers/123</div>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-purpose">🔍 ID番号が123番の顧客の情報をください</div>
+                        <div class="endpoint-desc">
+                            <code>/customers</code>の後ろに<code>/123</code>と付いている。<br>
+                            この<code>123</code>は顧客ID、つまり特定の一人を指定している。<br><br>
+                            
+                            このような形を「パスパラメータ」と呼ぶ。<br>
+                            第2回で学んだ「主キー」に対応している。
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="endpoint-card">
+                    <div class="endpoint-header">
+                        <div class="endpoint-method post">POST</div>
+                        <div class="endpoint-path">/customers</div>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-purpose">➕ 新しい顧客を登録してください</div>
+                        <div class="endpoint-desc">
+                            同じ<code>/customers</code>というエンドポイントでも、<br>
+                            <strong>HTTPメソッドを変えるだけで、操作の意味が変わる</strong><br><br>
+                            
+                            <code>GET</code>なら「見せて」、<code>POST</code>なら「登録して」<br>
+                            これがRESTの面白いところ!
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="resource-concept">
+                <div class="resource-title">💎 リソース(資源)という考え方</div>
+                <div class="resource-content">
+                    リソース = 「扱いたいデータのまとまり」<br><br>
+                    
+                    <code>/customers</code>の<code>customers</code>がリソース名<br>
+                    同様に、<code>/orders</code>なら注文リソース、<code>/products</code>なら商品リソース<br><br>
+                    
+                    <strong style="font-size: 1.2em; color: #92400e;">
+                    RESTでは、リソース名はそのままで、メソッドを変えることで操作を変える
+                    </strong><br><br>
+                    
+                    • <code>GET</code>なら「見せて」<br>
+                    • <code>POST</code>なら「作って」<br>
+                    • <code>PUT</code>なら「更新して」<br>
+                    • <code>DELETE</code>なら「消して」
+                </div>
+            </div>
+            
+            <div class="rest-principles">
+                <h3 style="font-size: 1.3em; color: #ea580c; margin-bottom: 20px; text-align: center;">
+                    📋 エンドポイントの命名慣習
+                </h3>
+                
+                <div class="principle-item">
+                    <div class="principle-title">1️⃣ リソース名は複数形にする</div>
+                    <div style="color: #666;">
+                        <code>/customer</code>ではなく<code>/customers</code><br>
+                        <code>/order</code>ではなく<code>/orders</code><br><br>
+                        「顧客の集まり」「注文の集まり」というニュアンスを表す
+                    </div>
+                </div>
+                
+                <div class="principle-item">
+                    <div class="principle-title">2️⃣ 動詞を使わない</div>
+                    <div style="color: #666;">
+                        <code>/getCustomers</code>とか<code>/createOrder</code>ではなく、<br>
+                        <code>/customers</code>、<code>/orders</code>という名詞だけにする<br><br>
+                        動詞はHTTPメソッドで表現するから
+                    </div>
+                </div>
+                
+                <div class="principle-item">
+                    <div class="principle-title">3️⃣ 階層構造を使う</div>
+                    <div style="color: #666;">
+                        「顧客IDが123の人の注文一覧」を取得したい場合:<br>
+                        <code>/customers/123/orders</code><br><br>
+                        「顧客123の下にある注文たち」という階層関係をURL構造で表現
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 経営・業務視点 -->
+        <div class="business-section">
+            <h2 class="section-title">💼 経営・業務視点でのAPI例</h2>
+            
+            <div style="padding: 25px; background: #f9fafb; border-radius: 10px; margin-bottom: 30px;">
+                <p style="font-size: 1.1em; color: #333; line-height: 1.8; text-align: center;">
+                    顧客管理システムで必要になりそうな操作を<br>
+                    REST API風に表現すると...
+                </p>
+            </div>
+            
+            <table class="api-table">
+                <thead>
+                    <tr>
+                        <th style="width: 15%;">メソッド</th>
+                        <th style="width: 30%;">エンドポイント</th>
+                        <th>何をするAPIか</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>GET</code></td>
+                        <td><code>/customers</code></td>
+                        <td>顧客一覧を取得(ページング・絞り込み可能)</td>
+                    </tr>
+                    <tr>
+                        <td><code>GET</code></td>
+                        <td><code>/customers/{id}</code></td>
+                        <td>特定の顧客の詳細情報を取得</td>
+                    </tr>
+                    <tr>
+                        <td><code>POST</code></td>
+                        <td><code>/customers</code></td>
+                        <td>新しい顧客を登録</td>
+                    </tr>
+                    <tr>
+                        <td><code>PUT</code></td>
+                        <td><code>/customers/{id}</code></td>
+                        <td>顧客情報を更新</td>
+                    </tr>
+                    <tr>
+                        <td><code>PUT</code></td>
+                        <td><code>/customers/{id}/status</code></td>
+                        <td>顧客ステータスを変更(専用エンドポイント)</td>
+                    </tr>
+                    <tr>
+                        <td><code>POST</code></td>
+                        <td><code>/customers/{id}/notes</code></td>
+                        <td>顧客へのメモを追加</td>
+                    </tr>
+                    <tr>
+                        <td><code>DELETE</code></td>
+                        <td><code>/customers/{id}</code></td>
+                        <td>顧客を削除(または無効化)</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div style="padding: 25px; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 10px; margin-top: 30px;">
+                <h3 style="font-size: 1.2em; color: #92400e; margin-bottom: 15px; text-align: center;">
+                    💡 重要なポイント
+                </h3>
+                <p style="font-size: 1.05em; color: #78350f; line-height: 1.8; text-align: center;">
+                    このAPIがあると、他のシステムとデータ連携しやすくなる!<br><br>
+                    
+                    • MAツールから顧客データを取りに来る<br>
+                    • 経営ダッシュボードでリアルタイムデータを表示<br>
+                    • スマホアプリで外出先から顧客情報を確認<br><br>
+                    
+                    <strong>APIはシステム同士をつなぐ「のり」のようなもの</strong>
+                </p>
+            </div>
+            
+            <h3 style="font-size: 1.3em; color: #ea580c; margin: 40px 0 25px 0; text-align: center;">
+                APIがあることのメリット
+            </h3>
+            
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">🔗</div>
+                    <div class="benefit-title">システム連携が容易</div>
+                    <div class="benefit-desc">
+                        MAツール、BIツール、会計システムなど、<br>
+                        他のツールとの連携がスムーズになる。<br><br>
+                        
+                        1日1回、夜中に自動でデータを同期する、<br>
+                        といった運用が可能に。
+                    </div>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">📱</div>
+                    <div class="benefit-title">マルチデバイス対応</div>
+                    <div class="benefit-desc">
+                        Webブラウザからアクセスしても、<br>
+                        スマホアプリからアクセスしても、<br>
+                        同じAPIを使える。<br><br>
+                        
+                        これが再利用性の高さ。
+                    </div>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">⚡</div>
+                    <div class="benefit-title">自動化が進む</div>
+                    <div class="benefit-desc">
+                        定期的に必要なレポートを、<br>
+                        APIから自動でデータを取得して生成。<br><br>
+                        
+                        毎月手作業でExcelに集計していた作業が、<br>
+                        自動化できる。
+                    </div>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">🏗️</div>
+                    <div class="benefit-title">将来の拡張性</div>
+                    <div class="benefit-desc">
+                        後から新しいツールを導入したり、<br>
+                        データを別の用途で使い回したりするのが、<br>
+                        ずっと楽になる。<br><br>
+                        
+                        「API ファースト」の設計思想。
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AIデモ -->
+        <div class="ai-demo-section">
+            <h2 class="section-title">🤖 AIに「API一覧」を作らせるデモ</h2>
+            
+            <div style="padding: 25px; background: #f9fafb; border-radius: 10px; margin-bottom: 30px;">
+                <p style="font-size: 1.1em; color: #333; line-height: 1.8; text-align: center;">
+                    AIに業務内容と機能を伝えるだけで、<br>
+                    REST API風の一覧表を作ってくれる!
+                </p>
+            </div>
+            
+            <div class="prompt-box">
+                <div class="prompt-title">📝 プロンプト例</div>
+                <div class="prompt-content">
+社内の「問い合わせ管理システム」のREST APIを設計したいです。
+
+次のような機能があります:
+- 問い合わせの新規登録
+- 問い合わせ一覧の取得(ステータスで絞り込み)
+- 問い合わせ詳細の表示
+- ステータスの変更(対応中 → 完了など)
+- 担当者の割り当て
+- メモの追加
+
+非エンジニアにもわかるように、
+以下の項目を含めたAPI一覧を表形式で提案してください。
+
+- HTTPメソッド
+- パス(エンドポイント)
+- 目的(日本語)
+- 主な入力項目
+- 主な出力項目
+                </div>
+            </div>
+            
+            <div style="padding: 30px; background: white; border-radius: 15px; border: 3px solid #10b981;">
+                <h3 style="font-size: 1.3em; color: #065f46; margin-bottom: 20px; text-align: center;">
+                    ✨ AIが返してくれるイメージ
+                </h3>
+                <p style="font-size: 1.05em; color: #333; line-height: 1.8; text-align: center;">
+                    表形式で、各APIのメソッド、エンドポイント、<br>
+                    入力項目、出力項目が整理されて返ってくる!<br><br>
+                    
+                    これを見ながら、<br>
+                    「この項目も必要だな」「こんなAPIもあった方がいいな」<br>
+                    と気づきを得ることができる。
+                </p>
+            </div>
+            
+            <div class="ai-tips">
+                <div class="tips-title">💡 AIを使うポイント</div>
+                
+                <div class="tip-item">
+                    <strong>1. 「非エンジニアにもわかるように」と明示する</strong><br>
+                    難しい専門用語を避けて、分かりやすい説明をしてくれる
+                </div>
+                
+                <div class="tip-item">
+                    <strong>2. 出力形式を指定する</strong><br>
+                    「表形式で」「次の項目を含めて」と具体的にお願いすると、欲しい形で回答が返ってくる
+                </div>
+                
+                <div class="tip-item">
+                    <strong>3. AIの回答を鵜呑みにしない</strong><br>
+                    AIは業務の細かい事情までは知らない。「ここは違うな」「これが足りないな」と気づいて、フィードバックする
+                </div>
+                
+                <div class="tip-item">
+                    <strong>4. 叩き台として活用する</strong><br>
+                    AIが作った「80点の叩き台」を、あなたの業務知識で「95点」に仕上げる
+                </div>
+            </div>
+        </div>
+        
+        <!-- まとめ -->
+        <div class="summary-section">
+            <h2 class="section-title" style="color: white; border-bottom-color: white;">📝 REST APIのまとめ</h2>
+            
+            <div class="summary-points">
+                <div class="summary-point">
+                    <div class="point-number">1</div>
+                    <div class="point-title">REST APIとは</div>
+                    <div class="point-desc">
+                        システム同士が会話するための「窓口」<br>
+                        Webの設計ルールに則った、標準的な仕組み<br><br>
+                        
+                        安全性・再利用性・変更への強さが特徴
+                    </div>
+                </div>
+                
+                <div class="summary-point">
+                    <div class="point-number">2</div>
+                    <div class="point-title">エンドポイントとリソース</div>
+                    <div class="point-desc">
+                        エンドポイント = APIにお願いするときのURL<br>
+                        リソース = 扱いたいデータのまとまり<br><br>
+                        
+                        リソース名はそのままで、メソッドを変えることで操作を変える
+                    </div>
+                </div>
+                
+                <div class="summary-point">
+                    <div class="point-number">3</div>
+                    <div class="point-title">業務視点でのAPI設計</div>
+                    <div class="point-desc">
+                        「どんな操作が必要か」を洗い出すことから始める<br><br>
+                        
+                        一覧取得、詳細取得、新規登録、更新、削除、ステータス変更、メモ追加...
+                    </div>
+                </div>
+                
+                <div class="summary-point">
+                    <div class="point-number">4</div>
+                    <div class="point-title">AIとの協働</div>
+                    <div class="point-desc">
+                        AIに業務内容を伝えるだけで、API一覧の叩き台を作ってくれる<br><br>
+                        
+                        それをブラッシュアップする。<br>
+                        これが、これからの非エンジニアの働き方
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.2); border-radius: 15px; padding: 35px; backdrop-filter: blur(10px); text-align: center; margin-top: 40px;">
+                <p style="font-size: 1.2em; line-height: 2;">
+                    REST APIの基本を理解することは、<br>
+                    非エンジニアが、システム企画や運用に関わる上で、<br>
+                    <strong style="font-size: 1.3em;">非常に重要なスキル</strong>になっています。<br><br>
+                    
+                    コードは書けなくても、<br>
+                    <strong>「どんな機能が必要で、どんな形で提供されるべきか」を整理する</strong><br>
+                    ことはできる!
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

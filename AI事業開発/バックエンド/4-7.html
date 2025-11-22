@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第4回：クロージング - AIによるバックエンド開発とデータベース講座</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #ea580c;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #f97316;
+        }
+        
+        /* オープニングメッセージ */
+        .opening-section {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        
+        .opening-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+        
+        .opening-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #ea580c;
+            margin-bottom: 30px;
+        }
+        
+        .opening-message {
+            font-size: 1.2em;
+            color: #333;
+            line-height: 2;
+            padding: 30px;
+            background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+            border-radius: 15px;
+        }
+        
+        /* 振り返りセクション */
+        .recap-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .recap-grid {
+            display: grid;
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .recap-card {
+            background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+            border-radius: 15px;
+            padding: 35px;
+            border-left: 8px solid #ea580c;
+        }
+        
+        .recap-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        
+        .recap-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #9a3412;
+            margin-bottom: 20px;
+        }
+        
+        .recap-content {
+            font-size: 1.05em;
+            color: #7c2d12;
+            line-height: 1.8;
+        }
+        
+        .recap-highlight {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 1em;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* ワーク振り返り */
+        .work-recap {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 15px;
+            padding: 35px;
+            margin-top: 30px;
+        }
+        
+        .work-recap-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .work-recap-content {
+            font-size: 1.1em;
+            color: #78350f;
+            line-height: 2;
+            text-align: center;
+        }
+        
+        /* 次回予告 */
+        .next-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .next-badge {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .next-badge-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+        
+        .next-badge-main {
+            font-size: 2.2em;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+        
+        .next-badge-desc {
+            font-size: 1.2em;
+            line-height: 1.8;
+            opacity: 0.95;
+        }
+        
+        .next-topics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .next-topic {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .topic-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        
+        .topic-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #065f46;
+            margin-bottom: 10px;
+        }
+        
+        .topic-desc {
+            font-size: 0.95em;
+            color: #047857;
+            line-height: 1.6;
+        }
+        
+        .save-reminder {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .reminder-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .reminder-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 15px;
+        }
+        
+        .reminder-content {
+            font-size: 1.05em;
+            color: #1e40af;
+            line-height: 1.8;
+        }
+        
+        /* エンカレッジメント */
+        .encourage-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .encourage-message {
+            background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+            border-radius: 15px;
+            padding: 40px;
+            margin: 30px 0;
+        }
+        
+        .encourage-title {
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #9a3412;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .encourage-content {
+            font-size: 1.15em;
+            color: #7c2d12;
+            line-height: 2;
+        }
+        
+        .value-points {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .value-point {
+            background: #f9fafb;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            border-top: 4px solid #ea580c;
+        }
+        
+        .value-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        
+        .value-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #ea580c;
+            margin-bottom: 10px;
+        }
+        
+        .value-desc {
+            font-size: 0.95em;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .ai-director {
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .director-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .director-content {
+            font-size: 1.2em;
+            line-height: 2;
+        }
+        
+        /* クロージング */
+        .closing-section {
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+            border-radius: 20px;
+            padding: 60px 40px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        
+        .closing-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+        
+        .closing-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        
+        .closing-message {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            margin: 30px 0;
+        }
+        
+        .closing-message-title {
+            font-size: 1.6em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .closing-message-content {
+            font-size: 1.3em;
+            line-height: 2;
+        }
+        
+        .see-you {
+            font-size: 2em;
+            font-weight: bold;
+            margin-top: 40px;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 1200px) {
+            .next-topics {
+                grid-template-columns: 1fr;
+            }
+            
+            .value-points {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">AIによるバックエンド開発とデータベース講座</h1>
+        <div class="subtitle">第4回：クロージング</div>
+        
+        <!-- オープニング -->
+        <div class="opening-section">
+            <div class="opening-icon">🎓</div>
+            <div class="opening-title">第4回、お疲れさまでした！</div>
+            <div class="opening-message">
+                今日は2時間かけて、かなり多くの新しい用語や概念に触れました。<br>
+                少し頭がパンパンになっているかもしれませんね。<br><br>
+                
+                <strong style="color: #ea580c; font-size: 1.2em;">でも大丈夫です。</strong><br><br>
+                
+                今日学んだことは、一度で完璧に理解する必要はありません。<br>
+                むしろ、「こういう言葉を聞いたことがある」<br>
+                「なんとなくイメージできる」という状態になっていれば、<br>
+                それだけで十分に価値があります。
+            </div>
+        </div>
+        
+        <!-- 今日の振り返り -->
+        <div class="recap-section">
+            <h2 class="section-title">📚 今日の内容を振り返りましょう</h2>
+            
+            <div class="recap-grid">
+                <div class="recap-card">
+                    <div class="recap-icon">📬</div>
+                    <div class="recap-title">1. HTTPについて学びました</div>
+                    <div class="recap-content">
+                        URLを分解して、どの部分が何を意味しているのか。<br>
+                        HTTPメソッドにはGETやPOSTといった種類があること。<br>
+                        そしてステータスコードの200や404、500が何を表しているのか。<br><br>
+                        
+                        <strong>これらは、Webの世界での「会話のルール」でしたね。</strong>
+                    </div>
+                    <div class="recap-highlight">
+                        普段何気なくブラウザでアクセスしているサイトの裏側で、<br>
+                        こうした仕組みが動いていることをイメージできるようになったのではないでしょうか。
+                    </div>
+                </div>
+                
+                <div class="recap-card">
+                    <div class="recap-icon">🔌</div>
+                    <div class="recap-title">2. REST APIの基本を学びました</div>
+                    <div class="recap-content">
+                        エンドポイントという言葉、そしてリソースという考え方。<br>
+                        <code style="background: white; padding: 3px 8px; border-radius: 3px; color: #ea580c;">GET /customers</code>で顧客一覧を取得する、<br>
+                        <code style="background: white; padding: 3px 8px; border-radius: 3px; color: #ea580c;">POST /customers</code>で新しい顧客を登録する。<br><br>
+                        
+                        <strong>こうしたシンプルな形で、システム同士が会話できる仕組みがREST APIでした。</strong>
+                    </div>
+                    <div class="recap-highlight">
+                        第2回や第3回で学んだテーブルやSQLと結びつけて考えることで、<br>
+                        「ああ、データベースの操作を、外から使いやすい形にしているんだな」と理解できたと思います。
+                    </div>
+                </div>
+                
+                <div class="recap-card">
+                    <div class="recap-icon">📄</div>
+                    <div class="recap-title">3. JSONというデータ形式を学びました</div>
+                    <div class="recap-content">
+                        最初は記号だらけで読みにくく感じたかもしれませんが、<br>
+                        実質は「名前付きの値のセット」でしかありません。<br><br>
+                        
+                        <strong>テーブルのデータを、別の見せ方で表現しているだけなんですね。</strong>
+                    </div>
+                    <div class="recap-highlight">
+                        これが理解できると、APIのレスポンスを見たときに、<br>
+                        「ああ、これは顧客テーブルのデータだな」と結びつけて考えられるようになります。
+                    </div>
+                </div>
+                
+                <div class="recap-card">
+                    <div class="recap-icon">🔄</div>
+                    <div class="recap-title">4. バックエンドの4ステップを整理しました</div>
+                    <div class="recap-content">
+                        1️⃣ リクエストを受け取って<br>
+                        2️⃣ ビジネスルールを適用して<br>
+                        3️⃣ データベースを操作して<br>
+                        4️⃣ 結果を返す<br><br>
+                        
+                        <strong>この流れを言語化できるようになりました。</strong>
+                    </div>
+                    <div class="recap-highlight">
+                        エンジニアとの会話がぐっとスムーズになります。<br>
+                        「このAPIは、こういう処理をしているんですよね?」と確認できるだけで、<br>
+                        認識のズレを防ぐことができるんです。
+                    </div>
+                </div>
+            </div>
+            
+            <div class="work-recap">
+                <div class="work-recap-title">✏️ 最後のミニワーク</div>
+                <div class="work-recap-content">
+                    自社業務に当てはめて「欲しいAPI」を3つ考えていただきました。<br><br>
+                    
+                    実際に手を動かしてみて、いかがでしたか。<br><br>
+                    
+                    最初は「どう書けばいいんだろう」と悩んだかもしれませんが、<br>
+                    AIにブラッシュアップしてもらうことで、<br>
+                    <strong style="font-size: 1.2em; color: #92400e;">だんだん形になっていくのを実感できたのではないでしょうか。</strong>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 次回予告 -->
+        <div class="next-section">
+            <h2 class="section-title">🚀 次回予告 – 第5回</h2>
+            
+            <div class="next-badge">
+                <div class="next-badge-title">NEXT TIME</div>
+                <div class="next-badge-main">
+                    実践編①<br>
+                    データベース設計を実務に近い形で深掘り
+                </div>
+                <div class="next-badge-desc">
+                    今日のワークで考えたAPIの裏側にある<br>
+                    「データベース設計」を、より実務に近い形で学びます
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.4em; color: #10b981; margin: 40px 0 25px 0; text-align: center;">
+                第5回で学ぶこと
+            </h3>
+            
+            <div class="next-topics">
+                <div class="next-topic">
+                    <div class="topic-icon">📊</div>
+                    <div class="topic-title">業務のテーブル設計</div>
+                    <div class="topic-desc">
+                        実際の業務に必要なテーブルを<br>
+                        どう設計するか、<br>
+                        AIと一緒に考えていきます
+                    </div>
+                </div>
+                
+                <div class="next-topic">
+                    <div class="topic-icon">🗺️</div>
+                    <div class="topic-title">ER図の作成</div>
+                    <div class="topic-desc">
+                        テーブル同士の関係を<br>
+                        視覚的に表現する<br>
+                        ER図を描いていきます
+                    </div>
+                </div>
+                
+                <div class="next-topic">
+                    <div class="topic-icon">🔄</div>
+                    <div class="topic-title">CRUD操作の流れ</div>
+                    <div class="topic-desc">
+                        作成・読み取り・更新・削除<br>
+                        の流れを実際に体験します
+                    </div>
+                </div>
+            </div>
+            
+            <div class="save-reminder">
+                <div class="reminder-icon">💾</div>
+                <div class="reminder-title">今日のワークを保存しておいてください!</div>
+                <div class="reminder-content">
+                    今日のワークで考えたAPIは、次回の出発点になります。<br>
+                    ぜひメモとして残しておいてください。<br><br>
+                    
+                    次回は、このAPIの裏側で必要になるテーブル設計を、<br>
+                    AIと一緒に具体化していきます。
+                </div>
+            </div>
+        </div>
+        
+        <!-- エンカレッジメント -->
+        <div class="encourage-section">
+            <h2 class="section-title">💪 あなたは大きな一歩を踏み出しました</h2>
+            
+            <div class="encourage-message">
+                <div class="encourage-title">非エンジニアの皆さんにとって、今日の内容は決して簡単なものではなかったと思います</div>
+                <div class="encourage-content">
+                    でも、ここで学んだ用語や考え方は、<br>
+                    <strong style="font-size: 1.2em; color: #9a3412;">これからの業務で必ず役に立ちます。</strong>
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.4em; color: #ea580c; margin: 40px 0 25px 0; text-align: center;">
+                今日学んだことが活きる場面
+            </h3>
+            
+            <div class="value-points">
+                <div class="value-point">
+                    <div class="value-icon">💬</div>
+                    <div class="value-title">社内のシステム開発で</div>
+                    <div class="value-desc">
+                        エンジニアと会話するとき、<br>
+                        専門用語を理解して<br>
+                        スムーズに意思疎通できる
+                    </div>
+                </div>
+                
+                <div class="value-point">
+                    <div class="value-icon">📋</div>
+                    <div class="value-title">外部のベンダーに</div>
+                    <div class="value-desc">
+                        要件を伝えるとき、<br>
+                        「REST APIはこういう形で」と<br>
+                        具体的に指示できる
+                    </div>
+                </div>
+                
+                <div class="value-point">
+                    <div class="value-icon">🤖</div>
+                    <div class="value-title">AIを使って</div>
+                    <div class="value-desc">
+                        システムの設計案を作るとき、<br>
+                        適切な質問ができて<br>
+                        精度の高い回答を得られる
+                    </div>
+                </div>
+            </div>
+            
+            <div class="ai-director">
+                <div class="director-title">🌟 あなたは立派な「AIディレクター」です</div>
+                <div class="director-content">
+                    「REST APIって、こういう形で設計するんですよね」<br>
+                    「このJSONは、こういうテーブルのデータですか」<br><br>
+                    
+                    こういった言葉が自然に出てくるようになれば、<br>
+                    <strong style="font-size: 1.3em;">あなたは立派な「AIディレクター」です。</strong><br><br>
+                    
+                    技術とビジネスの橋渡しができる人材として、<br>
+                    大きな価値を発揮できるようになっています!
+                </div>
+            </div>
+        </div>
+        
+        <!-- クロージング -->
+        <div class="closing-section">
+            <div class="closing-icon">🎉</div>
+            <div class="closing-title">第4回、本当にお疲れさまでした！</div>
+            
+            <div class="closing-message">
+                <div class="closing-message-title">
+                    HTTPとREST APIの超入門<br>
+                    完了!
+                </div>
+                <div class="closing-message-content">
+                    今日学んだことを完璧に覚えている必要はありません。<br><br>
+                    
+                    「こういう言葉があったな」<br>
+                    「こういう仕組みだったな」<br><br>
+                    
+                    という<strong>「引き出し」</strong>ができたことが、<br>
+                    何より大きな成果です。<br><br>
+                    
+                    必要なときに、この引き出しを開けて、<br>
+                    AIに聞き直せばいい。<br><br>
+                    
+                    それが、これからの学び方です。
+                </div>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.2); border-radius: 15px; padding: 35px; backdrop-filter: blur(10px); margin-top: 30px;">
+                <p style="font-size: 1.3em; line-height: 2;">
+                    今日のワークで考えたAPIを大切に保存して、<br>
+                    次回の第5回でさらに深めていきましょう。<br><br>
+                    
+                    データベース設計、ER図、CRUD操作...<br>
+                    より実務に近い体験が待っています!
+                </p>
+            </div>
+            
+            <div class="see-you">
+                それでは、第5回でお会いしましょう! 👋
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

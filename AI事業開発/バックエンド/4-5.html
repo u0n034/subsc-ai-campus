@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第4回-5：バックエンドの4ステップ - AIによるバックエンド開発とデータベース講座</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #ea580c;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #f97316;
+        }
+        
+        /* 4ステップモデルセクション */
+        .steps-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .steps-intro {
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .intro-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .intro-content {
+            font-size: 1.2em;
+            line-height: 1.8;
+        }
+        
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .step-card {
+            background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+            border-radius: 15px;
+            padding: 35px;
+            border-left: 8px solid #ea580c;
+            position: relative;
+        }
+        
+        .step-number {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: #ea580c;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(234,88,12,0.3);
+        }
+        
+        .step-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #9a3412;
+            margin-bottom: 20px;
+            padding-right: 80px;
+        }
+        
+        .step-desc {
+            font-size: 1.05em;
+            color: #7c2d12;
+            line-height: 1.8;
+        }
+        
+        .step-example {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 0.95em;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .flow-diagram {
+            background: #f9fafb;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 40px 0;
+        }
+        
+        .flow-title {
+            font-size: 1.4em;
+            color: #ea580c;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .flow-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .flow-box {
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 20px 30px;
+            min-width: 200px;
+            text-align: center;
+        }
+        
+        .flow-box-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .flow-box-desc {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .flow-arrow {
+            font-size: 2em;
+            color: #ea580c;
+        }
+        
+        .connections-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 15px;
+            padding: 35px;
+            margin-top: 30px;
+        }
+        
+        .connections-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .connection-items {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        .connection-item {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .connection-label {
+            font-weight: bold;
+            color: #ea580c;
+            margin-bottom: 10px;
+        }
+        
+        .connection-link {
+            color: #78350f;
+            line-height: 1.6;
+        }
+        
+        /* 具体例セクション */
+        .example-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .example-intro {
+            background: #f9fafb;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .example-api {
+            background: #1e293b;
+            color: #fbbf24;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 1.3em;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .example-steps {
+            display: grid;
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .example-step {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 15px;
+            padding: 30px;
+            border-left: 6px solid #3b82f6;
+        }
+        
+        .example-step-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .example-step-num {
+            background: #3b82f6;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .example-step-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #1e3a8a;
+        }
+        
+        .example-step-content {
+            font-size: 1.05em;
+            color: #1e40af;
+            line-height: 1.8;
+            padding-left: 55px;
+        }
+        
+        .code-example {
+            background: #1e293b;
+            color: #fbbf24;
+            font-family: 'Courier New', monospace;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            overflow-x: auto;
+        }
+        
+        /* AIプロンプトセクション */
+        .ai-prompt-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .prompt-display {
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 35px;
+            margin: 30px 0;
+        }
+        
+        .prompt-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .prompt-box {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 25px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.8;
+            backdrop-filter: blur(10px);
+        }
+        
+        .ai-benefits {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-radius: 15px;
+            padding: 35px;
+            margin-top: 30px;
+        }
+        
+        .benefit-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #065f46;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .benefit-items {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .benefit-item {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            color: #047857;
+            border-left: 4px solid #10b981;
+        }
+        
+        /* まとめセクション */
+        .summary-section {
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+            border-radius: 20px;
+            padding: 50px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .summary-core {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .core-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+        
+        .core-steps {
+            font-size: 1.3em;
+            line-height: 2.5;
+        }
+        
+        .value-proposition {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 35px;
+            backdrop-filter: blur(10px);
+            margin-top: 30px;
+        }
+        
+        .value-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .value-content {
+            font-size: 1.15em;
+            line-height: 2;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 1200px) {
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .connection-items {
+                grid-template-columns: 1fr;
+            }
+            
+            .flow-visual {
+                flex-direction: column;
+            }
+            
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">AIによるバックエンド開発とデータベース講座</h1>
+        <div class="subtitle">第4回-5：バックエンドがしていることを4ステップで言語化する</div>
+        
+        <!-- 4ステップモデル -->
+        <div class="steps-section">
+            <h2 class="section-title">🔄 4ステップモデルの提示</h2>
+            
+            <div class="steps-intro">
+                <div class="intro-title">バックエンドがしていることを整理すると...</div>
+                <div class="intro-content">
+                    HTTP、REST API、JSON、SQL...<br>
+                    これまで学んだすべてが、実はこの<strong style="font-size: 1.3em;">4つのステップ</strong>の中に<br>
+                    きれいに整理できる!
+                </div>
+            </div>
+            
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-title">リクエストを受け取る</div>
+                    <div class="step-desc">
+                        フロントエンド(画面側)から「こういう情報が欲しい」「こういうデータを登録したい」というお願いが届く。<br><br>
+                        
+                        このお願いには、URLがあって、HTTPメソッドがあって、場合によってはJSONデータが添付されている。
+                    </div>
+                    <div class="step-example">
+                        <strong>例:</strong><br>
+                        <code>GET /customers?pref=ishikawa</code><br>
+                        → 「石川県の顧客一覧をください」というお願い
+                    </div>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-title">内容を理解し、ビジネスルールを適用する</div>
+                    <div class="step-desc">
+                        受け取ったリクエストの内容を理解して、「このお願いに対して、どう処理すべきか」を判断する。<br><br>
+                        
+                        第1回で学んだ「ビジネスロジック」がここで動く。
+                    </div>
+                    <div class="step-example">
+                        <strong>チェック項目:</strong><br>
+                        • このメールアドレスは既に登録されていないか?<br>
+                        • 入力された電話番号の形式は正しいか?<br>
+                        • このユーザーには石川県のデータを見る権限があるか?
+                    </div>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-title">データベースを操作する</div>
+                    <div class="step-desc">
+                        第3回で学んだSQLの世界が登場!<br><br>
+                        
+                        ステップ2で判断した内容に基づいて、実際にデータベースに対してSQLを実行する。
+                    </div>
+                    <div class="step-example">
+                        <strong>SQL例:</strong><br>
+                        顧客一覧を取得なら → <code>SELECT</code>文<br>
+                        新規登録なら → <code>INSERT</code>文<br>
+                        更新なら → <code>UPDATE</code>文<br>
+                        削除なら → <code>DELETE</code>文
+                    </div>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <div class="step-title">結果をJSONにまとめて返す</div>
+                    <div class="step-desc">
+                        データベースから取得した結果を、フロントエンドが理解できる形、つまりJSONに整形して返す。<br><br>
+                        
+                        HTTPのステータスコードも一緒に返す。
+                    </div>
+                    <div class="step-example">
+                        <strong>レスポンス例:</strong><br>
+                        成功なら → <code>200</code><br>
+                        見つからなければ → <code>404</code><br>
+                        エラーなら → <code>500</code>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-diagram">
+                <div class="flow-title">🔄 4ステップの流れ</div>
+                <div class="flow-visual">
+                    <div class="flow-box">
+                        <div class="flow-box-title">STEP 1</div>
+                        <div class="flow-box-desc">リクエスト受け取る</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">
+                        <div class="flow-box-title">STEP 2</div>
+                        <div class="flow-box-desc">ビジネスルール適用</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">
+                        <div class="flow-box-title">STEP 3</div>
+                        <div class="flow-box-desc">DB操作</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">
+                        <div class="flow-box-title">STEP 4</div>
+                        <div class="flow-box-desc">JSON返す</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="connections-box">
+                <div class="connections-title">💡 これまでの学習内容との対応</div>
+                <div class="connection-items">
+                    <div class="connection-item">
+                        <div class="connection-label">ステップ1 & 4</div>
+                        <div class="connection-link">
+                            今日学んだ<br>
+                            <strong>HTTP・REST API・JSON</strong>の世界
+                        </div>
+                    </div>
+                    <div class="connection-item">
+                        <div class="connection-label">ステップ2</div>
+                        <div class="connection-link">
+                            第1回で触れた<br>
+                            <strong>ビジネスロジック</strong>の世界
+                        </div>
+                    </div>
+                    <div class="connection-item">
+                        <div class="connection-label">ステップ3</div>
+                        <div class="connection-link">
+                            第3回で学んだ<br>
+                            <strong>SQL</strong>の世界
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 25px; padding: 20px; background: white; border-radius: 10px;">
+                    <strong style="color: #92400e; font-size: 1.1em;">
+                        皆さんは既に、バックエンドがしていることの<br>
+                        全体像を理解するための基礎知識を持っている!
+                    </strong>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 具体例 -->
+        <div class="example-section">
+            <h2 class="section-title">💡 具体例で4ステップをなぞる</h2>
+            
+            <div class="example-intro">
+                <p style="font-size: 1.15em; color: #333; line-height: 1.8;">
+                    実際の例で、この4ステップを追いかけてみましょう
+                </p>
+            </div>
+            
+            <div class="example-api">
+                GET /customers?pref=ishikawa
+            </div>
+            
+            <div style="text-align: center; margin: 20px 0; color: #666;">
+                「石川県の顧客一覧を取得する」というリクエスト
+            </div>
+            
+            <div class="example-steps">
+                <div class="example-step">
+                    <div class="example-step-header">
+                        <div class="example-step-num">1</div>
+                        <div class="example-step-title">リクエストを受け取る</div>
+                    </div>
+                    <div class="example-step-content">
+                        フロントエンド側(ブラウザやアプリ)から、このリクエストが届きます。<br><br>
+                        
+                        • HTTPメソッド: <strong>GET</strong><br>
+                        • パス: <strong>/customers</strong><br>
+                        • クエリパラメータ: <strong>pref=ishikawa</strong><br><br>
+                        
+                        バックエンドは「顧客リソースに対するGETリクエスト。石川県を指定しているな」と理解します。
+                    </div>
+                </div>
+                
+                <div class="example-step">
+                    <div class="example-step-header">
+                        <div class="example-step-num">2</div>
+                        <div class="example-step-title">内容を理解し、ビジネスルールを適用する</div>
+                    </div>
+                    <div class="example-step-content">
+                        受け取った内容を精査します。<br><br>
+                        
+                        • <code>pref=ishikawa</code> というパラメータは有効か?<br>
+                        • 文字列として正しく受け取れているか?<br>
+                        • 都道府県名として認識できる値か?<br>
+                        • このユーザーは顧客データを閲覧する権限を持っているか?<br><br>
+                        
+                        すべて問題なければ、「では、データベースに対して石川県の顧客を取得するクエリを実行しよう」と判断します。<br><br>
+                        
+                        もし何か問題があれば、ここでエラーを返します(403エラー、400エラーなど)。
+                    </div>
+                </div>
+                
+                <div class="example-step">
+                    <div class="example-step-header">
+                        <div class="example-step-num">3</div>
+                        <div class="example-step-title">データベースを操作する</div>
+                    </div>
+                    <div class="example-step-content">
+                        第3回で学んだSQLの出番です!<br><br>
+                        
+                        バックエンドは、次のようなSQLを組み立てて実行します。
+                        
+                        <div class="code-example">
+SELECT * FROM customers WHERE prefecture = '石川県';
+                        </div>
+                        
+                        データベースはこのクエリを受け取り、<code>customers</code>テーブルの中から、<br>
+                        <code>prefecture</code>列が「石川県」になっているレコードをすべて取り出して返します。<br><br>
+                        
+                        例えば、5件のレコードが該当したとします。データベースからは、5行分のデータが返ってきます。
+                    </div>
+                </div>
+                
+                <div class="example-step">
+                    <div class="example-step-header">
+                        <div class="example-step-num">4</div>
+                        <div class="example-step-title">結果をJSONにまとめて返す</div>
+                    </div>
+                    <div class="example-step-content">
+                        データベースから受け取った5件のレコードを、JSON形式に変換します。<br><br>
+                        
+                        今日学んだように、複数のレコードは配列になります。各レコードはオブジェクトです。
+                        
+                        <div class="code-example">
+[
+  {
+    "id": 1,
+    "name": "田中太郎",
+    "email": "taro.tanaka@example.com",
+    "prefecture": "石川県"
+  },
+  {
+    "id": 2,
+    "name": "山田花子",
+    "email": "hanako.yamada@example.com",
+    "prefecture": "石川県"
+  }
+  // ... 以下3件
+]
+                        </div>
+                        
+                        こういった形のJSONを作り、HTTPステータスコード200(成功)と一緒にフロントエンドに返します。<br><br>
+                        
+                        フロントエンドは、このJSONを受け取って、画面に一覧表示します。
+                    </div>
+                </div>
+            </div>
+            
+            <div style="padding: 30px; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 15px; margin-top: 40px;">
+                <h3 style="font-size: 1.3em; color: #92400e; margin-bottom: 20px; text-align: center;">
+                    🎯 流れのイメージ
+                </h3>
+                <p style="font-size: 1.05em; color: #78350f; line-height: 1.8; text-align: center;">
+                    フロント → バックエンド → データベース<br>
+                    ↓<br>
+                    データベース → バックエンド → フロント<br><br>
+                    
+                    <strong>バックエンドは、その真ん中で、<br>
+                    リクエストを受け取って、判断して、DBとやり取りして、<br>
+                    結果を整形して返す。この4ステップを繰り返している!</strong>
+                </p>
+            </div>
+        </div>
+        
+        <!-- AIプロンプト -->
+        <div class="ai-prompt-section">
+            <h2 class="section-title">🤖 AIに「処理の言語化」をさせるプロンプト例</h2>
+            
+            <div style="padding: 25px; background: #f9fafb; border-radius: 10px; margin-bottom: 30px;">
+                <p style="font-size: 1.1em; color: #333; line-height: 1.8; text-align: center;">
+                    APIの仕様だけを見ても、「裏側で何が起きているか」は想像しにくい。<br>
+                    そんなとき、AIに聞いてみよう!
+                </p>
+            </div>
+            
+            <div class="prompt-display">
+                <div class="prompt-title">📝 プロンプト例</div>
+                <div class="prompt-box">
+次のAPIが裏側で行っている処理を、
+非エンジニアにもわかるように4ステップで説明してください。
+
+API:
+GET /customers?pref=ishikawa
+                </div>
+            </div>
+            
+            <div style="padding: 30px; background: white; border: 3px solid #10b981; border-radius: 15px; margin-top: 30px;">
+                <h3 style="font-size: 1.3em; color: #065f46; margin-bottom: 20px; text-align: center;">
+                    ✨ AIが返してくれるイメージ
+                </h3>
+                <div style="font-size: 1.05em; color: #333; line-height: 1.8; padding: 20px; background: #f0fdf4; border-radius: 10px;">
+                    「ステップ1では、GETメソッドで/customersへのリクエストを受け取り、クエリパラメータpref=ishikawaを解析します。<br><br>
+                    
+                    ステップ2では、prefパラメータが有効な都道府県名かをチェックし、リクエストユーザーの権限を確認します。<br><br>
+                    
+                    ステップ3では、データベースに対してSELECT文を実行し、石川県の顧客レコードを取得します。<br><br>
+                    
+                    ステップ4では、取得した結果をJSON形式に変換し、ステータスコード200と共にフロントエンドに返します。」
+                </div>
+            </div>
+            
+            <div class="ai-benefits">
+                <div class="benefit-title">💡 AIを使うメリット</div>
+                <div class="benefit-items">
+                    <div class="benefit-item">
+                        <strong>1. コードを読まなくても理解できる</strong><br>
+                        処理の流れを日本語で言語化してもらえる
+                    </div>
+                    <div class="benefit-item">
+                        <strong>2. ドキュメントとして保存できる</strong><br>
+                        将来、別の人がシステムを引き継ぐときにも役立つ
+                    </div>
+                    <div class="benefit-item">
+                        <strong>3. エンジニアとの会話がスムーズに</strong><br>
+                        「このAPIのステップ2の部分、もう少し詳しく教えてください」といった質問ができる
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- まとめ -->
+        <div class="summary-section">
+            <h2 class="section-title" style="color: white; border-bottom-color: white;">📝 4ステップモデルのまとめ</h2>
+            
+            <div class="summary-core">
+                <div class="core-title">バックエンドの4ステップ</div>
+                <div class="core-steps">
+                    <strong>1. リクエストを受け取る</strong><br>
+                    ↓<br>
+                    <strong>2. 内容を理解し、ビジネスルールを適用する</strong><br>
+                    ↓<br>
+                    <strong>3. データベースを操作する</strong><br>
+                    ↓<br>
+                    <strong>4. 結果をJSONにまとめて返す</strong>
+                </div>
+            </div>
+            
+            <div class="value-proposition">
+                <div class="value-title">🌟 この4ステップを理解すると...</div>
+                <div class="value-content">
+                    ✅ バックエンドが「どこで」「何を」しているのかが明確になる<br><br>
+                    
+                    ✅ 第1回〜第3回で学んだ内容が、すべてこの4ステップの中に組み込まれていることがわかる<br><br>
+                    
+                    ✅ エンジニアとの会話が驚くほどスムーズになる<br>
+                    「このAPIのステップ2の部分、もう少し詳しく教えてください」<br>
+                    「ステップ3のSQL、パフォーマンスは大丈夫ですか?」<br><br>
+                    
+                    ✅ AIを活用すれば、複雑なAPIの処理内容も、わかりやすく言語化してもらえる<br><br>
+                    
+                    <strong style="font-size: 1.3em; display: block; margin-top: 20px; text-align: center;">
+                    非エンジニアでも、この4ステップで説明できるようになれば、<br>
+                    システム開発の「共通言語」を持つことができる!
+                    </strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

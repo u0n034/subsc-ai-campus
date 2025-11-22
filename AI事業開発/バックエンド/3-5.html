@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第3回：よくあるエラーとAIに直してもらう流れ - AIによるバックエンド開発とデータベース講座</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #7c3aed;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #a78bfa;
+        }
+        
+        /* セクション1: よくあるエラー例 */
+        .errors-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .intro-message {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .intro-message-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #1e40af;
+            margin-bottom: 15px;
+        }
+        
+        .intro-message-content {
+            font-size: 1.1em;
+            color: #333;
+            line-height: 1.8;
+        }
+        
+        .error-patterns {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .error-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .error-header {
+            padding: 25px;
+            color: white;
+            text-align: center;
+        }
+        
+        .pattern1-header {
+            background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+        }
+        
+        .pattern2-header {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+        }
+        
+        .pattern3-header {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+        }
+        
+        .error-pattern-number {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .error-pattern-title {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .error-content {
+            background: white;
+            padding: 25px;
+        }
+        
+        .sql-example {
+            background: #1e293b;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            color: #e2e8f0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.8;
+        }
+        
+        .sql-keyword {
+            color: #60a5fa;
+            font-weight: bold;
+        }
+        
+        .sql-string {
+            color: #fbbf24;
+        }
+        
+        .sql-error {
+            color: #f87171;
+        }
+        
+        .error-message {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            color: #991b1b;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .error-desc {
+            color: #666;
+            line-height: 1.8;
+            margin-top: 15px;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+        
+        .key-point-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+        
+        .key-point-content {
+            color: #78350f;
+            line-height: 1.8;
+        }
+        
+        /* セクション2: AIデモ */
+        .ai-demo-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .demo-steps {
+            margin-top: 30px;
+        }
+        
+        .demo-step {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border-left: 5px solid #a78bfa;
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: #a78bfa;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-right: 20px;
+        }
+        
+        .step-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #7c3aed;
+        }
+        
+        .step-content {
+            color: #333;
+            line-height: 1.8;
+        }
+        
+        .ai-interaction {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            margin: 25px 0;
+        }
+        
+        .ai-interaction-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .ai-prompt-box {
+            background: rgba(255,255,255,0.95);
+            color: #1f2937;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 15px 0;
+            line-height: 1.8;
+        }
+        
+        .ai-response-box {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            margin: 15px 0;
+        }
+        
+        .success-message {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            border-radius: 10px;
+            padding: 25px;
+            color: white;
+            text-align: center;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+        
+        /* まとめセクション */
+        .summary-box {
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            margin-top: 40px;
+        }
+        
+        .summary-title {
+            font-size: 2em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .summary-points {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .summary-point {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .summary-point-number {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            background: white;
+            color: #7c3aed;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 35px;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        .summary-point-text {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+        
+        .encouragement-box {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 35px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            font-size: 1.2em;
+            line-height: 2;
+            margin-top: 30px;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+            }
+            
+            .error-patterns {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">AIによるバックエンド開発とデータベース講座</h1>
+        <div class="subtitle">第3回：よくあるエラーとAIに直してもらう流れ</div>
+        
+        <!-- セクション1: よくあるエラー例 -->
+        <div class="errors-section">
+            <h2 class="section-title">🐛 よくあるエラー例</h2>
+            
+            <div class="intro-message">
+                <div class="intro-message-title">💡 エラーは敵じゃない！</div>
+                <div class="intro-message-content">
+                    エラーが出るのは「自分にはできない」という証拠ではありません。<br>
+                    むしろ、<strong>「ここがちょっとおかしいですよ」とコンピュータが教えてくれているヒント</strong>なんです。<br><br>
+                    
+                    エンジニアでも、何年も経験を積んでいる人でも、<br>
+                    こういったミスは日常茶飯事です。<br><br>
+                    
+                    大切なのは、<strong>エラーを恐れずに、「何が原因なのか」を読み解く姿勢</strong>です。
+                </div>
+            </div>
+            
+            <div class="error-patterns">
+                <!-- パターン1 -->
+                <div class="error-card">
+                    <div class="error-header pattern1-header">
+                        <div class="error-pattern-number">パターン 1</div>
+                        <div class="error-pattern-title">カラム名のスペルミス</div>
+                    </div>
+                    <div class="error-content">
+                        <div class="sql-example">
+<span class="sql-keyword">SELECT</span> *<br>
+<span class="sql-keyword">FROM</span> customers<br>
+<span class="sql-keyword">WHERE</span> <span class="sql-error">prefecturee</span> = <span class="sql-string">'石川県'</span>;
+                        </div>
+                        
+                        <div class="error-message">
+ERROR: column "prefecturee" does not exist
+                        </div>
+                        
+                        <div class="error-desc">
+                            <strong>原因：</strong><br>
+                            「prefecture」を「prefecturee」と、eを一つ多く書いてしまった<br><br>
+                            
+                            <strong>SQLの特徴：</strong><br>
+                            一文字でも違うと、まったく別のものとして認識してしまう
+                        </div>
+                        
+                        <div class="key-point">
+                            <div class="key-point-title">⚠️ 注意点</div>
+                            <div class="key-point-content">
+                                • 全角/半角の違い<br>
+                                • 大文字/小文字（設定による）<br>
+                                • スペースの有無
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- パターン2 -->
+                <div class="error-card">
+                    <div class="error-header pattern2-header">
+                        <div class="error-pattern-number">パターン 2</div>
+                        <div class="error-pattern-title">クォートの付け忘れ</div>
+                    </div>
+                    <div class="error-content">
+                        <div class="sql-example">
+<span class="sql-keyword">SELECT</span> *<br>
+<span class="sql-keyword">FROM</span> customers<br>
+<span class="sql-keyword">WHERE</span> prefecture = <span class="sql-error">石川県</span>;
+                        </div>
+                        
+                        <div class="error-message">
+ERROR: column "石川県" does not exist
+                        </div>
+                        
+                        <div class="error-desc">
+                            <strong>原因：</strong><br>
+                            文字列をシングルクォート(')で囲んでいない<br><br>
+                            
+                            <strong>データベースの解釈：</strong><br>
+                            「石川県」という文字列ではなく、「石川県」という名前のカラムを探そうとしてしまう
+                        </div>
+                        
+                        <div class="key-point">
+                            <div class="key-point-title">📌 ルール</div>
+                            <div class="key-point-content">
+                                • <strong>文字列：</strong>シングルクォートで囲む<br>
+                                &nbsp;&nbsp;例: 'Tokyo'<br>
+                                • <strong>数値：</strong>そのまま書く<br>
+                                &nbsp;&nbsp;例: 100<br>
+                                • <strong>日付：</strong>文字列として扱う<br>
+                                &nbsp;&nbsp;例: '2025-11-01'
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- パターン3 -->
+                <div class="error-card">
+                    <div class="error-header pattern3-header">
+                        <div class="error-pattern-number">パターン 3</div>
+                        <div class="error-pattern-title">セミコロンの付け忘れ</div>
+                    </div>
+                    <div class="error-content">
+                        <div class="sql-example">
+<span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> customers<span class="sql-error">←ここにセミコロンが必要</span>
+                        </div>
+                        
+                        <div class="error-message">
+ERROR: syntax error at or near "SELECT"<br>
+(次のSQL文を書こうとした場合)
+                        </div>
+                        
+                        <div class="error-desc">
+                            <strong>原因：</strong><br>
+                            命令の終わりを示すセミコロン(;)がない<br><br>
+                            
+                            <strong>影響：</strong><br>
+                            データベースが「まだ命令が続くのかな？」と待ち続ける、または複数SQL実行時にエラーになる
+                        </div>
+                        
+                        <div class="key-point">
+                            <div class="key-point-title">💡 習慣化</div>
+                            <div class="key-point-content">
+                                環境によってはセミコロンなしでも実行できる場合もあるが、<br>
+                                <strong>書く習慣を付けておく</strong>方が、後々のトラブルを避けられる
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border-radius: 15px; padding: 30px; margin-top: 40px;">
+                <div style="font-size: 1.4em; font-weight: bold; color: #1e40af; margin-bottom: 15px; text-align: center;">
+                    🎯 大切なこと
+                </div>
+                <div style="color: #333; line-height: 2; font-size: 1.1em;">
+                    SQLでよく起こるエラーの大半は、こういった<strong>タイプミスや記号の抜け</strong>です。<br><br>
+                    
+                    エラーメッセージは、一見すると英語ばかりで難しそうに見えますが、<br>
+                    よく見ると<strong>「ここがおかしいよ」というヒントが必ず書かれています</strong>。<br><br>
+                    
+                    そして、<strong>AIに助けてもらえば、このハードルは一気に下がります</strong>！
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション2: AIにエラーの意味を聞いてみる -->
+        <div class="ai-demo-section">
+            <h2 class="section-title">🤖 AIにエラーの意味を聞いてみる</h2>
+            
+            <p style="font-size: 1.1em; color: #333; text-align: center; margin-bottom: 30px;">
+                エラーが出たときに、AIにどうやって相談すればいいのか<br>
+                具体的な流れを見ていきましょう
+            </p>
+            
+            <div class="demo-steps">
+                <div class="demo-step">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <div class="step-title">エラーが発生</div>
+                    </div>
+                    <div class="step-content">
+                        わざとエラーが出るSQLを書いて実行してみます
+                        
+                        <div class="sql-example">
+<span class="sql-keyword">SELECT</span> *<br>
+<span class="sql-keyword">FROM</span> customers<br>
+<span class="sql-keyword">WHERE</span> <span class="sql-error">prefecturee</span> = <span class="sql-string">'石川県'</span>;
+                        </div>
+                        
+                        <div class="error-message">
+ERROR: column "prefecturee" does not exist<br>
+LINE 3: WHERE prefecturee = '石川県';<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+                        </div>
+                        
+                        <div style="margin-top: 20px; padding: 20px; background: #fef3c7; border-radius: 10px;">
+                            <strong>エラーメッセージの読み方：</strong><br>
+                            • column "prefecturee" does not exist = prefectureというカラムは存在しない<br>
+                            • LINE 3 = 3行目に問題がある<br>
+                            • ^ マーク = どの部分がおかしいか指し示している
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="demo-step">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <div class="step-title">SQLとエラーをセットでAIに投げる</div>
+                    </div>
+                    <div class="step-content">
+                        エラーメッセージを全部コピーして、AIツールに投げます
+                        
+                        <div class="ai-interaction">
+                            <div class="ai-interaction-title">💬 AIへのプロンプト例</div>
+                            
+                            <div class="ai-prompt-box">
+次のSQLを実行したところ、エラーが出ました。<br><br>
+
+<strong>SQL:</strong><br>
+SELECT *<br>
+FROM customers<br>
+WHERE prefecturee = '石川県';<br><br>
+
+<strong>エラー内容:</strong><br>
+ERROR: column "prefecturee" does not exist<br>
+LINE 3: WHERE prefecturee = '石川県';<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br><br>
+
+エラーの意味と、どう直せばいいか教えてください。
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 20px; padding: 20px; background: #fef3c7; border-radius: 10px;">
+                            <strong>ポイント：</strong><br>
+                            <strong>SQLとエラー内容の両方をセットで伝える</strong>ことで、<br>
+                            AIがより的確なアドバイスをしてくれます
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="demo-step">
+                    <div class="step-header">
+                        <div class="step-number">3</div>
+                        <div class="step-title">AIからの回答を読む</div>
+                    </div>
+                    <div class="step-content">
+                        AIが原因と修正方法を教えてくれます
+                        
+                        <div class="ai-interaction">
+                            <div class="ai-interaction-title">🤖 AIの回答</div>
+                            
+                            <div class="ai-response-box">
+                                <strong>エラーの意味:</strong><br>
+                                「prefecturee」という名前のカラムが存在しないというエラーです。<br>
+                                おそらく、カラム名のスペルが間違っている可能性があります。<br><br>
+                                
+                                <strong>修正案:</strong><br>
+                                正しいカラム名は「prefecture」だと思われますので、<br>
+                                次のように修正してください。
+                                
+                                <div class="sql-example" style="margin: 15px 0;">
+<span class="sql-keyword">SELECT</span> *<br>
+<span class="sql-keyword">FROM</span> customers<br>
+<span class="sql-keyword">WHERE</span> prefecture = <span class="sql-string">'石川県'</span>;
+                                </div>
+                                
+                                <strong>確認事項:</strong><br>
+                                もし「prefecture」でもエラーが出る場合は、<br>
+                                テーブル「customers」に実際にどんなカラムがあるのか、<br>
+                                以下のSQLで確認してみてください。
+                                
+                                <div class="sql-example" style="margin: 15px 0;">
+<span class="sql-keyword">SELECT</span> column_name<br>
+<span class="sql-keyword">FROM</span> information_schema.columns<br>
+<span class="sql-keyword">WHERE</span> table_name = <span class="sql-string">'customers'</span>;
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 20px; padding: 20px; background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border-radius: 10px;">
+                            <strong>AIの素晴らしいところ：</strong><br>
+                            • エラーの原因を分かりやすく説明<br>
+                            • 修正したSQLまで書いてくれる<br>
+                            • 「それでもダメだったら」という次の手まで提案<br>
+                            • 24時間いつでも、何度聞いても嫌な顔一つしない
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="demo-step">
+                    <div class="step-header">
+                        <div class="step-number">4</div>
+                        <div class="step-title">修正したSQLを実行</div>
+                    </div>
+                    <div class="step-content">
+                        AIが提案してくれた修正版のSQLを実行してみます
+                        
+                        <div class="sql-example">
+<span class="sql-keyword">SELECT</span> *<br>
+<span class="sql-keyword">FROM</span> customers<br>
+<span class="sql-keyword">WHERE</span> prefecture = <span class="sql-string">'石川県'</span>;
+                        </div>
+                        
+                        <div class="success-message">
+                            ✅ 成功！エラーが出ず、無事に結果が表示されました<br><br>
+                            
+                            石川県に住んでいる顧客のデータが取得できました
+                        </div>
+                        
+                        <div style="margin-top: 25px; padding: 25px; background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%); border-radius: 10px;">
+                            <strong style="color: #7c3aed; font-size: 1.2em; display: block; margin-bottom: 15px;">
+                                🎉 エラーの原因を突き止めて、正しく修正できました！
+                            </strong>
+                            <div style="color: #333; line-height: 1.8;">
+                                このやり方の素晴らしいところは、<br>
+                                <strong>自分でSQLの文法を完璧に覚えていなくても大丈夫</strong>という点です。<br><br>
+                                
+                                基本的な構造を理解しておくことは大事ですが、<br>
+                                細かいルールやスペルまで全部暗記する必要はありません。<br><br>
+                                
+                                <strong>「やりたいこと」を日本語で整理できていれば、<br>
+                                AIがそれをSQLに変換してくれます</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 15px; padding: 30px; margin-top: 40px;">
+                <div style="font-size: 1.4em; font-weight: bold; color: #92400e; margin-bottom: 15px; text-align: center;">
+                    ⚠️ 注意点：AIも完璧ではない
+                </div>
+                <div style="color: #78350f; line-height: 2; font-size: 1.05em;">
+                    AIも万能ではありません。時には、間違った提案をしてくることもあります。<br><br>
+                    
+                    <strong>大切なこと：</strong><br>
+                    • AIの回答を鵜呑みにせず、<strong>実際に試してみる</strong><br>
+                    • うまくいかない場合は、もう一度AIに「これでもダメでした」と伝える<br>
+                    • <strong>何度かやり取りをしながら、正解に近づいていく</strong>プロセス<br><br>
+                    
+                    AIとの対話は、一回で終わりではありません！
+                </div>
+            </div>
+        </div>
+        
+        <!-- まとめ -->
+        <div class="summary-box">
+            <div class="summary-title">📚 このセクションのまとめ</div>
+            
+            <div class="summary-points">
+                <div class="summary-point">
+                    <span class="summary-point-number">1</span>
+                    <span class="summary-point-text">
+                        SQLでよくあるエラーは、「カラム名のスペルミス」「クォートの付け忘れ」「セミコロンの抜け」など、<strong>細かいミスがほとんど</strong>
+                    </span>
+                </div>
+                
+                <div class="summary-point">
+                    <span class="summary-point-number">2</span>
+                    <span class="summary-point-text">
+                        エラーメッセージは怖くない。<strong>「ここがおかしいよ」というヒントが書かれている</strong>
+                    </span>
+                </div>
+                
+                <div class="summary-point">
+                    <span class="summary-point-number">3</span>
+                    <span class="summary-point-text">
+                        エラーが出たら、<strong>「SQL + エラーメッセージ」をセットでAIに投げる</strong>
+                    </span>
+                </div>
+                
+                <div class="summary-point">
+                    <span class="summary-point-number">4</span>
+                    <span class="summary-point-text">
+                        AIが<strong>原因と修正方法を教えてくれる</strong>ので、それを試してみる
+                    </span>
+                </div>
+                
+                <div class="summary-point">
+                    <span class="summary-point-number">5</span>
+                    <span class="summary-point-text">
+                        完璧に覚える必要はなく、<strong>AIと一緒に試行錯誤しながら学んでいく</strong>
+                    </span>
+                </div>
+            </div>
+            
+            <div class="encouragement-box">
+                <strong style="font-size: 1.4em; display: block; margin-bottom: 20px;">
+                    💪 勇気を持ってチャレンジ！
+                </strong>
+                
+                「AIに助けてもらいながらエラーを直す」という経験を積むことで、<br>
+                <strong>エラーへの恐怖心がなくなり、自信を持ってSQLに向き合えるようになります</strong><br><br>
+                
+                ぜひ、動画を見終わった後、実際に手を動かして、<br>
+                わざとエラーを起こしてみてください。そして、AIに聞いてみてください。<br><br>
+                
+                <strong style="font-size: 1.3em;">
+                    その体験が、あなたのスキルを確実に一段階引き上げてくれるはずです！
+                </strong>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

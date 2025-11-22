@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第4回-2：HTTPとは? - AIによるバックエンド開発とデータベース講座</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #ea580c;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #f97316;
+        }
+        
+        /* URLの分解セクション */
+        .url-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .url-display {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .url-text {
+            font-family: 'Courier New', monospace;
+            font-size: 1.8em;
+            color: #fbbf24;
+            font-weight: bold;
+        }
+        
+        .url-parts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .url-part {
+            background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 5px solid #ea580c;
+        }
+        
+        .part-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #9a3412;
+            margin-bottom: 10px;
+        }
+        
+        .part-value {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            color: #ea580c;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .part-desc {
+            font-size: 1em;
+            color: #7c2d12;
+            line-height: 1.7;
+        }
+        
+        .building-metaphor {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+        
+        .metaphor-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .metaphor-items {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        .metaphor-item {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 1.05em;
+            color: #78350f;
+        }
+        
+        /* HTTPメソッドセクション */
+        .methods-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .methods-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .method-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .method-header {
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .method-name {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .method-purpose {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        
+        .method-body {
+            background: white;
+            padding: 25px;
+        }
+        
+        .method-desc {
+            font-size: 1em;
+            color: #333;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        
+        .method-examples {
+            background: #f9fafb;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        
+        .example-title {
+            font-weight: bold;
+            color: #ea580c;
+            margin-bottom: 10px;
+        }
+        
+        .example-item {
+            margin: 8px 0;
+            padding-left: 15px;
+            border-left: 3px solid #fed7aa;
+        }
+        
+        .other-methods {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+        
+        .other-methods-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .other-methods-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .other-method-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .other-method-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #3b82f6;
+            margin-bottom: 10px;
+        }
+        
+        /* ステータスコードセクション */
+        .status-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .status-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .status-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .status-header {
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .status-200 {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+        }
+        
+        .status-404 {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+        }
+        
+        .status-500 {
+            background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+        }
+        
+        .status-code {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .status-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            opacity: 0.95;
+        }
+        
+        .status-body {
+            background: white;
+            padding: 25px;
+        }
+        
+        .status-meaning {
+            font-size: 1.15em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .status-desc {
+            font-size: 1em;
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        .status-example {
+            background: #f9fafb;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        /* まとめセクション */
+        .summary-section {
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+            border-radius: 20px;
+            padding: 50px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .summary-boxes {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .summary-box {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .summary-box-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .summary-items {
+            font-size: 1.05em;
+            line-height: 2;
+        }
+        
+        .summary-item {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 1200px) {
+            .url-parts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .methods-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .status-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .summary-boxes {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+            }
+            
+            .other-methods-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">AIによるバックエンド開発とデータベース講座</h1>
+        <div class="subtitle">第4回-2：HTTPとは? – Webの「会話のルール」を知る</div>
+        
+        <!-- URLの分解 -->
+        <div class="url-section">
+            <h2 class="section-title">🔍 Webアクセスで何が起きている? – URLの分解</h2>
+            
+            <div style="text-align: center; margin-bottom: 30px; padding: 25px; background: #f9fafb; border-radius: 10px;">
+                <p style="font-size: 1.15em; color: #333; line-height: 1.8;">
+                    URLは「どこに、何をお願いしに行くか」を示す<strong style="color: #ea580c;">住所</strong>のようなもの
+                </p>
+            </div>
+            
+            <div class="url-display">
+                <div class="url-text">https://example.com/customers?pref=ishikawa</div>
+            </div>
+            
+            <div class="url-parts-grid">
+                <div class="url-part">
+                    <div class="part-name">🔒 プロトコル</div>
+                    <div class="part-value">https://</div>
+                    <div class="part-desc">
+                        <strong>「通信の方法」を表す</strong><br><br>
+                        
+                        HTTPSのSは「Secure(安全)」のS<br>
+                        暗号化された安全な通信<br><br>
+                        
+                        クレジットカード番号や個人情報を入力するサイトでは、必ずHTTPSになっている
+                    </div>
+                </div>
+                
+                <div class="url-part">
+                    <div class="part-name">🏢 ドメイン</div>
+                    <div class="part-value">example.com</div>
+                    <div class="part-desc">
+                        <strong>「建物の住所」のようなもの</strong><br><br>
+                        
+                        インターネット上のどのコンピュータ(サーバー)に行けばいいのかを示す<br><br>
+                        
+                        例: amazon.co.jp、rakuten.co.jp
+                    </div>
+                </div>
+                
+                <div class="url-part">
+                    <div class="part-name">📁 パス</div>
+                    <div class="part-value">/customers</div>
+                    <div class="part-desc">
+                        <strong>「建物の中のどの部屋に行くか」を表す</strong><br><br>
+                        
+                        サイトの中の「どこ」にアクセスするかを指定<br><br>
+                        
+                        例: /products(商品一覧)、/cart(カート)、/mypage(マイページ)
+                    </div>
+                </div>
+                
+                <div class="url-part">
+                    <div class="part-name">🔎 クエリパラメータ</div>
+                    <div class="part-value">?pref=ishikawa</div>
+                    <div class="part-desc">
+                        <strong>「条件」や「絞り込み」を表す</strong><br><br>
+                        
+                        「都道府県が石川県のデータをください」という条件を伝える<br><br>
+                        
+                        例: ?price=1000-5000(価格帯)、?color=red(色)
+                    </div>
+                </div>
+            </div>
+            
+            <div class="building-metaphor">
+                <div class="metaphor-title">🏗️ 建物の例えで整理すると...</div>
+                <div class="metaphor-items">
+                    <div class="metaphor-item">
+                        <strong>🚗 プロトコル(https://)</strong> = どんな交通手段で行くか(安全な方法で行きます)
+                    </div>
+                    <div class="metaphor-item">
+                        <strong>🏢 ドメイン(example.com)</strong> = どの建物に行くか(建物の住所)
+                    </div>
+                    <div class="metaphor-item">
+                        <strong>📁 パス(/customers)</strong> = 建物の中のどの部屋に行くか(顧客情報の部屋)
+                    </div>
+                    <div class="metaphor-item">
+                        <strong>🔎 クエリパラメータ(?pref=ishikawa)</strong> = どんなお願いをするか(石川県の人だけ教えてください)
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- HTTPメソッド -->
+        <div class="methods-section">
+            <h2 class="section-title">📬 HTTPメソッド – GETとPOSTの違いをざっくり</h2>
+            
+            <div style="text-align: center; margin-bottom: 30px; padding: 25px; background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%); border-radius: 10px;">
+                <p style="font-size: 1.15em; color: #7c2d12; line-height: 1.8;">
+                    メソッド = <strong style="font-size: 1.2em; color: #9a3412;">「お願いの種類」</strong><br><br>
+                    同じ場所(URL)に行くとしても、「見せてください」なのか「登録してください」なのか、<br>
+                    お願いの内容によって使い分ける
+                </p>
+            </div>
+            
+            <div class="methods-grid">
+                <div class="method-card">
+                    <div class="method-header">
+                        <div class="method-name">GET</div>
+                        <div class="method-purpose">📖 情報を見せてください</div>
+                    </div>
+                    <div class="method-body">
+                        <div class="method-desc">
+                            <strong>「情報を見せてください」「取得してください」というお願い</strong><br><br>
+                            
+                            データを取ってくるだけで、サーバー側のデータは変更しない<br><br>
+                            
+                            何度GETしても、データベースの中身は変わらない。ただ「見る」だけ。
+                        </div>
+                        
+                        <div class="method-examples">
+                            <div class="example-title">💡 具体例</div>
+                            <div class="example-item">
+                                • ECサイトで商品一覧を見る
+                            </div>
+                            <div class="example-item">
+                                • 顧客管理システムで顧客リストを表示
+                            </div>
+                            <div class="example-item">
+                                • 商品の詳細ページを見る
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <div class="method-name">POST</div>
+                        <div class="method-purpose">➕ 新しい情報を登録してください</div>
+                    </div>
+                    <div class="method-body">
+                        <div class="method-desc">
+                            <strong>「新しい情報を登録してください」というお願い</strong><br><br>
+                            
+                            サーバー側のデータを変更する(追加する)<br><br>
+                            
+                            POSTを実行すると、データベースに新しいレコードが追加される。
+                        </div>
+                        
+                        <div class="method-examples">
+                            <div class="example-title">💡 具体例</div>
+                            <div class="example-item">
+                                • ECサイトで新規会員登録
+                            </div>
+                            <div class="example-item">
+                                • お問い合わせフォームで問い合わせ内容を送信
+                            </div>
+                            <div class="example-item">
+                                • カートに商品を追加
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="other-methods">
+                <div class="other-methods-title">📚 他にもあるHTTPメソッド</div>
+                <div class="other-methods-grid">
+                    <div class="other-method-item">
+                        <div class="other-method-name">PUT</div>
+                        <div style="color: #666; margin-top: 10px;">
+                            既存のデータを更新してください<br><br>
+                            例: 顧客情報の住所を変更
+                        </div>
+                    </div>
+                    <div class="other-method-item">
+                        <div class="other-method-name">DELETE</div>
+                        <div style="color: #666; margin-top: 10px;">
+                            データを削除してください<br><br>
+                            例: 退会処理
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 20px; padding: 20px; background: white; border-radius: 10px; text-align: center;">
+                    <strong style="color: #1e3a8a;">今日の段階では、GETとPOSTの2つだけしっかり理解できていればOK!</strong>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ステータスコード -->
+        <div class="status-section">
+            <h2 class="section-title">🚦 ステータスコード – 200 / 404 / 500を理解する</h2>
+            
+            <div style="text-align: center; margin-bottom: 30px; padding: 25px; background: #f9fafb; border-radius: 10px;">
+                <p style="font-size: 1.15em; color: #333; line-height: 1.8;">
+                    ステータスコード = <strong style="color: #ea580c;">「お願いがうまくいったかどうか」を示す番号</strong><br><br>
+                    3桁の数字で表される。非エンジニアが知っておくべきは<strong>たった3つ</strong>だけ!
+                </p>
+            </div>
+            
+            <div class="status-grid">
+                <div class="status-card">
+                    <div class="status-header status-200">
+                        <div class="status-code">200</div>
+                        <div class="status-name">OK</div>
+                    </div>
+                    <div class="status-body">
+                        <div class="status-meaning">✅ 成功しました</div>
+                        <div class="status-desc">
+                            「あなたのお願い、ちゃんと受け付けましたよ。成功しました」という返事<br><br>
+                            
+                            商品一覧ページを開いたとき、画面にちゃんと商品が表示されていれば、裏側では200が返ってきている<br><br>
+                            
+                            <strong>200 = すべて順調、問題なし</strong>
+                        </div>
+                        <div class="status-example">
+                            開発中やテスト中に「ちゃんと動いてるかな?」と確認するとき、エンジニアは「200が返ってきてるか?」をチェックします
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="status-card">
+                    <div class="status-header status-404">
+                        <div class="status-code">404</div>
+                        <div class="status-name">Not Found</div>
+                    </div>
+                    <div class="status-body">
+                        <div class="status-meaning">🔍 見つかりませんでした</div>
+                        <div class="status-desc">
+                            指定されたURL(パス)に対応するページやデータが存在しない<br><br>
+                            
+                            例: ID=999の顧客データが存在しなかったら、サーバーは404を返す<br><br>
+                            
+                            <strong>404 = 指定されたものが見つからない</strong>
+                        </div>
+                        <div class="status-example">
+                            対処法:<br>
+                            • URLが間違っていないか確認<br>
+                            • そもそもそのページやデータが存在しているか確認<br>
+                            • デプロイやファイルの配置がちゃんとできているか確認
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="status-card">
+                    <div class="status-header status-500">
+                        <div class="status-code">500</div>
+                        <div class="status-name">Internal Server Error</div>
+                    </div>
+                    <div class="status-body">
+                        <div class="status-meaning">⚠️ サーバー内部エラー</div>
+                        <div class="status-desc">
+                            サーバー側で何か問題が起きました<br><br>
+                            
+                            データベースとの接続が切れた、プログラムにバグがある、予期しない問題が発生した<br><br>
+                            
+                            <strong>500 = サーバー側のトラブル</strong>
+                        </div>
+                        <div class="status-example">
+                            500エラーが出たら、開発者やシステム管理者がすぐに調査に動く必要がある。<br><br>
+                            
+                            よくある原因:<br>
+                            • データベースのテーブルが存在しない<br>
+                            • SQLの文法が間違っている<br>
+                            • サーバーのメモリ不足
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- まとめ -->
+        <div class="summary-section">
+            <h2 class="section-title" style="color: white; border-bottom-color: white;">📝 今日学んだことのまとめ</h2>
+            
+            <div class="summary-boxes">
+                <div class="summary-box">
+                    <div class="summary-box-title">🔗 URLの構造</div>
+                    <div class="summary-items">
+                        <div class="summary-item">
+                            <strong>プロトコル</strong><br>
+                            通信の方法
+                        </div>
+                        <div class="summary-item">
+                            <strong>ドメイン</strong><br>
+                            サイトの住所
+                        </div>
+                        <div class="summary-item">
+                            <strong>パス</strong><br>
+                            サイトの中のどの部屋か
+                        </div>
+                        <div class="summary-item">
+                            <strong>クエリパラメータ</strong><br>
+                            条件や絞り込み
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="summary-box">
+                    <div class="summary-box-title">📬 HTTPメソッド</div>
+                    <div class="summary-items">
+                        <div class="summary-item">
+                            <strong>GET</strong><br>
+                            情報を見せてください<br>
+                            (データを取得するだけ)
+                        </div>
+                        <div class="summary-item">
+                            <strong>POST</strong><br>
+                            新しい情報を登録してください<br>
+                            (データを追加する)
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="summary-box">
+                    <div class="summary-box-title">🚦 ステータスコード</div>
+                    <div class="summary-items">
+                        <div class="summary-item">
+                            <strong>200</strong><br>
+                            成功
+                        </div>
+                        <div class="summary-item">
+                            <strong>404</strong><br>
+                            見つからない
+                        </div>
+                        <div class="summary-item">
+                            <strong>500</strong><br>
+                            サーバー側のトラブル
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.2); border-radius: 15px; padding: 35px; backdrop-filter: blur(10px); text-align: center; margin-top: 40px;">
+                <p style="font-size: 1.2em; line-height: 2;">
+                    これらの基本を理解しておくだけで、<br>
+                    Webの裏側で何が起きているのか、そのイメージがぐっと鮮明になります。<br><br>
+                    
+                    <strong style="font-size: 1.3em;">
+                    エンジニアとの会話で「この人、HTTPの基本がわかってるな」と<br>
+                    思ってもらえるレベルになりました!
+                    </strong>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

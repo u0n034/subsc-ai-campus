@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第3回：SELECTでデータを「読む」体験 - AIによるバックエンド開発とデータベース講座</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #7c3aed;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #a78bfa;
+        }
+        
+        /* セクション1: SELECT文の基本形 */
+        .select-basic-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .sql-example {
+            background: #1e293b;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            color: #e2e8f0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            border-left: 5px solid #10b981;
+        }
+        
+        .sql-keyword {
+            color: #60a5fa;
+            font-weight: bold;
+        }
+        
+        .sql-string {
+            color: #fbbf24;
+        }
+        
+        .sql-number {
+            color: #34d399;
+        }
+        
+        .sql-breakdown {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .breakdown-item {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 5px solid #a78bfa;
+        }
+        
+        .breakdown-keyword {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #7c3aed;
+            margin-bottom: 10px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .breakdown-meaning {
+            color: #333;
+            line-height: 1.8;
+        }
+        
+        .result-table {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+            border: 2px solid #a78bfa;
+        }
+        
+        .result-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .result-table th {
+            background: #a78bfa;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        .result-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e5e7eb;
+            color: #333;
+        }
+        
+        .result-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .result-table tr:nth-child(even) {
+            background: #f9fafb;
+        }
+        
+        .key-point-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+        
+        .key-point-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 15px;
+        }
+        
+        .key-point-content {
+            color: #78350f;
+            line-height: 1.8;
+        }
+        
+        .column-select-examples {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .column-select-card {
+            background: #f9fafb;
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid #a78bfa;
+        }
+        
+        .column-select-label {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #7c3aed;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        /* セクション2: WHERE句 */
+        .where-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .comparison-operators {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .operator-card {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .operator-symbol {
+            font-size: 2em;
+            font-weight: bold;
+            color: #7c3aed;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 10px;
+        }
+        
+        .operator-meaning {
+            color: #666;
+            font-size: 0.95em;
+        }
+        
+        .condition-types {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .condition-type-card {
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+        }
+        
+        .and-card {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+        }
+        
+        .or-card {
+            background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+        }
+        
+        .condition-type-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .condition-type-desc {
+            font-size: 1.05em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        .condition-type-example {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.8;
+            backdrop-filter: blur(10px);
+        }
+        
+        .special-operators {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .special-operator-card {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            border-radius: 15px;
+            padding: 25px;
+        }
+        
+        .special-operator-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #7c3aed;
+            margin-bottom: 15px;
+        }
+        
+        .special-operator-content {
+            color: #333;
+            line-height: 1.8;
+        }
+        
+        /* セクション3: ORDER BY句 */
+        .orderby-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .sort-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .sort-card {
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            text-align: center;
+        }
+        
+        .asc-card {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+        }
+        
+        .desc-card {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+        }
+        
+        .sort-title {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .sort-full-name {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+        
+        .sort-meaning {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .sort-example {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 20px;
+        }
+        
+        .sort-result {
+            background: rgba(255,255,255,0.9);
+            color: #333;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .sort-result-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .sort-result-items {
+            line-height: 2;
+        }
+        
+        /* セクション4: 総合例 */
+        .comprehensive-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .sql-flow {
+            margin-top: 30px;
+        }
+        
+        .flow-step {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #a78bfa;
+        }
+        
+        .flow-step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: #a78bfa;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-right: 15px;
+        }
+        
+        .flow-step-title {
+            display: inline;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #7c3aed;
+        }
+        
+        .flow-step-content {
+            margin-top: 15px;
+            color: #333;
+            line-height: 1.8;
+        }
+        
+        .flow-step-sql {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+        
+        /* セクション5: AIとの連携 */
+        .ai-collaboration-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .ai-workflow {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .ai-workflow-step {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .ai-workflow-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .ai-workflow-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #7c3aed;
+            margin-bottom: 15px;
+        }
+        
+        .ai-workflow-content {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .ai-prompt-example {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            margin-top: 30px;
+        }
+        
+        .ai-prompt-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .ai-prompt-text {
+            background: rgba(255,255,255,0.95);
+            color: #1f2937;
+            border-radius: 10px;
+            padding: 25px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        .ai-response {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* セクション6: まとめ */
+        .summary-section {
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .summary-title {
+            font-size: 2em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .summary-card {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        
+        .summary-card-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .summary-card-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .summary-card-content {
+            line-height: 1.8;
+        }
+        
+        .final-message {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 35px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            font-size: 1.2em;
+            line-height: 2;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 1200px) {
+            .sql-breakdown {
+                grid-template-columns: 1fr;
+            }
+            
+            .comparison-operators {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .ai-workflow {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+            }
+            
+            .column-select-examples {
+                grid-template-columns: 1fr;
+            }
+            
+            .comparison-operators {
+                grid-template-columns: 1fr;
+            }
+            
+            .condition-types {
+                grid-template-columns: 1fr;
+            }
+            
+            .special-operators {
+                grid-template-columns: 1fr;
+            }
+            
+            .sort-comparison {
+                grid-template-columns: 1fr;
+            }
+            
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">AIによるバックエンド開発とデータベース講座</h1>
+        <div class="subtitle">第3回：SELECTでデータを「読む」体験</div>
+        
+        <!-- セクション1: SELECT文の基本形 -->
+        <div class="select-basic-section">
+            <h2 class="section-title">📖 SELECT文の基本形</h2>
+            
+            <p style="font-size: 1.1em; color: #333; text-align: center; margin-bottom: 30px;">
+                最もシンプルで最も重要なSQL文から始めましょう
+            </p>
+            
+            <div class="sql-example">
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> customers;
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0; padding: 25px; background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border-radius: 15px;">
+                <div style="font-size: 1.4em; font-weight: bold; color: #1e3a8a; margin-bottom: 15px;">
+                    📝 日本語で読むと
+                </div>
+                <div style="font-size: 1.2em; color: #333; line-height: 1.8;">
+                    「customersという表から、全部の列を全部の行分ください」
+                </div>
+            </div>
+            
+            <div class="sql-breakdown">
+                <div class="breakdown-item">
+                    <div class="breakdown-keyword">SELECT</div>
+                    <div class="breakdown-meaning">
+                        <strong>意味：</strong>「取り出してください」<br>
+                        データベースに対して「データを取り出したい」という意思表示をする部分。命令の始まりを示す。
+                    </div>
+                </div>
+                
+                <div class="breakdown-item">
+                    <div class="breakdown-keyword">*</div>
+                    <div class="breakdown-meaning">
+                        <strong>意味：</strong>「すべて」<br>
+                        アスタリスクは「全部」を意味する記号。ここでは「すべてのカラム（列）」を表す。
+                    </div>
+                </div>
+                
+                <div class="breakdown-item">
+                    <div class="breakdown-keyword">FROM</div>
+                    <div class="breakdown-meaning">
+                        <strong>意味：</strong>「〜から」<br>
+                        どこからデータを取り出すのかを指定する部分。日本語の「から」と同じ使い方。
+                    </div>
+                </div>
+                
+                <div class="breakdown-item">
+                    <div class="breakdown-keyword">customers</div>
+                    <div class="breakdown-meaning">
+                        <strong>意味：</strong>テーブル名<br>
+                        「顧客テーブル」の名前。取り出し先のテーブルを指定している。
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 40px;">
+                <h3 style="font-size: 1.4em; color: #1e3a8a; margin-bottom: 25px; text-align: center;">
+                    📊 実行結果のイメージ
+                </h3>
+                
+                <div class="result-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>customer_id</th>
+                                <th>name</th>
+                                <th>email</th>
+                                <th>prefecture</th>
+                                <th>created_at</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>山田太郎</td>
+                                <td>yamada@example.com</td>
+                                <td>東京都</td>
+                                <td>2025-11-01</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>佐藤花子</td>
+                                <td>sato@example.com</td>
+                                <td>石川県</td>
+                                <td>2025-11-02</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>鈴木一郎</td>
+                                <td>suzuki@example.com</td>
+                                <td>大阪府</td>
+                                <td>2025-11-03</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" style="text-align: center; font-style: italic; color: #999;">
+                                    ... すべてのデータが表示される ...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="column-select-examples">
+                <div class="column-select-card">
+                    <div class="column-select-label">🌟 すべての列を取得</div>
+                    <div class="sql-example" style="margin: 20px 0;">
+                        <span class="sql-keyword">SELECT</span> *<br>
+                        <span class="sql-keyword">FROM</span> customers;
+                    </div>
+                    <div style="color: #666; line-height: 1.8;">
+                        • すべてのカラムが取得される<br>
+                        • データ量が多い場合は注意<br>
+                        • 確認目的でよく使用
+                    </div>
+                </div>
+                
+                <div class="column-select-card">
+                    <div class="column-select-label">🎯 特定の列だけ取得</div>
+                    <div class="sql-example" style="margin: 20px 0;">
+                        <span class="sql-keyword">SELECT</span> name, email<br>
+                        <span class="sql-keyword">FROM</span> customers;
+                    </div>
+                    <div style="color: #666; line-height: 1.8;">
+                        • 必要な列だけを指定<br>
+                        • カンマで区切って複数指定<br>
+                        • 効率的なデータ取得
+                    </div>
+                </div>
+            </div>
+            
+            <div class="key-point-box">
+                <div class="key-point-title">💡 重要なポイント</div>
+                <div class="key-point-content">
+                    <strong>• IDも一緒に取得する習慣：</strong>後の処理でデータを特定するために、主キー（ID）も取得しておくのが基本<br><br>
+                    <strong>• カラム名は正確に：</strong>スペルミスがあるとエラーになる。不明な場合はAIに確認<br><br>
+                    <strong>• LIMIT句で件数制限：</strong>実務では「SELECT * FROM customers LIMIT 10;」のように、最初の数件だけ取得することが多い
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション2: WHERE句 -->
+        <div class="where-section">
+            <h2 class="section-title">🔍 WHERE句で条件を絞る</h2>
+            
+            <p style="font-size: 1.1em; color: #333; text-align: center; margin-bottom: 30px;">
+                「すべてのデータ」ではなく「特定の条件に当てはまるデータだけ」を取得する
+            </p>
+            
+            <div class="sql-example">
+                <span class="sql-keyword">SELECT</span> *<br>
+                <span class="sql-keyword">FROM</span> customers<br>
+                <span class="sql-keyword">WHERE</span> prefecture = <span class="sql-string">'石川県'</span>;
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0; padding: 25px; background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border-radius: 15px;">
+                <div style="font-size: 1.4em; font-weight: bold; color: #1e3a8a; margin-bottom: 15px;">
+                    📝 日本語で読むと
+                </div>
+                <div style="font-size: 1.2em; color: #333; line-height: 1.8;">
+                    「customersテーブルから、全部の列を取得する。<br>
+                    ただし、prefectureカラムの値が『石川県』のデータだけに限定して」
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.4em; color: #1e3a8a; margin: 40px 0 25px 0;">
+                ⚖️ 比較演算子
+            </h3>
+            
+            <div class="comparison-operators">
+                <div class="operator-card">
+                    <div class="operator-symbol">=</div>
+                    <div class="operator-meaning">等しい</div>
+                </div>
+                
+                <div class="operator-card">
+                    <div class="operator-symbol">!= または &lt;&gt;</div>
+                    <div class="operator-meaning">等しくない</div>
+                </div>
+                
+                <div class="operator-card">
+                    <div class="operator-symbol">&gt;</div>
+                    <div class="operator-meaning">より大きい・より後</div>
+                </div>
+                
+                <div class="operator-card">
+                    <div class="operator-symbol">&lt;</div>
+                    <div class="operator-meaning">より小さい・より前</div>
+                </div>
+                
+                <div class="operator-card">
+                    <div class="operator-symbol">&gt;=</div>
+                    <div class="operator-meaning">以上</div>
+                </div>
+                
+                <div class="operator-card">
+                    <div class="operator-symbol">&lt;=</div>
+                    <div class="operator-meaning">以下</div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 40px;">
+                <h3 style="font-size: 1.4em; color: #1e3a8a; margin-bottom: 25px; text-align: center;">
+                    📅 日付・数値での絞り込み例
+                </h3>
+                
+                <div class="sql-example">
+                    <span class="sql-keyword">SELECT</span> *<br>
+                    <span class="sql-keyword">FROM</span> customers<br>
+                    <span class="sql-keyword">WHERE</span> created_at &gt;= <span class="sql-string">'2025-11-01'</span>;
+                </div>
+                
+                <p style="text-align: center; color: #666; margin-top: 20px; line-height: 1.8;">
+                    「2025年11月1日以降に登録されたお客様」を取得<br>
+                    日付は文字列として扱うので、シングルクォーテーションで囲む
+                </p>
+                
+                <div class="sql-example">
+                    <span class="sql-keyword">SELECT</span> *<br>
+                    <span class="sql-keyword">FROM</span> orders<br>
+                    <span class="sql-keyword">WHERE</span> amount &gt;= <span class="sql-number">10000</span>;
+                </div>
+                
+                <p style="text-align: center; color: #666; margin-top: 20px; line-height: 1.8;">
+                    「金額が1万円以上の注文」を取得<br>
+                    数字はシングルクォーテーションで囲まない
+                </p>
+            </div>
+            
+            <h3 style="font-size: 1.4em; color: #1e3a8a; margin: 40px 0 25px 0; text-align: center;">
+                🔗 複数条件の組み合わせ
+            </h3>
+            
+            <div class="condition-types">
+                <div class="condition-type-card and-card">
+                    <div class="condition-type-title">AND（両方とも満たす）</div>
+                    <div class="condition-type-desc">
+                        2つの条件を<strong>両方とも</strong>満たすデータだけを取得
+                    </div>
+                    <div class="condition-type-example">
+                        SELECT *<br>
+                        FROM customers<br>
+                        WHERE prefecture = '石川県'<br>
+                        &nbsp;&nbsp;AND created_at &gt;= '2025-11-01';
+                    </div>
+                    <div style="margin-top: 20px; background: rgba(255,255,255,0.2); border-radius: 10px; padding: 15px; backdrop-filter: blur(10px);">
+                        「石川県に住んでいて、かつ、11月以降に登録」
+                    </div>
+                </div>
+                
+                <div class="condition-type-card or-card">
+                    <div class="condition-type-title">OR（どちらか満たす）</div>
+                    <div class="condition-type-desc">
+                        2つの条件の<strong>どちらか一方</strong>を満たせばOK
+                    </div>
+                    <div class="condition-type-example">
+                        SELECT *<br>
+                        FROM customers<br>
+                        WHERE prefecture = '石川県'<br>
+                        &nbsp;&nbsp;OR prefecture = '富山県';
+                    </div>
+                    <div style="margin-top: 20px; background: rgba(255,255,255,0.2); border-radius: 10px; padding: 15px; backdrop-filter: blur(10px);">
+                        「石川県または富山県のお客様」
+                    </div>
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.4em; color: #1e3a8a; margin: 40px 0 25px 0; text-align: center;">
+                🎯 特殊な条件指定
+            </h3>
+            
+            <div class="special-operators">
+                <div class="special-operator-card">
+                    <div class="special-operator-title">IS NULL / IS NOT NULL</div>
+                    <div class="special-operator-content">
+                        <strong>用途：</strong>値が入っているか、空欄かをチェック<br><br>
+                        
+                        <div class="sql-example" style="margin: 15px 0;">
+                            <span class="sql-keyword">WHERE</span> email <span class="sql-keyword">IS NULL</span>
+                        </div>
+                        → メールアドレスが未入力の顧客<br><br>
+                        
+                        <div class="sql-example" style="margin: 15px 0;">
+                            <span class="sql-keyword">WHERE</span> email <span class="sql-keyword">IS NOT NULL</span>
+                        </div>
+                        → メールアドレスが登録されている顧客
+                    </div>
+                </div>
+                
+                <div class="special-operator-card">
+                    <div class="special-operator-title">LIKE（部分一致検索）</div>
+                    <div class="special-operator-content">
+                        <strong>用途：</strong>特定の文字が含まれるデータを検索<br><br>
+                        
+                        <div class="sql-example" style="margin: 15px 0;">
+                            <span class="sql-keyword">WHERE</span> name <span class="sql-keyword">LIKE</span> <span class="sql-string">'%田中%'</span>
+                        </div>
+                        → 「田中」が含まれる名前<br>
+                        （田中太郎、佐藤田中一郎など）<br><br>
+                        
+                        <div class="sql-example" style="margin: 15px 0;">
+                            <span class="sql-keyword">WHERE</span> name <span class="sql-keyword">LIKE</span> <span class="sql-string">'田中%'</span>
+                        </div>
+                        → 「田中」で始まる名前<br>
+                        （田中太郎、田中花子など）
+                    </div>
+                </div>
+            </div>
+            
+            <div class="key-point-box">
+                <div class="key-point-title">💡 WHERE句のポイント</div>
+                <div class="key-point-content">
+                    <strong>• 文字列はクォーテーションで囲む：</strong>'石川県' のように ' で囲む<br><br>
+                    <strong>• 数字は囲まない：</strong>10000 のようにそのまま書く<br><br>
+                    <strong>• 日付も文字列扱い：</strong>'2025-11-01' のように ' で囲む<br><br>
+                    <strong>• 複雑な条件はAIに依頼：</strong>日本語で説明すれば、AIが適切なSQLを返してくれる
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション3: ORDER BY句 -->
+        <div class="orderby-section">
+            <h2 class="section-title">📊 ORDER BYで並び替える</h2>
+            
+            <p style="font-size: 1.1em; color: #333; text-align: center; margin-bottom: 30px;">
+                取得したデータを、指定した順序で並び替えて表示する
+            </p>
+            
+            <div class="sort-comparison">
+                <div class="sort-card asc-card">
+                    <div class="sort-title">ASC</div>
+                    <div class="sort-full-name">Ascending（上昇）</div>
+                    <div class="sort-meaning">昇順</div>
+                    
+                    <div class="sort-example">
+                        SELECT *<br>
+                        FROM customers<br>
+                        ORDER BY created_at ASC;
+                    </div>
+                    
+                    <div style="margin: 20px 0; font-size: 1.1em;">
+                        小さい値 → 大きい値<br>
+                        古い日付 → 新しい日付<br>
+                        あ → わ（五十音順）
+                    </div>
+                    
+                    <div class="sort-result">
+                        <div class="sort-result-title">📅 登録日時（古い順）</div>
+                        <div class="sort-result-items">
+                            2025-11-01 ⬆️<br>
+                            2025-11-05<br>
+                            2025-11-10<br>
+                            2025-11-15 ⬇️
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sort-card desc-card">
+                    <div class="sort-title">DESC</div>
+                    <div class="sort-full-name">Descending（下降）</div>
+                    <div class="sort-meaning">降順</div>
+                    
+                    <div class="sort-example">
+                        SELECT *<br>
+                        FROM customers<br>
+                        ORDER BY created_at DESC;
+                    </div>
+                    
+                    <div style="margin: 20px 0; font-size: 1.1em;">
+                        大きい値 → 小さい値<br>
+                        新しい日付 → 古い日付<br>
+                        わ → あ（逆順）
+                    </div>
+                    
+                    <div class="sort-result">
+                        <div class="sort-result-title">📅 登録日時（新しい順）</div>
+                        <div class="sort-result-items">
+                            2025-11-15 ⬆️<br>
+                            2025-11-10<br>
+                            2025-11-05<br>
+                            2025-11-01 ⬇️
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 40px;">
+                <h3 style="font-size: 1.4em; color: #1e3a8a; margin-bottom: 25px; text-align: center;">
+                    📝 様々な並び替え例
+                </h3>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
+                    <div style="background: #f9fafb; border-radius: 15px; padding: 25px; border: 2px solid #3b82f6;">
+                        <div style="font-size: 1.2em; font-weight: bold; color: #1e3a8a; margin-bottom: 15px; text-align: center;">
+                            名前で五十音順
+                        </div>
+                        <div class="sql-example">
+                            <span class="sql-keyword">SELECT</span> *<br>
+                            <span class="sql-keyword">FROM</span> customers<br>
+                            <span class="sql-keyword">ORDER BY</span> name <span class="sql-keyword">ASC</span>;
+                        </div>
+                        <div style="margin-top: 15px; color: #666; line-height: 1.6;">
+                            あ行の人が上、わ行の人が下<br>
+                            名簿作成などに便利
+                        </div>
+                    </div>
+                    
+                    <div style="background: #f9fafb; border-radius: 15px; padding: 25px; border: 2px solid #3b82f6;">
+                        <div style="font-size: 1.2em; font-weight: bold; color: #1e3a8a; margin-bottom: 15px; text-align: center;">
+                            複数条件で並び替え
+                        </div>
+                        <div class="sql-example">
+                            <span class="sql-keyword">SELECT</span> *<br>
+                            <span class="sql-keyword">FROM</span> customers<br>
+                            <span class="sql-keyword">ORDER BY</span> prefecture <span class="sql-keyword">ASC</span>,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;created_at <span class="sql-keyword">DESC</span>;
+                        </div>
+                        <div style="margin-top: 15px; color: #666; line-height: 1.6;">
+                            まず都道府県で五十音順<br>
+                            同じ県内では登録日が新しい順
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="key-point-box">
+                <div class="key-point-title">💡 ORDER BYのポイント</div>
+                <div class="key-point-content">
+                    <strong>• ASCは省略可能：</strong>ORDER BY created_at だけでも昇順になる<br><br>
+                    <strong>• DESCは明示が必要：</strong>降順にしたい場合は必ずDESCを書く<br><br>
+                    <strong>• 覚え方：</strong>「DESCは下降（Descend）、ASCは上昇（Ascend）」<br><br>
+                    <strong>• 試してみる：</strong>迷ったら実行してみて、逆だったら入れ替えればOK
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション4: 総合例 -->
+        <div class="comprehensive-section">
+            <h2 class="section-title">🎯 総合例：すべてを組み合わせる</h2>
+            
+            <p style="font-size: 1.1em; color: #333; text-align: center; margin-bottom: 30px;">
+                SELECT、WHERE、ORDER BYを組み合わせた実践的なSQL
+            </p>
+            
+            <div class="sql-example">
+                <span class="sql-keyword">SELECT</span> customer_id, name, email, created_at<br>
+                <span class="sql-keyword">FROM</span> customers<br>
+                <span class="sql-keyword">WHERE</span> prefecture = <span class="sql-string">'石川県'</span><br>
+                &nbsp;&nbsp;<span class="sql-keyword">AND</span> created_at &gt;= <span class="sql-string">'2025-11-01'</span><br>
+                <span class="sql-keyword">ORDER BY</span> created_at <span class="sql-keyword">DESC</span>;
+            </div>
+            
+            <div class="sql-flow">
+                <div class="flow-step">
+                    <span class="flow-step-number">1</span>
+                    <span class="flow-step-title">SELECT：取得する列を指定</span>
+                    <div class="flow-step-content">
+                        customer_id、name、email、created_at の4列だけを取得
+                        <div class="flow-step-sql">
+                            SELECT customer_id, name, email, created_at
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flow-step">
+                    <span class="flow-step-number">2</span>
+                    <span class="flow-step-title">FROM：対象テーブルを指定</span>
+                    <div class="flow-step-content">
+                        customersテーブルから取得する
+                        <div class="flow-step-sql">
+                            FROM customers
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flow-step">
+                    <span class="flow-step-number">3</span>
+                    <span class="flow-step-title">WHERE：条件で絞り込む</span>
+                    <div class="flow-step-content">
+                        • prefecture が「石川県」<br>
+                        • かつ（AND）、created_at が「2025年11月1日以降」<br>
+                        → この2つの条件を両方満たすデータだけに絞り込む
+                        <div class="flow-step-sql">
+                            WHERE prefecture = '石川県'<br>
+                            &nbsp;&nbsp;AND created_at >= '2025-11-01'
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flow-step">
+                    <span class="flow-step-number">4</span>
+                    <span class="flow-step-title">ORDER BY：並び替える</span>
+                    <div class="flow-step-content">
+                        created_at（登録日）の新しい順に並べる
+                        <div class="flow-step-sql">
+                            ORDER BY created_at DESC
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px; padding: 30px; background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%); border-radius: 15px; color: white;">
+                <div style="font-size: 1.5em; font-weight: bold; margin-bottom: 20px;">
+                    🎉 これが読めればSQLの基本は完璧！
+                </div>
+                <div style="font-size: 1.1em; line-height: 2;">
+                    「石川県に住んでいて、2025年11月以降に登録したお客様の<br>
+                    ID・名前・メール・登録日を、登録が新しい順に表示する」<br><br>
+                    
+                    このように、SQLの意図を理解できることが最も重要です
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション5: AIとの連携 -->
+        <div class="ai-collaboration-section">
+            <h2 class="section-title">🤖 AIを活用したSQL作成</h2>
+            
+            <p style="font-size: 1.1em; color: #333; text-align: center; margin-bottom: 30px;">
+                完璧にSQLを書ける必要はありません。AIと協力して使いこなしましょう
+            </p>
+            
+            <div class="ai-workflow">
+                <div class="ai-workflow-step">
+                    <div class="ai-workflow-icon">💭</div>
+                    <div class="ai-workflow-title">1. 要求を日本語で整理</div>
+                    <div class="ai-workflow-content">
+                        「こういう条件でデータを取りたい」という要求を、日本語で明確にする
+                    </div>
+                </div>
+                
+                <div class="ai-workflow-step">
+                    <div class="ai-workflow-icon">🤖</div>
+                    <div class="ai-workflow-title">2. AIに依頼</div>
+                    <div class="ai-workflow-content">
+                        テーブル名、カラム名、条件を伝えて、SQLを書いてもらう
+                    </div>
+                </div>
+                
+                <div class="ai-workflow-step">
+                    <div class="ai-workflow-icon">✅</div>
+                    <div class="ai-workflow-title">3. 結果を確認・修正</div>
+                    <div class="ai-workflow-content">
+                        AIが返したSQLの意図を理解し、必要に応じて修正を依頼
+                    </div>
+                </div>
+            </div>
+            
+            <div class="ai-prompt-example">
+                <div class="ai-prompt-title">💬 AIへのプロンプト例</div>
+                
+                <div class="ai-prompt-text">
+                    顧客テーブル customers があり、<br>
+                    prefecture カラムで都道府県、<br>
+                    created_at カラムで登録日を管理しています。<br><br>
+                    
+                    「石川県在住で、2025年10月以降に登録された顧客だけを<br>
+                    取得する SQL」を書いてください。
+                </div>
+                
+                <div style="text-align: center; font-size: 1.2em; font-weight: bold; margin: 20px 0;">
+                    ⬇️ AIの回答 ⬇️
+                </div>
+                
+                <div class="ai-response">
+                    <div class="sql-example">
+                        <span class="sql-keyword">SELECT</span> *<br>
+                        <span class="sql-keyword">FROM</span> customers<br>
+                        <span class="sql-keyword">WHERE</span> prefecture = <span class="sql-string">'石川県'</span><br>
+                        &nbsp;&nbsp;<span class="sql-keyword">AND</span> created_at &gt;= <span class="sql-string">'2025-10-01'</span>;
+                    </div>
+                </div>
+            </div>
+            
+            <div class="key-point-box">
+                <div class="key-point-title">💡 AI時代のSQLスキル</div>
+                <div class="key-point-content">
+                    <strong>• SQLを完璧に書ける必要はない：</strong>AIに書いてもらえばいい<br><br>
+                    <strong>• 重要なのは「読めること」：</strong>AIが返したSQLの意図を理解できればOK<br><br>
+                    <strong>• 要求を整理する力：</strong>「何がしたいか」を日本語で明確にできることが大切<br><br>
+                    <strong>• 結果を評価する力：</strong>AIが返したSQLが意図通りかを確認できる
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション6: まとめ -->
+        <div class="summary-section">
+            <h2 class="section-title" style="color: white; border-bottom-color: white;">📚 SELECTの基本まとめ</h2>
+            <div class="summary-title">SQLの3つの重要要素</div>
+            
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-card-icon">1️⃣</div>
+                    <div class="summary-card-title">SELECT / FROM</div>
+                    <div class="summary-card-content">
+                        どのテーブルから<br>
+                        どの列を取るか<br><br>
+                        
+                        <strong>SELECT</strong> name, email<br>
+                        <strong>FROM</strong> customers
+                    </div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="summary-card-icon">2️⃣</div>
+                    <div class="summary-card-title">WHERE</div>
+                    <div class="summary-card-content">
+                        どんな条件で<br>
+                        絞り込むか<br><br>
+                        
+                        <strong>WHERE</strong> prefecture = '石川県'<br>
+                        <strong>AND</strong> created_at >= '2025-11-01'
+                    </div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="summary-card-icon">3️⃣</div>
+                    <div class="summary-card-title">ORDER BY</div>
+                    <div class="summary-card-content">
+                        どの順番に<br>
+                        並べるか<br><br>
+                        
+                        <strong>ORDER BY</strong> created_at <strong>DESC</strong><br>
+                        （新しい順）
+                    </div>
+                </div>
+            </div>
+            
+            <div class="final-message">
+                <strong style="font-size: 1.4em; display: block; margin-bottom: 20px;">
+                    🎯 最も大切なこと
+                </strong>
+                
+                プログラミング言語を完璧にマスターする必要はありません。<br><br>
+                
+                重要なのは：<br>
+                • 「何ができるのか」を理解していること<br>
+                • AIに適切な指示を出せること<br>
+                • AIが返してきた結果を評価できること<br><br>
+                
+                <strong style="font-size: 1.3em;">
+                    これが「SQLを書けないけれど、SQLを使いこなせる」という状態です
+                </strong><br><br>
+                
+                AI時代に必要なのは、まさにこういうスキルなんです！
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

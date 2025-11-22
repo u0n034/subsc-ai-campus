@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第3回：INSERT/UPDATE/DELETEのイメージ - AIによるバックエンド開発とデータベース講座</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #7c3aed;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #a78bfa;
+        }
+        
+        .intro-text {
+            font-size: 1.1em;
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+        
+        /* セクション1: INSERT */
+        .insert-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .command-header {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .command-title {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .command-subtitle {
+            font-size: 1.3em;
+            opacity: 0.9;
+        }
+        
+        .sql-example {
+            background: #1e293b;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            color: #e2e8f0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            border-left: 5px solid #10b981;
+            line-height: 1.8;
+        }
+        
+        .sql-keyword {
+            color: #60a5fa;
+            font-weight: bold;
+        }
+        
+        .sql-string {
+            color: #fbbf24;
+        }
+        
+        .sql-breakdown {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .breakdown-card {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 5px solid #a78bfa;
+        }
+        
+        .breakdown-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #7c3aed;
+            margin-bottom: 15px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .breakdown-content {
+            color: #333;
+            line-height: 1.8;
+        }
+        
+        .key-point-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+        
+        .key-point-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 15px;
+        }
+        
+        .key-point-content {
+            color: #78350f;
+            line-height: 1.8;
+        }
+        
+        .ai-demo-box {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            margin-top: 30px;
+        }
+        
+        .ai-demo-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .ai-prompt {
+            background: rgba(255,255,255,0.95);
+            color: #1f2937;
+            border-radius: 10px;
+            padding: 25px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        .ai-response {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* セクション2: UPDATE */
+        .update-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .update-header {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .danger-warning {
+            background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            margin-top: 30px;
+        }
+        
+        .danger-icon {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .danger-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .danger-content {
+            font-size: 1.1em;
+            line-height: 2;
+            text-align: center;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .comparison-card {
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+        }
+        
+        .safe-card {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+        }
+        
+        .danger-card {
+            background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+        }
+        
+        .comparison-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .comparison-sql {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            backdrop-filter: blur(10px);
+        }
+        
+        .comparison-desc {
+            line-height: 1.8;
+            text-align: center;
+        }
+        
+        .multiple-update {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+        
+        .multiple-update-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #7c3aed;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        /* セクション3: DELETE */
+        .delete-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .delete-header {
+            background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .deletion-types {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .deletion-type-card {
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+        }
+        
+        .physical-delete-card {
+            background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+        }
+        
+        .logical-delete-card {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+        }
+        
+        .deletion-type-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .deletion-type-desc {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        .deletion-type-sql {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            backdrop-filter: blur(10px);
+            line-height: 1.8;
+        }
+        
+        .deletion-pros-cons {
+            margin-top: 20px;
+        }
+        
+        .pros-cons-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .pros-cons-list {
+            line-height: 1.8;
+            padding-left: 20px;
+        }
+        
+        .logical-delete-flow {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+        
+        .flow-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #7c3aed;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .flow-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        .flow-step {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid #a78bfa;
+        }
+        
+        .flow-step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: #a78bfa;
+            color: white;
+            border-radius: 50%;
+            line-height: 40px;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+        
+        .flow-step-title {
+            font-weight: bold;
+            color: #7c3aed;
+            margin-bottom: 10px;
+        }
+        
+        .flow-step-content {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        
+        /* セクション4: AIに安全なSQLを書かせるコツ */
+        .ai-tips-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .tip-card {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .tip-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .tip-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #7c3aed;
+            margin-bottom: 10px;
+        }
+        
+        .tip-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #7c3aed;
+            margin-bottom: 15px;
+        }
+        
+        .tip-content {
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        /* セクション5: まとめ */
+        .summary-section {
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .summary-title {
+            font-size: 2em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .summary-card {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .summary-card-icon {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .summary-card-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .summary-card-content {
+            line-height: 1.8;
+        }
+        
+        .final-message {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 35px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            font-size: 1.2em;
+            line-height: 2;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 1200px) {
+            .sql-breakdown {
+                grid-template-columns: 1fr;
+            }
+            
+            .tips-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+            }
+            
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .deletion-types {
+                grid-template-columns: 1fr;
+            }
+            
+            .flow-steps {
+                grid-template-columns: 1fr;
+            }
+            
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">AIによるバックエンド開発とデータベース講座</h1>
+        <div class="subtitle">第3回：INSERT / UPDATE / DELETE のイメージ</div>
+        
+        <!-- セクション1: INSERT -->
+        <div class="insert-section">
+            <div class="command-header">
+                <div class="command-title">✨ INSERT</div>
+                <div class="command-subtitle">新しい行を追加する</div>
+            </div>
+            
+            <h2 class="section-title">📝 INSERT：新しいデータを追加する</h2>
+            
+            <p class="intro-text">
+                「新しいお客様が登録する」「新しい注文が入る」<br>
+                こういった場面で使うのがINSERT文です
+            </p>
+            
+            <div class="sql-example">
+<span class="sql-keyword">INSERT INTO</span> customers (name, email, prefecture)<br>
+<span class="sql-keyword">VALUES</span> (<span class="sql-string">'山田太郎'</span>, <span class="sql-string">'taro@example.com'</span>, <span class="sql-string">'東京都'</span>);
+            </div>
+            
+            <div class="sql-breakdown">
+                <div class="breakdown-card">
+                    <div class="breakdown-title">INSERT INTO customers</div>
+                    <div class="breakdown-content">
+                        <strong>意味：</strong>customersテーブルに挿入する<br><br>
+                        INTOは「〜の中へ」という意味。<br>
+                        「customersの中に入れる」というニュアンス
+                    </div>
+                </div>
+                
+                <div class="breakdown-card">
+                    <div class="breakdown-title">(name, email, prefecture)</div>
+                    <div class="breakdown-content">
+                        <strong>意味：</strong>どのカラムに値を入れるか<br><br>
+                        「名前、メールアドレス、都道府県の3つの項目に、これから値を入れますよ」と宣言
+                    </div>
+                </div>
+                
+                <div class="breakdown-card">
+                    <div class="breakdown-title">VALUES</div>
+                    <div class="breakdown-content">
+                        <strong>意味：</strong>実際に入れる値<br><br>
+                        VALUESは「値」という意味。<br>
+                        この後ろに実際のデータを順番に並べる
+                    </div>
+                </div>
+                
+                <div class="breakdown-card">
+                    <div class="breakdown-title">('山田太郎', ...)</div>
+                    <div class="breakdown-content">
+                        <strong>意味：</strong>具体的なデータ<br><br>
+                        最初に指定したカラムの順番と対応。<br>
+                        name → '山田太郎'<br>
+                        email → 'taro@example.com'<br>
+                        prefecture → '東京都'
+                    </div>
+                </div>
+            </div>
+            
+            <div class="key-point-box">
+                <div class="key-point-title">💡 IDの自動採番</div>
+                <div class="key-point-content">
+                    多くのデータベースでは、<strong>IDは自動的に採番される</strong>仕組みになっています。<br><br>
+                    
+                    • customer_id、order_id などの主キーは、データベースが自動で割り振る<br>
+                    • 私たちは「次は123番だな」と計算する必要がない<br>
+                    • INSERT文では、IDを除いた「実際に人間が入力する項目」だけを指定すればOK<br><br>
+                    
+                    つまり、<strong>「IDはシステムにお任せ」</strong>という感覚で大丈夫です！
+                </div>
+            </div>
+            
+            <div class="ai-demo-box">
+                <div class="ai-demo-title">🤖 AIを使ったINSERT文の生成</div>
+                
+                <div class="ai-prompt">
+                    <strong>プロンプト例：</strong><br><br>
+                    顧客テーブルcustomersに、<br>
+                    『鈴木一郎』『ichiro@example.com』『大阪府』という<br>
+                    新規顧客を追加するSQLを書いてください。
+                </div>
+                
+                <div style="text-align: center; font-size: 1.1em; margin: 20px 0;">
+                    ⬇️ AIの回答 ⬇️
+                </div>
+                
+                <div class="ai-response">
+                    <div class="sql-example" style="border-left-color: rgba(255,255,255,0.3);">
+<span class="sql-keyword">INSERT INTO</span> customers (name, email, prefecture)<br>
+<span class="sql-keyword">VALUES</span> (<span class="sql-string">'鈴木一郎'</span>, <span class="sql-string">'ichiro@example.com'</span>, <span class="sql-string">'大阪府'</span>);
+                    </div>
+                </div>
+                
+                <div style="margin-top: 25px; padding: 20px; background: rgba(255,255,255,0.2); border-radius: 10px; backdrop-filter: blur(10px);">
+                    日本語で「こういうデータを追加したい」と伝えるだけで、<br>
+                    AIがSQL文に変換してくれます。これが、<strong>AI時代のSQL活用</strong>です！
+                </div>
+            </div>
+            
+            <div class="key-point-box">
+                <div class="key-point-title">🎯 実務での位置づけ</div>
+                <div class="key-point-content">
+                    実際のシステムでは、INSERT文を直接実行することは、実はそんなに多くありません。<br><br>
+                    
+                    <strong>例：</strong>Webサイトで新規会員登録<br>
+                    • ユーザーが名前やメールアドレスを入力<br>
+                    • ボタンを押す<br>
+                    • <strong>バックエンドのプログラムが自動的にINSERT文を組み立てて実行</strong><br><br>
+                    
+                    つまり、画面の裏側でこの「INSERT INTO customers」が走っているわけです。<br><br>
+                    
+                    このイメージを持っていると、エンジニアとのコミュニケーションがスムーズになります！
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション2: UPDATE -->
+        <div class="update-section">
+            <div class="update-header">
+                <div class="command-title">🔄 UPDATE</div>
+                <div class="command-subtitle">既存データを更新する</div>
+            </div>
+            
+            <h2 class="section-title">✏️ UPDATE：既存データを書き換える</h2>
+            
+            <p class="intro-text">
+                「メールアドレスを変更したい」「ステータスを更新したい」<br>
+                既にある行の特定のカラムの値を書き換えるのがUPDATE文です
+            </p>
+            
+            <div class="sql-example" style="border-left-color: #f59e0b;">
+<span class="sql-keyword">UPDATE</span> customers<br>
+<span class="sql-keyword">SET</span> email = <span class="sql-string">'new_mail@example.com'</span><br>
+<span class="sql-keyword">WHERE</span> customer_id = 123;
+            </div>
+            
+            <div class="sql-breakdown">
+                <div class="breakdown-card">
+                    <div class="breakdown-title">UPDATE customers</div>
+                    <div class="breakdown-content">
+                        <strong>意味：</strong>customersテーブルを更新する<br><br>
+                        どのテーブルを対象にするかを指定
+                    </div>
+                </div>
+                
+                <div class="breakdown-card">
+                    <div class="breakdown-title">SET email = '...'</div>
+                    <div class="breakdown-content">
+                        <strong>意味：</strong>値をセットする<br><br>
+                        SETは「設定する」という意味。<br>
+                        emailカラムを新しい値に書き換える
+                    </div>
+                </div>
+                
+                <div class="breakdown-card">
+                    <div class="breakdown-title">WHERE customer_id = 123</div>
+                    <div class="breakdown-content">
+                        <strong>意味：</strong>どの行を更新するか<br><br>
+                        <strong style="color: #ef4444;">これが最重要！</strong><br>
+                        customer_id=123の行「だけ」を更新
+                    </div>
+                </div>
+                
+                <div class="breakdown-card">
+                    <div class="breakdown-title">⚠️ 鉄則</div>
+                    <div class="breakdown-content">
+                        <strong style="color: #ef4444; font-size: 1.2em;">UPDATEには必ずWHERE句をセットで書く</strong><br><br>
+                        WHERE句がないと全件書き換わってしまい、<br>
+                        大事故につながります！
+                    </div>
+                </div>
+            </div>
+            
+            <div class="danger-warning">
+                <div class="danger-icon">⚠️</div>
+                <div class="danger-title">WHERE句を忘れると大惨事！</div>
+                <div class="danger-content">
+                    WHERE句なしのUPDATE文を実行すると、<br>
+                    <strong style="font-size: 1.3em;">テーブルの全顧客データが書き換わってしまいます</strong><br><br>
+                    
+                    全員のメールアドレスが同じになる = 大事故<br><br>
+                    
+                    本番環境では取り返しのつかないことになります
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.4em; color: #7c3aed; margin: 40px 0 25px 0; text-align: center;">
+                🔍 安全なUPDATEと危険なUPDATEの比較
+            </h3>
+            
+            <div class="comparison-grid">
+                <div class="comparison-card safe-card">
+                    <div class="comparison-title">✅ 安全：WHERE句あり</div>
+                    <div class="comparison-sql">
+UPDATE customers<br>
+SET email = 'new_mail@example.com'<br>
+WHERE customer_id = 123;
+                    </div>
+                    <div class="comparison-desc">
+                        <strong>結果：</strong><br>
+                        customer_id=123の顧客<strong>だけ</strong>が更新される<br><br>
+                        
+                        <strong>影響範囲：</strong>1件のみ<br><br>
+                        
+                        これが正しい使い方！
+                    </div>
+                </div>
+                
+                <div class="comparison-card danger-card">
+                    <div class="comparison-title">❌ 危険：WHERE句なし</div>
+                    <div class="comparison-sql">
+UPDATE customers<br>
+SET email = 'new_mail@example.com';
+                    </div>
+                    <div class="comparison-desc">
+                        <strong>結果：</strong><br>
+                        <strong>全顧客</strong>のemailが同じ値に書き換わる<br><br>
+                        
+                        <strong>影響範囲：</strong>全件（数千〜数万件）<br><br>
+                        
+                        絶対にやってはいけない！
+                    </div>
+                </div>
+            </div>
+            
+            <div class="multiple-update">
+                <div class="multiple-update-title">📝 複数カラムをまとめて更新</div>
+                
+                <div class="sql-example" style="border-left-color: #f59e0b;">
+<span class="sql-keyword">UPDATE</span> customers<br>
+<span class="sql-keyword">SET</span> email = <span class="sql-string">'new_mail@example.com'</span>,<br>
+    prefecture = <span class="sql-string">'神奈川県'</span>,<br>
+    updated_at = NOW()<br>
+<span class="sql-keyword">WHERE</span> customer_id = 123;
+                </div>
+                
+                <p style="color: #666; margin-top: 20px; line-height: 1.8;">
+                    SETの後ろにカンマ区切りで複数の項目を並べることができます。<br><br>
+                    
+                    <strong>updated_at = NOW()：</strong>更新日時も一緒に記録<br>
+                    → 「いつ更新されたか」を記録しておくことは実務で非常に重要！
+                </p>
+            </div>
+            
+            <div class="ai-demo-box" style="background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);">
+                <div class="ai-demo-title">🤖 AIに安全なUPDATE文を書いてもらう</div>
+                
+                <div class="ai-prompt">
+                    <strong>プロンプト例：</strong><br><br>
+                    顧客テーブルcustomersで、customer_id=456の顧客の都道府県を『北海道』に変更するUPDATE文を書いてください。<br><br>
+                    <strong style="color: #ef4444;">WHERE句を必ず含めて、安全に実行できる形でお願いします。</strong>
+                </div>
+                
+                <div style="text-align: center; font-size: 1.1em; margin: 20px 0;">
+                    ⬇️ AIの回答 ⬇️
+                </div>
+                
+                <div class="ai-response">
+                    <div class="sql-example" style="border-left-color: rgba(255,255,255,0.3);">
+<span class="sql-keyword">UPDATE</span> customers<br>
+<span class="sql-keyword">SET</span> prefecture = <span class="sql-string">'北海道'</span><br>
+<span class="sql-keyword">WHERE</span> customer_id = 456;
+                    </div>
+                </div>
+                
+                <div style="margin-top: 25px; padding: 20px; background: rgba(255,255,255,0.2); border-radius: 10px; backdrop-filter: blur(10px);">
+                    「安全に」「WHERE句必須で」と明示することで、<br>
+                    AIにも「これは慎重に書かなきゃいけないな」と認識させることができます！
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション3: DELETE -->
+        <div class="delete-section">
+            <div class="delete-header">
+                <div class="command-title">🗑️ DELETE</div>
+                <div class="command-subtitle">削除と「削除フラグ」の文化</div>
+            </div>
+            
+            <h2 class="section-title">🗑️ DELETE：データを削除する</h2>
+            
+            <p class="intro-text">
+                テーブルから行を消す命令<br>
+                <strong style="color: #ef4444;">最も慎重に扱うべき命令</strong>です
+            </p>
+            
+            <div class="sql-example" style="border-left-color: #ef4444;">
+<span class="sql-keyword">DELETE FROM</span> customers<br>
+<span class="sql-keyword">WHERE</span> customer_id = 123;
+            </div>
+            
+            <div class="sql-breakdown">
+                <div class="breakdown-card">
+                    <div class="breakdown-title">DELETE FROM customers</div>
+                    <div class="breakdown-content">
+                        <strong>意味：</strong>customersテーブルから削除<br><br>
+                        文字通り、データを消す命令
+                    </div>
+                </div>
+                
+                <div class="breakdown-card">
+                    <div class="breakdown-title">WHERE customer_id = 123</div>
+                    <div class="breakdown-content">
+                        <strong>意味：</strong>どの行を削除するか<br><br>
+                        <strong style="color: #ef4444;">WHERE句は絶対に必要！</strong><br>
+                        ないと全データが消えます
+                    </div>
+                </div>
+            </div>
+            
+            <div class="danger-warning">
+                <div class="danger-icon">☠️</div>
+                <div class="danger-title">WHERE句なしは事件レベル</div>
+                <div class="danger-content">
+                    <strong style="font-size: 1.5em;">DELETE FROM customers;</strong><br><br>
+                    
+                    これを実行すると、<br>
+                    <strong style="font-size: 1.4em;">customersテーブルの全データが消えます</strong><br><br>
+                    
+                    全顧客情報が一瞬で消える = もはや事件<br><br>
+                    
+                    会社によっては「本番環境でDELETE文の直接実行を禁止」というルールも
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.4em; color: #7c3aed; margin: 40px 0 25px 0; text-align: center;">
+                💡 実務では「論理削除」が主流
+            </h3>
+            
+            <div class="deletion-types">
+                <div class="deletion-type-card physical-delete-card">
+                    <div class="deletion-type-title">🔥 物理削除</div>
+                    <div class="deletion-type-desc">
+                        データを完全に消してしまう方法<br>
+                        一度消したら基本的に元に戻せない
+                    </div>
+                    
+                    <div class="deletion-type-sql">
+DELETE FROM customers<br>
+WHERE customer_id = 123;
+                    </div>
+                    
+                    <div class="deletion-pros-cons">
+                        <div class="pros-cons-title">❌ デメリット</div>
+                        <div class="pros-cons-list">
+                            • データが完全に消える<br>
+                            • 復旧はバックアップからのみ<br>
+                            • 過去データの参照ができない<br>
+                            • 法律的な保管義務に違反する可能性
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px; backdrop-filter: blur(10px);">
+                        <strong>使用場面：</strong><br>
+                        本当に「もう二度と必要ない」と<br>
+                        確信できる場合だけ
+                    </div>
+                </div>
+                
+                <div class="deletion-type-card logical-delete-card">
+                    <div class="deletion-type-title">✨ 論理削除（推奨）</div>
+                    <div class="deletion-type-desc">
+                        データは残しておくけれど、<br>
+                        「削除された」という目印を付ける方法
+                    </div>
+                    
+                    <div class="deletion-type-sql">
+UPDATE customers<br>
+SET is_deleted = 1,<br>
+    deleted_at = NOW()<br>
+WHERE customer_id = 123;
+                    </div>
+                    
+                    <div class="deletion-pros-cons">
+                        <div class="pros-cons-title">✅ メリット</div>
+                        <div class="pros-cons-list">
+                            • データは実際には残っている<br>
+                            • 必要なときに復旧できる<br>
+                            • 過去データの参照が可能<br>
+                            • 削除日時も記録できる
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px; backdrop-filter: blur(10px);">
+                        <strong>使用場面：</strong><br>
+                        実務では圧倒的にこちらが多い<br>
+                        安全なシステム設計の基本
+                    </div>
+                </div>
+            </div>
+            
+            <div class="logical-delete-flow">
+                <div class="flow-title">📊 論理削除の仕組み</div>
+                
+                <div class="flow-steps">
+                    <div class="flow-step">
+                        <div class="flow-step-number">1</div>
+                        <div class="flow-step-title">フラグカラムを用意</div>
+                        <div class="flow-step-content">
+                            is_deleted カラム<br>
+                            • 0 = 有効<br>
+                            • 1 = 削除済み<br><br>
+                            
+                            deleted_at カラム<br>
+                            • 削除日時を記録
+                        </div>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="flow-step-number">2</div>
+                        <div class="flow-step-title">削除時はフラグを立てる</div>
+                        <div class="flow-step-content">
+                            DELETE文ではなく<br>
+                            UPDATE文を使用<br><br>
+                            
+                            is_deleted = 1 にする<br>
+                            deleted_at に現在日時
+                        </div>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="flow-step-number">3</div>
+                        <div class="flow-step-title">取得時は条件を追加</div>
+                        <div class="flow-step-content">
+                            SELECT文に<br>
+                            WHERE is_deleted = 0<br>
+                            を必ず追加<br><br>
+                            
+                            削除済みは表示されない
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sql-example" style="margin-top: 30px; border-left-color: #a78bfa;">
+<span style="color: #94a3b8;">-- 論理削除の実行</span><br>
+<span class="sql-keyword">UPDATE</span> customers<br>
+<span class="sql-keyword">SET</span> is_deleted = 1, deleted_at = NOW()<br>
+<span class="sql-keyword">WHERE</span> customer_id = 123;<br>
+<br>
+<span style="color: #94a3b8;">-- 有効な顧客だけを取得</span><br>
+<span class="sql-keyword">SELECT</span> *<br>
+<span class="sql-keyword">FROM</span> customers<br>
+<span class="sql-keyword">WHERE</span> is_deleted = 0;
+                </div>
+            </div>
+            
+            <div class="key-point-box">
+                <div class="key-point-title">💡 論理削除の利点</div>
+                <div class="key-point-content">
+                    <strong>• 復活が可能：</strong>「やっぱり戻したい」という要望にも対応できる<br><br>
+                    <strong>• 過去データの分析：</strong>「3年前に削除されたデータ」も参照可能<br><br>
+                    <strong>• 法律対応：</strong>一定期間の保管義務がある業種でも安心<br><br>
+                    <strong>• 段階的削除：</strong>「削除から1ヶ月後に物理削除」といったルールを設定できる
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション4: AIに安全なSQLを書かせるコツ -->
+        <div class="ai-tips-section">
+            <h2 class="section-title">🤖 AIに安全なSQLを書かせるコツ</h2>
+            
+            <p class="intro-text">
+                AI時代の非エンジニアに求められるスキル
+            </p>
+            
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon">🛡️</div>
+                    <div class="tip-number">ポイント 1</div>
+                    <div class="tip-title">「安全に」を明示する</div>
+                    <div class="tip-content">
+                        「WHERE句必須で」<br>
+                        「本番データなので慎重に」<br>
+                        「誤って全件更新にならないように」<br><br>
+                        
+                        こういった一文を添えるだけで、AIの出力が変わる
+                    </div>
+                </div>
+                
+                <div class="tip-card">
+                    <div class="tip-icon">📋</div>
+                    <div class="tip-number">ポイント 2</div>
+                    <div class="tip-title">テーブル構造を伝える</div>
+                    <div class="tip-content">
+                        どんなテーブルがあり、<br>
+                        どんなカラムがあるか<br><br>
+                        
+                        この情報を事前に伝えると、<br>
+                        より正確なSQLを<br>
+                        生成してくれる
+                    </div>
+                </div>
+                
+                <div class="tip-card">
+                    <div class="tip-icon">👀</div>
+                    <div class="tip-number">ポイント 3</div>
+                    <div class="tip-title">出力を「読む」習慣</div>
+                    <div class="tip-content">
+                        AIが返したSQLを<br>
+                        そのまま実行する前に、<br>
+                        一度「読む」<br><br>
+                        
+                        WHERE句の有無、<br>
+                        カラム名の確認だけでも<br>
+                        事故を防げる
+                    </div>
+                </div>
+            </div>
+            
+            <div class="ai-demo-box">
+                <div class="ai-demo-title">💬 安全性を意識したプロンプト例</div>
+                
+                <div class="ai-prompt">
+                    顧客テーブルcustomersがあります。<br>
+                    本番データなので、誤って全件更新や削除にならないように、<br>
+                    WHERE句を必ず付けたUPDATE文とDELETE文の例を、それぞれ1つずつ示してください。<br>
+                    また、それぞれのSQLの意図も日本語で説明してください。
+                </div>
+                
+                <div style="text-align: center; font-size: 1.1em; margin: 20px 0;">
+                    ⬇️ AIの回答 ⬇️
+                </div>
+                
+                <div class="ai-response">
+                    <div class="sql-example" style="border-left-color: rgba(255,255,255,0.3);">
+<span style="color: #94a3b8;">-- 特定顧客のメールアドレスを更新</span><br>
+<span class="sql-keyword">UPDATE</span> customers<br>
+<span class="sql-keyword">SET</span> email = <span class="sql-string">'updated@example.com'</span><br>
+<span class="sql-keyword">WHERE</span> customer_id = 123;<br>
+<br>
+<span style="color: #94a3b8;">-- 特定顧客を削除</span><br>
+<span class="sql-keyword">DELETE FROM</span> customers<br>
+<span class="sql-keyword">WHERE</span> customer_id = 456;
+                    </div>
+                    
+                    <div style="margin-top: 20px; line-height: 1.8;">
+                        + それぞれに「このSQLは、customer_idが123の顧客のみを対象としています」といった説明も付きます
+                    </div>
+                </div>
+            </div>
+            
+            <div class="key-point-box">
+                <div class="key-point-title">🎯 非エンジニアに求められるスキル</div>
+                <div class="key-point-content">
+                    <strong>✅ SQLを完璧に書けること</strong> → <span style="color: #ef4444; text-decoration: line-through;">不要！</span><br><br>
+                    
+                    <strong>✅ 求められるスキル：</strong><br>
+                    • 「何がしたいか」を日本語で整理できる<br>
+                    • AIが生成したSQLを、ざっくり読めて、おかしいところに気づける<br>
+                    • WHERE句の有無など、基本的なチェックができる<br>
+                    • エンジニアに「このSQL文でお願いします」とスムーズに伝えられる<br><br>
+                    
+                    <strong style="font-size: 1.2em; color: #7c3aed;">これが「SQLを書けないけれど、SQLを使いこなせる」状態です！</strong>
+                </div>
+            </div>
+        </div>
+        
+        <!-- セクション5: まとめ -->
+        <div class="summary-section">
+            <h2 class="section-title" style="color: white; border-bottom-color: white;">📚 データ書き込み系SQLまとめ</h2>
+            <div class="summary-title">INSERT / UPDATE / DELETE の3つの命令</div>
+            
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-card-icon">✨</div>
+                    <div class="summary-card-title">INSERT</div>
+                    <div class="summary-card-content">
+                        <strong>役割：</strong>新しい行を追加<br><br>
+                        
+                        • 新規顧客登録<br>
+                        • 新規注文<br>
+                        • データを増やす<br><br>
+                        
+                        <strong>特徴：</strong><br>
+                        IDは自動採番される<br>
+                        人間が入力する項目だけ指定
+                    </div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="summary-card-icon">🔄</div>
+                    <div class="summary-card-title">UPDATE</div>
+                    <div class="summary-card-content">
+                        <strong>役割：</strong>既存の値を書き換え<br><br>
+                        
+                        • メールアドレス変更<br>
+                        • ステータス更新<br>
+                        • データを変える<br><br>
+                        
+                        <strong>鉄則：</strong><br>
+                        WHERE句は絶対必須！<br>
+                        ないと全件書き換わる
+                    </div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="summary-card-icon">🗑️</div>
+                    <div class="summary-card-title">DELETE</div>
+                    <div class="summary-card-content">
+                        <strong>役割：</strong>行を削除<br><br>
+                        
+                        • 物理削除：完全に消す<br>
+                        • 論理削除：フラグを立てる（推奨）<br><br>
+                        
+                        <strong>実務：</strong><br>
+                        論理削除が主流<br>
+                        is_deleted フラグで管理
+                    </div>
+                </div>
+            </div>
+            
+            <div class="final-message">
+                <strong style="font-size: 1.4em; display: block; margin-bottom: 20px;">
+                    🎯 覚えておくべきこと
+                </strong>
+                
+                皆さんに求められるのは、<strong>「SQLを暗記すること」ではありません</strong><br><br>
+                
+                重要なのは：<br>
+                • 「こういう操作がしたい」という要求を日本語でAIに伝えられる<br>
+                • AIが生成したSQLがどういう動きをするか、ざっくりイメージできる<br>
+                • WHERE句があるか、更新対象は正しいか、といった基本チェックができる<br><br>
+                
+                <strong style="font-size: 1.3em;">
+                    それだけで、非エンジニアでも十分にSQLを活用できます！
+                </strong><br><br>
+                
+                学習段階では、どんどん試して、失敗して、学んでいってください。<br>
+                エラーは敵ではなく、ヒントです！
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

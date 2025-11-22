@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第4回-4：JSONというデータ形式 - AIによるバックエンド開発とデータベース講座</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #ea580c;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #f97316;
+        }
+        
+        /* JSON基本形セクション */
+        .json-basic-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .json-def {
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 35px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .json-def-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .json-def-content {
+            font-size: 1.2em;
+            line-height: 1.8;
+        }
+        
+        .json-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .feature-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #ea580c;
+            margin-bottom: 15px;
+        }
+        
+        .feature-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #9a3412;
+            margin-bottom: 15px;
+        }
+        
+        .feature-desc {
+            font-size: 0.95em;
+            color: #7c2d12;
+            line-height: 1.7;
+        }
+        
+        .json-display {
+            background: #1e293b;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            overflow-x: auto;
+        }
+        
+        .json-code {
+            font-family: 'Courier New', monospace;
+            color: #fbbf24;
+            font-size: 1.3em;
+            line-height: 2;
+            white-space: pre;
+        }
+        
+        .data-types-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .data-type-card {
+            background: #f9fafb;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 5px solid #ea580c;
+        }
+        
+        .type-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #ea580c;
+            margin-bottom: 15px;
+        }
+        
+        .type-example {
+            background: #1e293b;
+            color: #fbbf24;
+            font-family: 'Courier New', monospace;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .type-desc {
+            font-size: 0.95em;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .table-comparison {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 25px;
+            align-items: center;
+            margin: 30px 0;
+        }
+        
+        .comparison-box {
+            border-radius: 15px;
+            padding: 25px;
+        }
+        
+        .table-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border: 3px solid #3b82f6;
+        }
+        
+        .json-box {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border: 3px solid #10b981;
+        }
+        
+        .comparison-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .comparison-content {
+            font-size: 1em;
+            color: #333;
+            line-height: 1.8;
+        }
+        
+        .arrow-icon {
+            font-size: 3em;
+            text-align: center;
+            color: #ea580c;
+        }
+        
+        /* 配列とネストセクション */
+        .array-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .array-concept {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+        
+        .concept-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .concept-content {
+            font-size: 1.1em;
+            color: #78350f;
+            line-height: 1.8;
+            text-align: center;
+        }
+        
+        .syntax-box {
+            background: #f9fafb;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        .syntax-label {
+            font-weight: bold;
+            color: #ea580c;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .syntax-meaning {
+            color: #666;
+            font-size: 1em;
+            line-height: 1.7;
+            margin-top: 10px;
+        }
+        
+        /* AIデモセクション */
+        .ai-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .prompt-display {
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+        
+        .prompt-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .prompt-content {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.8;
+            backdrop-filter: blur(10px);
+            font-size: 1.05em;
+        }
+        
+        .use-cases {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .use-case {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .use-case-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        
+        .use-case-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+        
+        .use-case-desc {
+            font-size: 0.95em;
+            color: #1e40af;
+            line-height: 1.6;
+        }
+        
+        /* まとめセクション */
+        .summary-section {
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+            border-radius: 20px;
+            padding: 50px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .summary-card {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .summary-number {
+            font-size: 2em;
+            font-weight: bold;
+            opacity: 0.5;
+            margin-bottom: 15px;
+        }
+        
+        .summary-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .summary-content {
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 1200px) {
+            .json-features {
+                grid-template-columns: 1fr;
+            }
+            
+            .data-types-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .table-comparison {
+                grid-template-columns: 1fr;
+            }
+            
+            .arrow-icon {
+                transform: rotate(90deg);
+                margin: 20px 0;
+            }
+            
+            .use-cases {
+                grid-template-columns: 1fr;
+            }
+            
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">AIによるバックエンド開発とデータベース講座</h1>
+        <div class="subtitle">第4回-4：JSONというデータ形式 – 「人にも機械にも読める」データの形</div>
+        
+        <!-- JSON基本形 -->
+        <div class="json-basic-section">
+            <h2 class="section-title">📄 JSONの基本形を読む</h2>
+            
+            <div class="json-def">
+                <div class="json-def-title">JSONとは何か</div>
+                <div class="json-def-content">
+                    JSON = JavaScript Object Notation<br><br>
+                    
+                    <strong style="font-size: 1.3em;">「人間が読めて、機械も読める、データの書き方のルール」</strong><br><br>
+                    
+                    データを構造化して表現するための形式
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.3em; color: #ea580c; margin: 40px 0 25px 0; text-align: center;">
+                JSONが広まった3つの理由
+            </h3>
+            
+            <div class="json-features">
+                <div class="feature-card">
+                    <div class="feature-number">1</div>
+                    <div class="feature-title">人間が読みやすい</div>
+                    <div class="feature-desc">
+                        文字で書かれているので、<br>
+                        エンジニアでなくても、<br>
+                        少し慣れれば内容を理解できる
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-number">2</div>
+                    <div class="feature-title">機械が処理しやすい</div>
+                    <div class="feature-desc">
+                        明確なルールがあるので、<br>
+                        プログラムがこれを読み込んで、<br>
+                        自動的にデータとして扱える
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-number">3</div>
+                    <div class="feature-title">シンプルで軽量</div>
+                    <div class="feature-desc">
+                        余計な装飾がなく、<br>
+                        必要最小限の記号だけで構造を表現<br>
+                        ネットワークでの通信に効率的
+                    </div>
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.3em; color: #ea580c; margin: 40px 0 25px 0; text-align: center;">
+                実際のJSONを見てみましょう
+            </h3>
+            
+            <div class="json-display">
+                <div class="json-code">{
+  "id": 123,
+  "name": "田中太郎",
+  "email": "taro.tanaka@example.com",
+  "prefecture": "石川県",
+  "is_active": true
+}</div>
+            </div>
+            
+            <div style="padding: 25px; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 10px; margin: 30px 0;">
+                <h3 style="font-size: 1.2em; color: #92400e; margin-bottom: 15px; text-align: center;">
+                    💡 これは何を表しているか?
+                </h3>
+                <p style="font-size: 1.05em; color: #78350f; line-height: 1.8; text-align: center;">
+                    第2回で学んだ「顧客テーブル」の<strong>1レコード分のデータ</strong>を、<br>
+                    別の形で表現しているだけ!<br><br>
+                    
+                    <strong>JSON = テーブルの別の見せ方</strong>
+                </p>
+            </div>
+            
+            <h3 style="font-size: 1.3em; color: #ea580c; margin: 40px 0 25px 0; text-align: center;">
+                JSONの構造を分解する
+            </h3>
+            
+            <div style="background: #f9fafb; border-radius: 10px; padding: 25px; margin-bottom: 20px;">
+                <div class="syntax-label">波括弧 { }</div>
+                <div class="syntax-meaning">
+                    「ここからここまでが1つのまとまりですよ」という印<br>
+                    データベースで言えば、「1レコード」「1行のデータ」を表す
+                </div>
+            </div>
+            
+            <div style="background: #f9fafb; border-radius: 10px; padding: 25px; margin-bottom: 20px;">
+                <div class="syntax-label">"キー": 値</div>
+                <div class="syntax-meaning">
+                    <strong>キー</strong> = データベースの「カラム名」「項目名」<br>
+                    <strong>値</strong> = その項目の具体的なデータ<br><br>
+                    
+                    例: <code>"name": "田中太郎"</code><br>
+                    → 名前という項目の値は田中太郎
+                </div>
+            </div>
+            
+            <div style="background: #f9fafb; border-radius: 10px; padding: 25px;">
+                <div class="syntax-label">カンマ ,</div>
+                <div class="syntax-meaning">
+                    「次にもまだキーと値のペアが続きますよ」という印<br><br>
+                    
+                    ⚠️ 最後の行にはカンマを付けない!<br>
+                    これがJSONのルール
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.3em; color: #ea580c; margin: 40px 0 25px 0; text-align: center;">
+                JSONのデータ型
+            </h3>
+            
+            <div class="data-types-grid">
+                <div class="data-type-card">
+                    <div class="type-name">📊 数値</div>
+                    <div class="type-example">"id": 123</div>
+                    <div class="type-desc">
+                        引用符なしで書く<br>
+                        整数でも小数でもOK<br><br>
+                        
+                        例: <code>"price": 1980</code><br>
+                        例: <code>"rating": 4.5</code>
+                    </div>
+                </div>
+                
+                <div class="data-type-card">
+                    <div class="type-name">📝 文字列</div>
+                    <div class="type-example">"name": "田中太郎"</div>
+                    <div class="type-desc">
+                        必ずダブルクォーテーションで囲む<br><br>
+                        
+                        人の名前、メールアドレス、住所など、<br>
+                        文字で表現されるデータ
+                    </div>
+                </div>
+                
+                <div class="data-type-card">
+                    <div class="type-name">✅ 真偽値</div>
+                    <div class="type-example">"is_active": true</div>
+                    <div class="type-desc">
+                        <code>true</code> = 正しい、有効<br>
+                        <code>false</code> = 間違っている、無効<br><br>
+                        
+                        引用符で囲まない<br>
+                        この2つだけが特別な値
+                    </div>
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.3em; color: #ea580c; margin: 40px 0 25px 0; text-align: center;">
+                テーブルとJSONの対応
+            </h3>
+            
+            <div class="table-comparison">
+                <div class="comparison-box table-box">
+                    <div class="comparison-title">📊 データベースのテーブル</div>
+                    <div class="comparison-content">
+                        <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 5px; overflow: hidden;">
+                            <thead style="background: #3b82f6; color: white;">
+                                <tr>
+                                    <th style="padding: 10px; text-align: left;">id</th>
+                                    <th style="padding: 10px; text-align: left;">name</th>
+                                    <th style="padding: 10px; text-align: left;">email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid #e5e7eb;">
+                                    <td style="padding: 10px;">123</td>
+                                    <td style="padding: 10px;">田中太郎</td>
+                                    <td style="padding: 10px; font-size: 0.9em;">taro@...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="arrow-icon">≈</div>
+                
+                <div class="comparison-box json-box">
+                    <div class="comparison-title">📄 JSONの表現</div>
+                    <div class="comparison-content" style="font-family: 'Courier New', monospace; font-size: 0.9em; background: #1e293b; color: #fbbf24; padding: 15px; border-radius: 5px;">
+{<br>
+&nbsp;&nbsp;"id": 123,<br>
+&nbsp;&nbsp;"name": "田中太郎",<br>
+&nbsp;&nbsp;"email": "taro@..."<br>
+}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 配列とネスト -->
+        <div class="array-section">
+            <h2 class="section-title">📚 配列とネスト – 複数件＆入れ子構造</h2>
+            
+            <div style="padding: 25px; background: #f9fafb; border-radius: 10px; margin-bottom: 30px;">
+                <p style="font-size: 1.1em; color: #333; line-height: 1.8; text-align: center;">
+                    実際のシステムでは、1件のデータだけを扱うことは稀。<br>
+                    複数のレコードを一度にやり取りすることの方が多い!
+                </p>
+            </div>
+            
+            <div class="array-concept">
+                <div class="concept-title">📋 配列 = 複数のデータをまとめる</div>
+                <div class="concept-content">
+                    配列(Array) = 「データのリスト」「データの集まり」<br><br>
+                    
+                    <strong>角括弧 [ ] で囲む</strong>
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.2em; color: #ea580c; margin: 30px 0 20px 0; text-align: center;">
+                配列の例
+            </h3>
+            
+            <div class="json-display">
+                <div class="json-code">[
+  {
+    "id": 1,
+    "name": "田中太郎"
+  },
+  {
+    "id": 2,
+    "name": "佐藤花子"
+  }
+]</div>
+            </div>
+            
+            <div class="syntax-box">
+                <div class="syntax-label">🔍 構造の読み方</div>
+                <div class="syntax-meaning">
+                    • 全体を囲む <strong>角括弧 [ ]</strong> = 「複数のデータのまとまり」<br>
+                    • その中の <strong>波括弧 { }</strong> = それぞれ「1行のレコード」<br>
+                    • データ間の <strong>カンマ ,</strong> = 「次にもまだデータが続く」<br><br>
+                    
+                    <strong>つまり、角括弧 [ ] は「複数行の表」を表している!</strong>
+                </div>
+            </div>
+            
+            <div style="padding: 25px; background: white; border: 3px solid #10b981; border-radius: 10px; margin: 30px 0;">
+                <h4 style="font-size: 1.2em; color: #065f46; margin-bottom: 15px; text-align: center;">
+                    テーブルとの対応
+                </h4>
+                <table style="width: 100%; border-collapse: collapse; background: white;">
+                    <thead style="background: #10b981; color: white;">
+                        <tr>
+                            <th style="padding: 12px; text-align: left;">id</th>
+                            <th style="padding: 12px; text-align: left;">name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="padding: 12px;">1</td>
+                            <td style="padding: 12px;">田中太郎</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px;">2</td>
+                            <td style="padding: 12px;">佐藤花子</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="text-align: center; margin-top: 15px; color: #047857; font-size: 1.05em;">
+                    ↑ この2行のテーブルが、上記のJSONに対応している
+                </p>
+            </div>
+            
+            <h3 style="font-size: 1.2em; color: #ea580c; margin: 40px 0 20px 0; text-align: center;">
+                ネスト構造 = データの中にデータ
+            </h3>
+            
+            <div class="json-display">
+                <div class="json-code">{
+  "id": 1,
+  "name": "田中太郎",
+  "email": "taro.tanaka@example.com",
+  "orders": [
+    {
+      "order_id": 101,
+      "product": "ノートPC",
+      "price": 98000
+    },
+    {
+      "order_id": 102,
+      "product": "マウス",
+      "price": 2980
+    }
+  ]
+}</div>
+            </div>
+            
+            <div style="padding: 25px; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 10px; margin-top: 30px;">
+                <h4 style="font-size: 1.2em; color: #92400e; margin-bottom: 15px; text-align: center;">
+                    💡 ネスト構造の理解
+                </h4>
+                <p style="font-size: 1.05em; color: #78350f; line-height: 1.8;">
+                    顧客の基本情報の中に、<code>"orders"</code>というキーがあり、<br>
+                    その値として<strong>配列 [ ]</strong>が入っている。<br><br>
+                    
+                    つまり、<strong>「注文のリスト」がここに埋め込まれている</strong>わけです。<br><br>
+                    
+                    これが「ネスト構造」= データの中に別のデータが入っている状態<br><br>
+                    
+                    第2回で学んだ「テーブル同士の関係」(1対多)を、JSON でも表現できる!
+                </p>
+            </div>
+        </div>
+        
+        <!-- AIデモ -->
+        <div class="ai-section">
+            <h2 class="section-title">🤖 JSON ↔ テーブルの対応をAIにやらせる</h2>
+            
+            <div style="padding: 25px; background: #f9fafb; border-radius: 10px; margin-bottom: 30px;">
+                <p style="font-size: 1.1em; color: #333; line-height: 1.8; text-align: center;">
+                    実際に自分の手でJSONを書く必要はない。<br>
+                    それはAIに任せればいい!<br><br>
+                    
+                    私たちが理解すべきなのは、<br>
+                    <strong>「テーブルとJSONがどう対応しているか」というイメージ</strong>
+                </p>
+            </div>
+            
+            <div class="prompt-display">
+                <div class="prompt-title">📝 AIへのプロンプト例</div>
+                <div class="prompt-content">
+次の顧客テーブルを、REST APIのレスポンスとして返すことを想定して、
+JSONのサンプルデータを3件分作ってください。
+
+- id(数値)
+- name(文字列)
+- email(文字列)
+- prefecture(都道府県名)
+- is_active(true/false)
+
+データの内容は、日本人の名前と、実在しそうなメールアドレス、
+日本の都道府県名で作成してください。
+                </div>
+            </div>
+            
+            <div style="padding: 30px; background: white; border: 3px solid #10b981; border-radius: 15px; margin-top: 30px;">
+                <h3 style="font-size: 1.3em; color: #065f46; margin-bottom: 20px; text-align: center;">
+                    ✨ プロンプトのポイント
+                </h3>
+                
+                <div style="display: grid; gap: 15px;">
+                    <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; border-left: 4px solid #10b981;">
+                        <strong style="color: #047857;">1. テーブルの構造を明確に伝える</strong><br>
+                        カラム名とデータ型を箇条書きで示す
+                    </div>
+                    
+                    <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; border-left: 4px solid #10b981;">
+                        <strong style="color: #047857;">2. 何をしてほしいのか具体的に指示</strong><br>
+                        「JSONのサンプルデータを3件分作って」
+                    </div>
+                    
+                    <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; border-left: 4px solid #10b981;">
+                        <strong style="color: #047857;">3. データの内容に関する条件も加える</strong><br>
+                        「日本人の名前」「実在しそうなメールアドレス」など
+                    </div>
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.3em; color: #ea580c; margin: 40px 0 25px 0; text-align: center;">
+                実務での活用イメージ
+            </h3>
+            
+            <div class="use-cases">
+                <div class="use-case">
+                    <div class="use-case-icon">📋</div>
+                    <div class="use-case-title">API設計のレビュー</div>
+                    <div class="use-case-desc">
+                        エンジニアが作ったAPI設計書を見たとき、<br>
+                        「このエンドポイントは、こういうJSONを返すんですね」<br>
+                        と理解できる
+                    </div>
+                </div>
+                
+                <div class="use-case">
+                    <div class="use-case-icon">🔗</div>
+                    <div class="use-case-title">外部連携の仕様確認</div>
+                    <div class="use-case-desc">
+                        他社のシステムとAPI連携をする際、<br>
+                        先方から送られてくる仕様書のJSONを見て、<br>
+                        内容を理解できる
+                    </div>
+                </div>
+                
+                <div class="use-case">
+                    <div class="use-case-icon">📊</div>
+                    <div class="use-case-title">BIツールへのデータ連携</div>
+                    <div class="use-case-desc">
+                        社内のデータを可視化するために、<br>
+                        「こういう形でデータを送りたい」と<br>
+                        エンジニアに提案できる
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- まとめ -->
+        <div class="summary-section">
+            <h2 class="section-title" style="color: white; border-bottom-color: white;">📝 JSONのまとめ</h2>
+            
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-number">1</div>
+                    <div class="summary-title">JSONとは</div>
+                    <div class="summary-content">
+                        人間が読めて、機械も読める、データの書き方のルール<br><br>
+                        
+                        システム間でデータをやり取りする際の標準的な形式<br><br>
+                        
+                        REST APIのレスポンスは、ほぼ間違いなくJSON形式
+                    </div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="summary-number">2</div>
+                    <div class="summary-title">基本構造</div>
+                    <div class="summary-content">
+                        • <strong>波括弧 { }</strong> = 1つのまとまり(1レコード)<br>
+                        • <strong>"キー": 値</strong> = 項目名と値のペア<br>
+                        • <strong>カンマ ,</strong> = 次のデータが続く印<br><br>
+                        
+                        データ型: 数値、文字列、真偽値
+                    </div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="summary-number">3</div>
+                    <div class="summary-title">配列とネスト</div>
+                    <div class="summary-content">
+                        • <strong>角括弧 [ ]</strong> = 配列(複数のデータ)<br>
+                        • <strong>ネスト構造</strong> = データの中に別のデータ<br><br>
+                        
+                        テーブル同士の関係(1対多)も表現できる
+                    </div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="summary-number">4</div>
+                    <div class="summary-title">AIとの協働</div>
+                    <div class="summary-content">
+                        テーブル構造を伝えれば、AIがサンプルJSONを生成してくれる<br><br>
+                        
+                        逆に、JSONからテーブル構造を提案してもらうこともできる<br><br>
+                        
+                        <strong>「JSONはテーブルの別の見せ方」</strong>という理解が重要
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.2); border-radius: 15px; padding: 35px; backdrop-filter: blur(10px); text-align: center; margin-top: 40px;">
+                <p style="font-size: 1.2em; line-height: 2;">
+                    非エンジニアは、JSONの細かい文法を暗記する必要はない。<br><br>
+                    
+                    <strong style="font-size: 1.3em;">
+                    「JSONはテーブルの別の見せ方」<br>
+                    というイメージを持っていれば十分!
+                    </strong><br><br>
+                    
+                    AIを使って、テーブルとJSONの間を自由に行き来できる、<br>
+                    という実感を持てたなら、それだけで大きな前進です。
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
