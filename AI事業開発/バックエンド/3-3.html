@@ -731,6 +731,82 @@
                 </div>
             </div>
             
+            <div style="margin-top: 40px;">
+                <h3 style="font-size: 1.4em; color: #1e3a8a; margin-bottom: 25px; text-align: center;">
+                    🆔 実務の鉄則：IDも一緒に取得する
+                </h3>
+                
+                <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 15px; padding: 30px; margin-bottom: 30px;">
+                    <div style="font-size: 1.2em; font-weight: bold; color: #92400e; margin-bottom: 20px; text-align: center;">
+                        なぜIDが重要なのか？
+                    </div>
+                    <div style="color: #78350f; line-height: 1.8; font-size: 1.05em;">
+                        名前だけでは誰を特定すればいいか分からないことがあります。<br>
+                        「田中太郎」さんは日本中に何人もいるかもしれません。<br><br>
+                        でも、<strong>IDは絶対に重複しない唯一の値</strong>なので、確実にその人を特定できます。<br>
+                        これが「主キー」の概念です。
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
+                    <div style="background: #fee2e2; border-radius: 15px; padding: 25px; border: 3px solid #ef4444;">
+                        <div style="font-size: 1.2em; font-weight: bold; color: #991b1b; margin-bottom: 15px; text-align: center;">
+                            ❌ IDなしの場合
+                        </div>
+                        <div class="sql-example" style="margin: 20px 0;">
+                            <span class="sql-keyword">SELECT</span> name, email<br>
+                            <span class="sql-keyword">FROM</span> customers;
+                        </div>
+                        <div style="background: white; border-radius: 10px; padding: 15px; margin-top: 15px;">
+                            <div style="font-weight: bold; margin-bottom: 10px; color: #991b1b;">取得結果：</div>
+                            <div style="color: #666; line-height: 1.8;">
+                                田中太郎 | tanaka@example.com<br>
+                                佐藤花子 | sato@example.com<br>
+                                田中太郎 | tanaka2@example.com
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px; color: #991b1b; font-weight: bold;">
+                            ⚠️ 同じ名前の人がいる！<br>
+                            どちらの田中太郎さん？
+                        </div>
+                    </div>
+                    
+                    <div style="background: #d1fae5; border-radius: 15px; padding: 25px; border: 3px solid #10b981;">
+                        <div style="font-size: 1.2em; font-weight: bold; color: #065f46; margin-bottom: 15px; text-align: center;">
+                            ✅ IDありの場合
+                        </div>
+                        <div class="sql-example" style="margin: 20px 0;">
+                            <span class="sql-keyword">SELECT</span> customer_id, name, email<br>
+                            <span class="sql-keyword">FROM</span> customers;
+                        </div>
+                        <div style="background: white; border-radius: 10px; padding: 15px; margin-top: 15px;">
+                            <div style="font-weight: bold; margin-bottom: 10px; color: #065f46;">取得結果：</div>
+                            <div style="color: #666; line-height: 1.8;">
+                                <strong>1</strong> | 田中太郎 | tanaka@example.com<br>
+                                <strong>2</strong> | 佐藤花子 | sato@example.com<br>
+                                <strong>15</strong> | 田中太郎 | tanaka2@example.com
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px; color: #065f46; font-weight: bold;">
+                            ✨ IDで確実に特定できる！<br>
+                            ID=1とID=15で区別可能
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 25px; background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border-radius: 15px; padding: 25px;">
+                    <div style="font-size: 1.1em; font-weight: bold; color: #1e3a8a; margin-bottom: 15px;">
+                        📌 実務での使い方
+                    </div>
+                    <div style="color: #1e40af; line-height: 1.8;">
+                        • 後の処理でデータを更新・削除する際に、IDで特定する<br>
+                        • メール送信などの処理でも、IDを使って確実に対象を指定<br>
+                        • リストから詳細画面への遷移でも、IDをパラメータとして渡す<br>
+                        • <strong>「とりあえずIDは取っておく」が実務の鉄則</strong>
+                    </div>
+                </div>
+            </div>
+            
             <div class="key-point-box">
                 <div class="key-point-title">💡 重要なポイント</div>
                 <div class="key-point-content">
@@ -749,24 +825,101 @@
                 「すべてのデータ」ではなく「特定の条件に当てはまるデータだけ」を取得する
             </p>
             
+            <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-radius: 15px; padding: 30px; margin-bottom: 40px; border: 3px solid #0ea5e9;">
+                <h3 style="font-size: 1.5em; color: #0c4a6e; margin-bottom: 25px; text-align: center;">
+                    📍 例1：文字列で絞り込む（都道府県）
+                </h3>
+            
             <div class="sql-example">
                 <span class="sql-keyword">SELECT</span> *<br>
                 <span class="sql-keyword">FROM</span> customers<br>
                 <span class="sql-keyword">WHERE</span> prefecture = <span class="sql-string">'石川県'</span>;
             </div>
             
-            <div style="text-align: center; margin: 30px 0; padding: 25px; background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border-radius: 15px;">
-                <div style="font-size: 1.4em; font-weight: bold; color: #1e3a8a; margin-bottom: 15px;">
+                <div style="text-align: center; margin: 30px 0; padding: 25px; background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    <div style="font-size: 1.3em; font-weight: bold; color: #0c4a6e; margin-bottom: 15px;">
                     📝 日本語で読むと
                 </div>
-                <div style="font-size: 1.2em; color: #333; line-height: 1.8;">
+                    <div style="font-size: 1.1em; color: #333; line-height: 1.8;">
                     「customersテーブルから、全部の列を取得する。<br>
                     ただし、prefectureカラムの値が『石川県』のデータだけに限定して」
                 </div>
             </div>
             
-            <h3 style="font-size: 1.4em; color: #1e3a8a; margin: 40px 0 25px 0;">
-                ⚖️ 比較演算子
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 25px;">
+                    <div style="background: rgba(255,255,255,0.9); border-radius: 10px; padding: 20px; text-align: center;">
+                        <div style="font-size: 1.1em; font-weight: bold; color: #0ea5e9; margin-bottom: 10px;">WHERE</div>
+                        <div style="color: #666; line-height: 1.6;">条件を指定する<br>合図</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.9); border-radius: 10px; padding: 20px; text-align: center;">
+                        <div style="font-size: 1.1em; font-weight: bold; color: #0ea5e9; margin-bottom: 10px;">prefecture = '石川県'</div>
+                        <div style="color: #666; line-height: 1.6;">カラム名と値を<br>イコールで比較</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.9); border-radius: 10px; padding: 20px; text-align: center;">
+                        <div style="font-size: 1.1em; font-weight: bold; color: #0ea5e9; margin-bottom: 10px;">' '</div>
+                        <div style="color: #666; line-height: 1.6;">文字列は<br>シングルクォートで囲む</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 25px; padding: 20px; background: rgba(254, 243, 199, 0.5); border-radius: 10px; border-left: 4px solid #f59e0b;">
+                    <div style="font-weight: bold; color: #92400e; margin-bottom: 8px;">💡 イメージ</div>
+                    <div style="color: #78350f; line-height: 1.6;">
+                        Excelのフィルター機能で「石川県だけ表示」と設定するのと同じ！<br>
+                        東京都、大阪府などのデータは除外され、石川県だけが抽出されます。
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 40px; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-radius: 15px; padding: 30px; border: 3px solid #0ea5e9;">
+                <h3 style="font-size: 1.5em; color: #0c4a6e; margin-bottom: 25px; text-align: center;">
+                    📅 例2：日付で絞り込む（登録日）
+                </h3>
+                
+                <div class="sql-example">
+                    <span class="sql-keyword">SELECT</span> *<br>
+                    <span class="sql-keyword">FROM</span> customers<br>
+                    <span class="sql-keyword">WHERE</span> created_at &gt;= <span class="sql-string">'2025-11-01'</span>;
+                </div>
+                
+                <div style="text-align: center; margin: 30px 0; padding: 25px; background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    <div style="font-size: 1.3em; font-weight: bold; color: #0c4a6e; margin-bottom: 15px;">
+                        📝 日本語で読むと
+                    </div>
+                    <div style="font-size: 1.1em; color: #333; line-height: 1.8;">
+                        「customersテーブルから全部の列を取得する。<br>
+                        ただし、created_atが2025年11月1日以降のデータだけに限定して」
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 25px;">
+                    <div style="background: rgba(255, 255, 255, 0.8); border-radius: 10px; padding: 20px; border-left: 4px solid #0891b2;">
+                        <div style="font-size: 1.1em; font-weight: bold; color: #0c4a6e; margin-bottom: 10px;">&gt;= とは？</div>
+                        <div style="color: #164e63; line-height: 1.6;">
+                            「以上」という意味<br>
+                            2025年11月1日か、それより後<br><br>
+                            数学で使う記号と同じです
+                        </div>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.8); border-radius: 10px; padding: 20px; border-left: 4px solid #0891b2;">
+                        <div style="font-size: 1.1em; font-weight: bold; color: #0c4a6e; margin-bottom: 10px;">使い方のヒント</div>
+                        <div style="color: #164e63; line-height: 1.6;">
+                            「今月登録されたお客様」<br>
+                            「最近増えた顧客の傾向」<br><br>
+                            などの分析によく使います
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 25px; padding: 20px; background: rgba(255, 255, 255, 0.7); border-radius: 10px; border-left: 4px solid #06b6d4;">
+                    <div style="font-weight: bold; color: #0c4a6e; margin-bottom: 8px;">⚠️ 日付もシングルクォートで囲む</div>
+                    <div style="color: #164e63; line-height: 1.6;">
+                        日付は文字列として扱うので '2025-11-01' のように ' で囲みます
+                    </div>
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.5em; color: #1e3a8a; margin: 40px 0 30px 0; text-align: center;">
+                ⚖️ 比較演算子（値を比べるための記号）
             </h3>
             
             <div class="comparison-operators">
@@ -801,32 +954,131 @@
                 </div>
             </div>
             
-            <div style="margin-top: 40px;">
-                <h3 style="font-size: 1.4em; color: #1e3a8a; margin-bottom: 25px; text-align: center;">
-                    📅 日付・数値での絞り込み例
+            <div style="margin-top: 40px; background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%); border-radius: 15px; padding: 30px; border: 3px solid #a78bfa;">
+                <h3 style="font-size: 1.5em; color: #7c3aed; margin-bottom: 25px; text-align: center;">
+                    🔗 例3：ANDで複数条件（両方とも満たす）
                 </h3>
                 
                 <div class="sql-example">
                     <span class="sql-keyword">SELECT</span> *<br>
                     <span class="sql-keyword">FROM</span> customers<br>
-                    <span class="sql-keyword">WHERE</span> created_at &gt;= <span class="sql-string">'2025-11-01'</span>;
+                    <span class="sql-keyword">WHERE</span> prefecture = <span class="sql-string">'石川県'</span><br>
+                    &nbsp;&nbsp;<span class="sql-keyword">AND</span> created_at &gt;= <span class="sql-string">'2025-11-01'</span>;
                 </div>
                 
-                <p style="text-align: center; color: #666; margin-top: 20px; line-height: 1.8;">
-                    「2025年11月1日以降に登録されたお客様」を取得<br>
-                    日付は文字列として扱うので、シングルクォーテーションで囲む
-                </p>
+                <div style="text-align: center; margin: 30px 0; padding: 25px; background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    <div style="font-size: 1.3em; font-weight: bold; color: #5b21b6; margin-bottom: 15px;">
+                        📝 日本語で読むと
+                    </div>
+                    <div style="font-size: 1.1em; color: #333; line-height: 1.8;">
+                        「石川県に住んでいて、<strong>かつ</strong>、11月以降に登録したお客様」<br><br>
+                        2つの条件を<strong>両方とも</strong>満たすデータだけを取得
+                    </div>
+                </div>
+                
+                <div style="margin-top: 25px; padding: 25px; background: white; border-radius: 15px;">
+                    <div style="font-size: 1.2em; font-weight: bold; color: #7c3aed; margin-bottom: 15px; text-align: center;">
+                        🎯 ANDのイメージ（重なる部分だけ）
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; align-items: center;">
+                        <div style="background: rgba(147, 51, 234, 0.2); border-radius: 10px; padding: 20px; text-align: center; border: 2px solid #9333ea;">
+                            <div style="font-weight: bold; color: #581c87; margin-bottom: 10px;">条件1</div>
+                            <div style="color: #6b21a8;">石川県</div>
+                        </div>
+                        <div style="text-align: center; font-size: 2em; color: #7c3aed;">
+                            AND<br>
+                            <span style="font-size: 0.5em;">両方とも</span>
+                        </div>
+                        <div style="background: rgba(59, 130, 246, 0.2); border-radius: 10px; padding: 20px; text-align: center; border: 2px solid #3b82f6;">
+                            <div style="font-weight: bold; color: #1e40af; margin-bottom: 10px;">条件2</div>
+                            <div style="color: #1e3a8a;">11月以降登録</div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 20px; padding: 15px; background: rgba(16, 185, 129, 0.2); border-radius: 10px; border: 2px solid #10b981;">
+                        <div style="font-weight: bold; color: #065f46;">✅ 取得されるデータ</div>
+                        <div style="color: #047857; margin-top: 8px;">石川県 <strong>AND</strong> 11月以降 = 両方を満たす人だけ</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 40px; background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%); border-radius: 15px; padding: 30px; border: 3px solid #ec4899;">
+                <h3 style="font-size: 1.5em; color: #db2777; margin-bottom: 25px; text-align: center;">
+                    🔗 例4：ORで複数条件（どちらか満たす）
+                </h3>
                 
                 <div class="sql-example">
                     <span class="sql-keyword">SELECT</span> *<br>
-                    <span class="sql-keyword">FROM</span> orders<br>
-                    <span class="sql-keyword">WHERE</span> amount &gt;= <span class="sql-number">10000</span>;
+                    <span class="sql-keyword">FROM</span> customers<br>
+                    <span class="sql-keyword">WHERE</span> prefecture = <span class="sql-string">'石川県'</span><br>
+                    &nbsp;&nbsp;<span class="sql-keyword">OR</span> prefecture = <span class="sql-string">'富山県'</span>;
                 </div>
                 
-                <p style="text-align: center; color: #666; margin-top: 20px; line-height: 1.8;">
-                    「金額が1万円以上の注文」を取得<br>
-                    数字はシングルクォーテーションで囲まない
-                </p>
+                <div style="text-align: center; margin: 30px 0; padding: 25px; background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    <div style="font-size: 1.3em; font-weight: bold; color: #9f1239; margin-bottom: 15px;">
+                        📝 日本語で読むと
+                    </div>
+                    <div style="font-size: 1.1em; color: #333; line-height: 1.8;">
+                        「石川県<strong>または</strong>富山県のお客様」<br><br>
+                        2つの条件の<strong>どちらか一方</strong>を満たせばOK
+                    </div>
+                </div>
+                
+                <div style="margin-top: 25px; padding: 25px; background: white; border-radius: 15px;">
+                    <div style="font-size: 1.2em; font-weight: bold; color: #db2777; margin-bottom: 15px; text-align: center;">
+                        🎯 ORのイメージ（どちらかに該当すればOK）
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; align-items: center;">
+                        <div style="background: rgba(236, 72, 153, 0.2); border-radius: 10px; padding: 20px; text-align: center; border: 2px solid #ec4899;">
+                            <div style="font-weight: bold; color: #9f1239; margin-bottom: 10px;">条件1</div>
+                            <div style="color: #be123c;">石川県</div>
+                        </div>
+                        <div style="text-align: center; font-size: 2em; color: #ea580c;">
+                            OR<br>
+                            <span style="font-size: 0.5em;">どちらか</span>
+                        </div>
+                        <div style="background: rgba(249, 115, 22, 0.2); border-radius: 10px; padding: 20px; text-align: center; border: 2px solid #f97316;">
+                            <div style="font-weight: bold; color: #9a3412; margin-bottom: 10px;">条件2</div>
+                            <div style="color: #c2410c;">富山県</div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 20px; padding: 15px; background: rgba(16, 185, 129, 0.2); border-radius: 10px; border: 2px solid #10b981;">
+                        <div style="font-weight: bold; color: #065f46;">✅ 取得されるデータ</div>
+                        <div style="color: #047857; margin-top: 8px;">石川県 <strong>OR</strong> 富山県 = どちらかに該当する人全員</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 40px; background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%); border-radius: 15px; padding: 30px; border: 3px solid #06b6d4;">
+                <h3 style="font-size: 1.5em; color: #0891b2; margin-bottom: 25px; text-align: center;">
+                    🔗 例5：ANDとORの組み合わせ
+                </h3>
+                
+                <div class="sql-example">
+                    <span class="sql-keyword">SELECT</span> *<br>
+                    <span class="sql-keyword">FROM</span> customers<br>
+                    <span class="sql-keyword">WHERE</span> (prefecture = <span class="sql-string">'石川県'</span> <span class="sql-keyword">OR</span> prefecture = <span class="sql-string">'富山県'</span>)<br>
+                    &nbsp;&nbsp;<span class="sql-keyword">AND</span> created_at &gt;= <span class="sql-string">'2025-11-01'</span>;
+                </div>
+                
+                <div style="text-align: center; margin: 30px 0; padding: 25px; background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    <div style="font-size: 1.3em; font-weight: bold; color: #0e7490; margin-bottom: 15px;">
+                        📝 日本語で読むと
+                    </div>
+                    <div style="font-size: 1.1em; color: #333; line-height: 1.8;">
+                        「（石川県または富山県の<strong>いずれか</strong>）で、<br>
+                        <strong>かつ</strong>、11月以降に登録したお客様」
+                    </div>
+                </div>
+                
+                <div style="margin-top: 25px; padding: 20px; background: white; border-radius: 10px;">
+                    <div style="font-size: 1.1em; font-weight: bold; color: #0891b2; margin-bottom: 15px;">
+                        💡 カッコの役割
+                    </div>
+                    <div style="color: #164e63; line-height: 1.8;">
+                        カッコで囲むことで「まず石川県OR富山県を判定 → その結果とAND条件を結合」という順序が明確になります。<br><br>
+                        <strong>複雑な条件になるほどAIに依頼するのが効率的！</strong>
+                    </div>
+                </div>
             </div>
             
             <h3 style="font-size: 1.4em; color: #1e3a8a; margin: 40px 0 25px 0; text-align: center;">
@@ -867,44 +1119,197 @@
                 </div>
             </div>
             
+            <div style="margin-top: 40px; background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-radius: 15px; padding: 30px; border: 3px solid #10b981;">
+                <h3 style="font-size: 1.5em; color: #065f46; margin-bottom: 25px; text-align: center;">
+                    💰 例6：数値で絞り込む（金額）
+                </h3>
+                
+                <div class="sql-example">
+                    <span class="sql-keyword">SELECT</span> *<br>
+                    <span class="sql-keyword">FROM</span> orders<br>
+                    <span class="sql-keyword">WHERE</span> amount &gt;= <span class="sql-number">10000</span>;
+                </div>
+                
+                <div style="text-align: center; margin: 30px 0; padding: 25px; background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    <div style="font-size: 1.3em; font-weight: bold; color: #065f46; margin-bottom: 15px;">
+                        📝 日本語で読むと
+                    </div>
+                    <div style="font-size: 1.1em; color: #333; line-height: 1.8;">
+                        「ordersテーブルから全部の列を取得する。<br>
+                        ただし、amountが10000以上のデータだけに限定して」<br><br>
+                        つまり「金額が1万円以上の注文」
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 25px;">
+                    <div style="background: #fee2e2; border-radius: 10px; padding: 20px; text-align: center; border: 2px solid #ef4444;">
+                        <div style="font-size: 1.1em; font-weight: bold; color: #991b1b; margin-bottom: 10px;">❌ 間違い</div>
+                        <div style="font-family: 'Courier New', monospace; background: white; padding: 15px; border-radius: 5px; margin: 10px 0;">
+                            amount &gt;= <span style="color: #ef4444;">'10000'</span>
+                        </div>
+                        <div style="color: #991b1b; line-height: 1.6;">
+                            数字にクォートは不要
+                        </div>
+                    </div>
+                    <div style="background: #d1fae5; border-radius: 10px; padding: 20px; text-align: center; border: 2px solid #10b981;">
+                        <div style="font-size: 1.1em; font-weight: bold; color: #065f46; margin-bottom: 10px;">✅ 正しい</div>
+                        <div style="font-family: 'Courier New', monospace; background: white; padding: 15px; border-radius: 5px; margin: 10px 0;">
+                            amount &gt;= <span style="color: #10b981;">10000</span>
+                        </div>
+                        <div style="color: #065f46; line-height: 1.6;">
+                            数字はそのまま書く
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 25px; padding: 20px; background: rgba(255, 255, 255, 0.7); border-radius: 10px; border-left: 4px solid #059669;">
+                    <div style="font-weight: bold; color: #065f46; margin-bottom: 12px; font-size: 1.1em;">📌 クォートのルール</div>
+                    <div style="color: #047857; line-height: 1.8;">
+                        <strong>• 文字列は ' で囲む：</strong> '石川県', 'tanaka@example.com'<br>
+                        <strong>• 数字は囲まない：</strong> 10000, 25, 100.5<br>
+                        <strong>• 日付も文字列扱い：</strong> '2025-11-01'
+                    </div>
+                </div>
+            </div>
+            
             <h3 style="font-size: 1.4em; color: #1e3a8a; margin: 40px 0 25px 0; text-align: center;">
                 🎯 特殊な条件指定
             </h3>
             
-            <div class="special-operators">
-                <div class="special-operator-card">
-                    <div class="special-operator-title">IS NULL / IS NOT NULL</div>
-                    <div class="special-operator-content">
-                        <strong>用途：</strong>値が入っているか、空欄かをチェック<br><br>
-                        
-                        <div class="sql-example" style="margin: 15px 0;">
-                            <span class="sql-keyword">WHERE</span> email <span class="sql-keyword">IS NULL</span>
+            <div style="margin-top: 30px; background: linear-gradient(135deg, #fef9c3 0%, #fef08a 100%); border-radius: 15px; padding: 30px; border: 3px solid #eab308;">
+                <h3 style="font-size: 1.5em; color: #854d0e; margin-bottom: 25px; text-align: center;">
+                    📧 例7：IS NULL / IS NOT NULL（空欄チェック）
+                </h3>
+                
+                <div style="background: white; border-radius: 10px; padding: 25px; margin-bottom: 25px;">
+                    <div style="font-size: 1.2em; font-weight: bold; color: #854d0e; margin-bottom: 15px;">
+                        IS NULL（値が入っていない）
                         </div>
-                        → メールアドレスが未入力の顧客<br><br>
-                        
-                        <div class="sql-example" style="margin: 15px 0;">
-                            <span class="sql-keyword">WHERE</span> email <span class="sql-keyword">IS NOT NULL</span>
+                    <div class="sql-example">
+                        <span class="sql-keyword">SELECT</span> *<br>
+                        <span class="sql-keyword">FROM</span> customers<br>
+                        <span class="sql-keyword">WHERE</span> email <span class="sql-keyword">IS NULL</span>;
+                    </div>
+                    <div style="text-align: center; margin-top: 20px; padding: 20px; background: #fee2e2; border-radius: 10px;">
+                        <div style="font-weight: bold; color: #991b1b; margin-bottom: 10px;">
+                            📝 意味
                         </div>
-                        → メールアドレスが登録されている顧客
+                        <div style="color: #7f1d1d;">
+                            「メールアドレスが未入力の顧客」を取得<br>
+                            NULLは「データがない」「未入力」「不明」という状態
+                        </div>
                     </div>
                 </div>
                 
-                <div class="special-operator-card">
-                    <div class="special-operator-title">LIKE（部分一致検索）</div>
-                    <div class="special-operator-content">
-                        <strong>用途：</strong>特定の文字が含まれるデータを検索<br><br>
-                        
-                        <div class="sql-example" style="margin: 15px 0;">
-                            <span class="sql-keyword">WHERE</span> name <span class="sql-keyword">LIKE</span> <span class="sql-string">'%田中%'</span>
+                <div style="background: white; border-radius: 10px; padding: 25px;">
+                    <div style="font-size: 1.2em; font-weight: bold; color: #854d0e; margin-bottom: 15px;">
+                        IS NOT NULL（値が入っている）
                         </div>
-                        → 「田中」が含まれる名前<br>
-                        （田中太郎、佐藤田中一郎など）<br><br>
-                        
-                        <div class="sql-example" style="margin: 15px 0;">
-                            <span class="sql-keyword">WHERE</span> name <span class="sql-keyword">LIKE</span> <span class="sql-string">'田中%'</span>
+                    <div class="sql-example">
+                        <span class="sql-keyword">SELECT</span> *<br>
+                        <span class="sql-keyword">FROM</span> customers<br>
+                        <span class="sql-keyword">WHERE</span> email <span class="sql-keyword">IS NOT NULL</span>;
+                    </div>
+                    <div style="text-align: center; margin-top: 20px; padding: 20px; background: #d1fae5; border-radius: 10px;">
+                        <div style="font-weight: bold; color: #065f46; margin-bottom: 10px;">
+                            📝 意味
                         </div>
-                        → 「田中」で始まる名前<br>
-                        （田中太郎、田中花子など）
+                        <div style="color: #047857;">
+                            「メールアドレスが登録されている顧客」を取得<br>
+                            データが何か入っている状態
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 25px; padding: 20px; background: rgba(255, 255, 255, 0.7); border-radius: 10px; border-left: 4px solid #ca8a04;">
+                    <div style="font-weight: bold; color: #854d0e; margin-bottom: 10px;">💡 NULLの理解</div>
+                    <div style="color: #713f12; line-height: 1.8;">
+                        NULLは「何もない」という特別な状態です。<br>
+                        • 0（ゼロ）とは違います<br>
+                        • 空文字列("")とも違います<br>
+                        • 「値が存在しない」という状態を表します
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 40px; background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%); border-radius: 15px; padding: 30px; border: 3px solid #6366f1;">
+                <h3 style="font-size: 1.5em; color: #3730a3; margin-bottom: 25px; text-align: center;">
+                    🔎 例8・9：LIKE（部分一致検索）
+                </h3>
+                
+                <div style="background: white; border-radius: 10px; padding: 25px; margin-bottom: 25px;">
+                    <div style="font-size: 1.2em; font-weight: bold; color: #3730a3; margin-bottom: 15px;">
+                        部分一致：どこかに含まれる
+                        </div>
+                    <div class="sql-example">
+                        <span class="sql-keyword">SELECT</span> *<br>
+                        <span class="sql-keyword">FROM</span> customers<br>
+                        <span class="sql-keyword">WHERE</span> name <span class="sql-keyword">LIKE</span> <span class="sql-string">'%田中%'</span>;
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <div style="font-weight: bold; color: #3730a3; margin-bottom: 10px;">
+                            📝 意味：「田中」が含まれる名前
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 15px;">
+                            <div style="padding: 15px; background: #d1fae5; border-radius: 10px; text-align: center; border: 2px solid #10b981;">
+                                <div style="font-weight: bold; color: #065f46;">✅ ヒットする</div>
+                                <div style="color: #047857; margin-top: 8px;">田中太郎</div>
+                            </div>
+                            <div style="padding: 15px; background: #d1fae5; border-radius: 10px; text-align: center; border: 2px solid #10b981;">
+                                <div style="font-weight: bold; color: #065f46;">✅ ヒットする</div>
+                                <div style="color: #047857; margin-top: 8px;">田中花子</div>
+                            </div>
+                            <div style="padding: 15px; background: #d1fae5; border-radius: 10px; text-align: center; border: 2px solid #10b981;">
+                                <div style="font-weight: bold; color: #065f46;">✅ ヒットする</div>
+                                <div style="color: #047857; margin-top: 8px;">佐藤田中一郎</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px; padding: 15px; background: rgba(251, 191, 36, 0.2); border-radius: 10px;">
+                            <strong>% の意味：</strong>「何でもいい文字」を表す記号<br>
+                            %田中% = 「前に何か文字があってもOK、後ろに何か文字があってもOK」
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: white; border-radius: 10px; padding: 25px;">
+                    <div style="font-size: 1.2em; font-weight: bold; color: #3730a3; margin-bottom: 15px;">
+                        前方一致：〜で始まる
+                        </div>
+                    <div class="sql-example">
+                        <span class="sql-keyword">SELECT</span> *<br>
+                        <span class="sql-keyword">FROM</span> customers<br>
+                        <span class="sql-keyword">WHERE</span> name <span class="sql-keyword">LIKE</span> <span class="sql-string">'田中%'</span>;
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <div style="font-weight: bold; color: #3730a3; margin-bottom: 10px;">
+                            📝 意味：「田中」で始まる名前
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 15px;">
+                            <div style="padding: 15px; background: #d1fae5; border-radius: 10px; text-align: center; border: 2px solid #10b981;">
+                                <div style="font-weight: bold; color: #065f46;">✅ ヒットする</div>
+                                <div style="color: #047857; margin-top: 8px;">田中太郎</div>
+                            </div>
+                            <div style="padding: 15px; background: #d1fae5; border-radius: 10px; text-align: center; border: 2px solid #10b981;">
+                                <div style="font-weight: bold; color: #065f46;">✅ ヒットする</div>
+                                <div style="color: #047857; margin-top: 8px;">田中花子</div>
+                            </div>
+                            <div style="padding: 15px; background: #fee2e2; border-radius: 10px; text-align: center; border: 2px solid #ef4444;">
+                                <div style="font-weight: bold; color: #991b1b;">❌ ヒットしない</div>
+                                <div style="color: #7f1d1d; margin-top: 8px;">佐藤田中一郎</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px; padding: 15px; background: rgba(251, 191, 36, 0.2); border-radius: 10px;">
+                            <strong>田中% の意味：</strong>「田中で始まり、後ろに何が続いてもOK」<br>
+                            前に何もついていない「田中」で始まる名前だけが対象
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 25px; padding: 20px; background: rgba(255, 255, 255, 0.7); border-radius: 10px; border-left: 4px solid #6366f1;">
+                    <div style="font-weight: bold; color: #3730a3; margin-bottom: 10px;">💡 LIKEの使い方</div>
+                    <div style="color: #312e81; line-height: 1.8;">
+                        Webサイトの検索ボックスで「キーワード検索」する機能の裏側では、<br>
+                        このLIKE演算子がよく使われています！
                     </div>
                 </div>
             </div>
@@ -912,10 +1317,14 @@
             <div class="key-point-box">
                 <div class="key-point-title">💡 WHERE句のポイント</div>
                 <div class="key-point-content">
-                    <strong>• 文字列はクォーテーションで囲む：</strong>'石川県' のように ' で囲む<br><br>
-                    <strong>• 数字は囲まない：</strong>10000 のようにそのまま書く<br><br>
-                    <strong>• 日付も文字列扱い：</strong>'2025-11-01' のように ' で囲む<br><br>
-                    <strong>• 複雑な条件はAIに依頼：</strong>日本語で説明すれば、AIが適切なSQLを返してくれる
+                    <strong>1. WHEREは条件を指定する部分</strong><br><br>
+                    <strong>2. 「カラム名 = 値」という形で条件を書く</strong><br><br>
+                    <strong>3. 文字列は ' で囲む、数字は囲まない</strong><br><br>
+                    <strong>4. 比較演算子 (=, !=, >, <, >=, <=) で様々な条件を表現できる</strong><br><br>
+                    <strong>5. ANDで「両方とも満たす」、ORで「どちらか満たす」条件を作れる</strong><br><br>
+                    <strong>6. IS NULL / IS NOT NULL で未入力チェックができる</strong><br><br>
+                    <strong>7. LIKE で部分一致検索ができる</strong><br><br>
+                    <strong>8. 複雑な条件はAIに日本語で説明して書いてもらえる</strong>
                 </div>
             </div>
         </div>
@@ -991,7 +1400,54 @@
                     📝 様々な並び替え例
                 </h3>
                 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 25px;">
+                    <div style="background: #f9fafb; border-radius: 15px; padding: 25px; border: 2px solid #3b82f6;">
+                        <div style="font-size: 1.2em; font-weight: bold; color: #1e3a8a; margin-bottom: 15px; text-align: center;">
+                            登録日が新しい順（降順）
+                        </div>
+                        <div class="sql-example">
+                            <span class="sql-keyword">SELECT</span> *<br>
+                            <span class="sql-keyword">FROM</span> customers<br>
+                            <span class="sql-keyword">ORDER BY</span> created_at <span class="sql-keyword">DESC</span>;
+                        </div>
+                        <div style="margin-top: 15px; color: #666; line-height: 1.6;">
+                            最近登録された人が上<br>
+                            管理画面で最新情報を見るときに便利
+                        </div>
+                    </div>
+                    
+                    <div style="background: #f9fafb; border-radius: 15px; padding: 25px; border: 2px solid #3b82f6;">
+                        <div style="font-size: 1.2em; font-weight: bold; color: #1e3a8a; margin-bottom: 15px; text-align: center;">
+                            登録日が古い順（昇順）
+                        </div>
+                        <div class="sql-example">
+                            <span class="sql-keyword">SELECT</span> *<br>
+                            <span class="sql-keyword">FROM</span> customers<br>
+                            <span class="sql-keyword">ORDER BY</span> created_at <span class="sql-keyword">ASC</span>;
+                        </div>
+                        <div style="margin-top: 15px; color: #666; line-height: 1.6;">
+                            最初に登録された人が上<br>
+                            創業当初からの顧客を確認するときに
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 25px;">
+                    <div style="background: #f9fafb; border-radius: 15px; padding: 25px; border: 2px solid #3b82f6;">
+                        <div style="font-size: 1.2em; font-weight: bold; color: #1e3a8a; margin-bottom: 15px; text-align: center;">
+                            ASC省略版
+                        </div>
+                        <div class="sql-example">
+                            <span class="sql-keyword">SELECT</span> *<br>
+                            <span class="sql-keyword">FROM</span> customers<br>
+                            <span class="sql-keyword">ORDER BY</span> created_at;
+                        </div>
+                        <div style="margin-top: 15px; color: #666; line-height: 1.6;">
+                            ASCは省略可能<br>
+                            書かなくても自動的に昇順になる
+                        </div>
+                    </div>
+                    
                     <div style="background: #f9fafb; border-radius: 15px; padding: 25px; border: 2px solid #3b82f6;">
                         <div style="font-size: 1.2em; font-weight: bold; color: #1e3a8a; margin-bottom: 15px; text-align: center;">
                             名前で五十音順
@@ -1006,7 +1462,9 @@
                             名簿作成などに便利
                         </div>
                     </div>
-                    
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr; gap: 25px;">
                     <div style="background: #f9fafb; border-radius: 15px; padding: 25px; border: 2px solid #3b82f6;">
                         <div style="font-size: 1.2em; font-weight: bold; color: #1e3a8a; margin-bottom: 15px; text-align: center;">
                             複数条件で並び替え
@@ -1014,12 +1472,11 @@
                         <div class="sql-example">
                             <span class="sql-keyword">SELECT</span> *<br>
                             <span class="sql-keyword">FROM</span> customers<br>
-                            <span class="sql-keyword">ORDER BY</span> prefecture <span class="sql-keyword">ASC</span>,<br>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;created_at <span class="sql-keyword">DESC</span>;
+                            <span class="sql-keyword">ORDER BY</span> prefecture <span class="sql-keyword">ASC</span>, created_at <span class="sql-keyword">DESC</span>;
                         </div>
                         <div style="margin-top: 15px; color: #666; line-height: 1.6;">
-                            まず都道府県で五十音順<br>
-                            同じ県内では登録日が新しい順
+                            まず都道府県で五十音順に並べ、同じ都道府県の中では登録日が新しい順に並べる<br>
+                            都道府県ごとに顧客を見たいが、各都道府県内では新しいお客様を優先的に確認したいときに便利
                         </div>
                     </div>
                 </div>
@@ -1032,6 +1489,84 @@
                     <strong>• DESCは明示が必要：</strong>降順にしたい場合は必ずDESCを書く<br><br>
                     <strong>• 覚え方：</strong>「DESCは下降（Descend）、ASCは上昇（Ascend）」<br><br>
                     <strong>• 試してみる：</strong>迷ったら実行してみて、逆だったら入れ替えればOK
+                </div>
+            </div>
+        </div>
+        
+        <!-- SELECT文の3つの重要な要素まとめ -->
+        <div class="comprehensive-section" style="margin-top: 60px;">
+            <h2 class="section-title">📚 SELECT文の3つの重要な要素</h2>
+            
+            <p style="font-size: 1.2em; color: #333; text-align: center; margin-bottom: 40px; line-height: 1.8;">
+                ここまでで、SELECT文の3つの重要な要素を学びました。<br>
+                この3つを組み合わせることで、データベースから「欲しいデータを、欲しい形で」取り出すことができます。
+            </p>
+            
+            <div style="display: grid; grid-template-columns: 1fr; gap: 30px; margin-bottom: 40px;">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; padding: 35px; color: white; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);">
+                    <div style="font-size: 2em; margin-bottom: 15px; text-align: center;">1️⃣</div>
+                    <div style="font-size: 1.4em; font-weight: bold; margin-bottom: 20px; text-align: center;">
+                        SELECT と FROM
+                    </div>
+                    <div style="font-size: 1.1em; text-align: center; line-height: 1.8;">
+                        「どのテーブルから、どの列を取るか」を指定
+                    </div>
+                    <div class="sql-example" style="margin-top: 20px; background: rgba(255, 255, 255, 0.95); color: #333;">
+                        <span class="sql-keyword">SELECT</span> customer_id, name, email<br>
+                        <span class="sql-keyword">FROM</span> customers;
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 20px; padding: 35px; color: white; box-shadow: 0 10px 30px rgba(240, 147, 251, 0.3);">
+                    <div style="font-size: 2em; margin-bottom: 15px; text-align: center;">2️⃣</div>
+                    <div style="font-size: 1.4em; font-weight: bold; margin-bottom: 20px; text-align: center;">
+                        WHERE
+                    </div>
+                    <div style="font-size: 1.1em; text-align: center; line-height: 1.8;">
+                        「どんな条件で絞り込むか」を指定
+                    </div>
+                    <div class="sql-example" style="margin-top: 20px; background: rgba(255, 255, 255, 0.95); color: #333;">
+                        <span class="sql-keyword">WHERE</span> prefecture = <span class="sql-string">'石川県'</span><br>
+                        &nbsp;&nbsp;<span class="sql-keyword">AND</span> created_at &gt;= <span class="sql-string">'2025-11-01'</span>
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border-radius: 20px; padding: 35px; color: white; box-shadow: 0 10px 30px rgba(79, 172, 254, 0.3);">
+                    <div style="font-size: 2em; margin-bottom: 15px; text-align: center;">3️⃣</div>
+                    <div style="font-size: 1.4em; font-weight: bold; margin-bottom: 20px; text-align: center;">
+                        ORDER BY
+                    </div>
+                    <div style="font-size: 1.1em; text-align: center; line-height: 1.8;">
+                        「どの順番に並べるか」を指定
+                    </div>
+                    <div class="sql-example" style="margin-top: 20px; background: rgba(255, 255, 255, 0.95); color: #333;">
+                        <span class="sql-keyword">ORDER BY</span> created_at <span class="sql-keyword">DESC</span>;
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); border-radius: 20px; padding: 40px; margin-bottom: 40px; box-shadow: 0 10px 30px rgba(252, 182, 159, 0.3);">
+                <div style="font-size: 1.5em; font-weight: bold; color: #8b4513; margin-bottom: 25px; text-align: center;">
+                    💡 実務でのSQLの大部分は、この3つの組み合わせ
+                </div>
+                <div style="font-size: 1.15em; color: #555; line-height: 1.9; text-align: center;">
+                    特殊な関数や高度なテクニックもたくさんありますが、<br>
+                    非エンジニアの方がまず押さえるべきなのは、この3つの基本構造なんです。
+                </div>
+            </div>
+            
+            <div class="key-point-box" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border: 3px solid #667eea;">
+                <div class="key-point-title" style="font-size: 1.5em;">🎯 非エンジニアに必要なスキル</div>
+                <div class="key-point-content" style="font-size: 1.1em; line-height: 2;">
+                    <strong style="color: #667eea;">✅ 完璧に暗記して自分で書ける必要はありません</strong><br><br>
+                    重要なのは：<br><br>
+                    <div style="margin-left: 20px;">
+                        <strong>1. 要求を日本語で整理できること</strong><br>
+                        「こういう条件でデータを取りたい」と明確に説明できる<br><br>
+                        
+                        <strong>2. AIが書いたSQLを理解できること</strong><br>
+                        「ああ、こういう処理をしているんだな」と読み取れる
+                    </div>
                 </div>
             </div>
         </div>
@@ -1144,32 +1679,6 @@
                     <div class="ai-workflow-title">3. 結果を確認・修正</div>
                     <div class="ai-workflow-content">
                         AIが返したSQLの意図を理解し、必要に応じて修正を依頼
-                    </div>
-                </div>
-            </div>
-            
-            <div class="ai-prompt-example">
-                <div class="ai-prompt-title">💬 AIへのプロンプト例</div>
-                
-                <div class="ai-prompt-text">
-                    顧客テーブル customers があり、<br>
-                    prefecture カラムで都道府県、<br>
-                    created_at カラムで登録日を管理しています。<br><br>
-                    
-                    「石川県在住で、2025年10月以降に登録された顧客だけを<br>
-                    取得する SQL」を書いてください。
-                </div>
-                
-                <div style="text-align: center; font-size: 1.2em; font-weight: bold; margin: 20px 0;">
-                    ⬇️ AIの回答 ⬇️
-                </div>
-                
-                <div class="ai-response">
-                    <div class="sql-example">
-                        <span class="sql-keyword">SELECT</span> *<br>
-                        <span class="sql-keyword">FROM</span> customers<br>
-                        <span class="sql-keyword">WHERE</span> prefecture = <span class="sql-string">'石川県'</span><br>
-                        &nbsp;&nbsp;<span class="sql-keyword">AND</span> created_at &gt;= <span class="sql-string">'2025-10-01'</span>;
                     </div>
                 </div>
             </div>

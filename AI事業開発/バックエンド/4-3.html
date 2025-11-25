@@ -498,6 +498,89 @@
             </div>
         </div>
         
+        <!-- RESTについて -->
+        <div class="api-intro-section">
+            <h2 class="section-title">🎯 RESTについて</h2>
+            
+            <div style="padding: 25px; background: #f9fafb; border-radius: 10px; margin-bottom: 30px;">
+                <p style="font-size: 1.1em; color: #333; line-height: 1.8;">
+                    次に「REST」についてです。RESTは「REpresentational State Transfer」の略で、これはWebの設計ルールの一種です。ただ、この正式名称を覚える必要は全くありません。非エンジニアの方は<strong style="color: #ea580c;">「RESTって、APIを作るときの設計のお作法なんだな」</strong>くらいに思っていただければ十分です。
+                </p>
+            </div>
+            
+            <h3 style="font-size: 1.4em; color: #ea580c; margin: 30px 0 20px 0; text-align: center;">
+                RESTが生まれた背景
+            </h3>
+            
+            <div style="padding: 30px; background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border-radius: 15px; margin-bottom: 30px;">
+                <p style="font-size: 1.05em; color: #1e40af; line-height: 1.8;">
+                    RESTという考え方が生まれたのは<strong>2000年</strong>のことです。当時、Web上でシステム同士がデータをやり取りする方法は、複雑で統一感がありませんでした。それぞれの会社、それぞれのシステムが、バラバラの方法でAPIを作っていたんです。<br><br>
+                    
+                    そこで、<strong style="color: #1e3a8a;">ロイ・フィールディング</strong>という研究者が、「Webの仕組みをうまく活用して、シンプルで分かりやすいAPI設計のルールを作ろう」と提案しました。それがRESTです。
+                </p>
+            </div>
+            
+            <h3 style="font-size: 1.4em; color: #ea580c; margin: 30px 0 20px 0; text-align: center;">
+                RESTの最も重要なポイント
+            </h3>
+            
+            <div style="padding: 35px; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 15px; margin-bottom: 30px; text-align: center;">
+                <div style="font-size: 1.4em; font-weight: bold; color: #92400e; margin-bottom: 20px;">
+                    「URLの形を見れば、何をお願いしているか分かる」
+                </div>
+                <div style="font-size: 1.1em; color: #78350f; line-height: 1.8;">
+                    例えば、<code style="background: white; padding: 5px 10px; border-radius: 5px; color: #ea580c;">/customers</code>というURLを見たら、<br>
+                    「ああ、これは顧客に関するお願いだな」と分かる。<br><br>
+                    
+                    <code style="background: white; padding: 5px 10px; border-radius: 5px; color: #ea580c;">/orders</code>なら「注文に関することだな」と分かる。<br>
+                    <code style="background: white; padding: 5px 10px; border-radius: 5px; color: #ea580c;">/products</code>なら「商品についてだな」と分かる。<br><br>
+                    
+                    こういう風に、<strong style="font-size: 1.2em; color: #92400e;">URLそのものが「意味を持つ」</strong>ように設計するのが、RESTの大きな特徴なんです。
+                </div>
+            </div>
+            
+            <div style="padding: 30px; background: white; border-radius: 15px; border-left: 5px solid #ea580c; margin-bottom: 30px;">
+                <h4 style="font-size: 1.2em; color: #ea580c; margin-bottom: 15px;">💡 リソース指向という考え方</h4>
+                <p style="font-size: 1.05em; color: #333; line-height: 1.8;">
+                    これを<strong>「リソース指向」</strong>と言います。リソースとは「資源」という意味ですが、ここでは<strong style="color: #ea580c;">「扱いたいデータのまとまり」</strong>と考えてください。<br><br>
+                    
+                    RESTが登場する前は、例えば<code style="background: #f3f4f6; padding: 3px 8px; border-radius: 4px;">/getCustomerList</code>とか<code style="background: #f3f4f6; padding: 3px 8px; border-radius: 4px;">/updateCustomerInfo</code>とか、動詞を含んだURLが多かったんです。<br><br>
+                    
+                    でも<strong style="color: #ea580c;">RESTでは、URLには名詞(リソース名)だけを使って、動詞はHTTPメソッド(GET、POSTなど)で表現します。</strong><br><br>
+                    
+                    この統一ルールのおかげで、初めて見るAPIでも「ああ、だいたいこういう構造だろうな」と予測できるようになりました。これがRESTの大きなメリットなんです。
+                </p>
+            </div>
+            
+            <div style="padding: 35px; background: linear-gradient(135deg, #ea580c 0%, #f97316 100%); color: white; border-radius: 15px; margin-bottom: 30px;">
+                <h3 style="font-size: 1.4em; margin-bottom: 20px; text-align: center;">📌 まとめ</h3>
+                <div style="font-size: 1.1em; line-height: 2; text-align: center;">
+                    REST APIとは、<br>
+                    <strong style="font-size: 1.3em;">「Webの設計ルールに則った、システム同士が会話するための窓口」</strong><br><br>
+                    
+                    非エンジニアの皆さんにとって重要なのは、<br>
+                    「このAPI、何ができるの?」「どういうお願いができるの?」<br>
+                    ということを理解できるようになること
+                </div>
+            </div>
+            
+            <h3 style="font-size: 1.4em; color: #ea580c; margin: 30px 0 20px 0; text-align: center;">
+                非エンジニアにとってのAPIリテラシー
+            </h3>
+            
+            <div style="padding: 30px; background: #f9fafb; border-radius: 15px; margin-bottom: 30px;">
+                <p style="font-size: 1.05em; color: #333; line-height: 1.8;">
+                    コードを書く必要はありません。でも、「ああ、このAPIはこういう形でお願いできるんだな」というイメージを持てるようになると、<strong style="color: #ea580c;">エンジニアとの会話が格段にスムーズになります。</strong><br><br>
+                    
+                    例えば、社内で新しいシステムを導入するとき、ベンダーから「このシステムはREST APIを提供しています」と言われたとします。そのとき、皆さんが「ああ、じゃあ他のシステムとの連携もしやすいですね」「どんなエンドポイントがありますか?」と質問できる。これが、<strong style="color: #ea580c;">非エンジニアにとってのAPIリテラシー</strong>なんです。<br><br>
+                    
+                    また、社内でシステム開発を企画するとき、「このシステムには外部連携用のREST APIを用意してほしい」と要件に入れることもできます。将来的な拡張性を考えた設計を、最初から求められるわけです。<br><br>
+                    
+                    このように、<strong style="color: #ea580c;">REST APIの基本を理解することは、非エンジニアの皆さんが、システム企画や運用に関わる上で、非常に重要なスキルになっているんです。</strong>
+                </p>
+            </div>
+        </div>
+        
         <!-- エンドポイントとリソース -->
         <div class="endpoint-section">
             <h2 class="section-title">📍 エンドポイントとリソースのイメージ</h2>
@@ -585,6 +668,244 @@
                 </div>
             </div>
             
+            <!-- 第2回・第3回とのつながり -->
+            <div style="background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%); border-radius: 20px; padding: 40px; margin-top: 40px;">
+                <h3 style="font-size: 1.5em; color: #3730a3; margin-bottom: 25px; text-align: center;">
+                    🔗 第2回・第3回の内容とつなげてみよう
+                </h3>
+                
+                <div style="background: white; border-radius: 15px; padding: 30px; margin-bottom: 30px;">
+                    <p style="font-size: 1.05em; color: #333; line-height: 1.8;">
+                        第2回では、データベースの<strong style="color: #3730a3;">「テーブル」</strong>という概念を学びましたよね。顧客テーブル、注文テーブルといった形で、データを表で管理する考え方です。そして第3回では、そのテーブルに対して<strong style="color: #3730a3;">SQL</strong>という言語で命令を出す方法を学びました。<br><br>
+                        
+                        実は、<strong style="color: #ea580c; font-size: 1.1em;">REST APIのリソース名は、このテーブル名にほぼ対応するんです。</strong>
+                    </p>
+                </div>
+                
+                <!-- テーブルとリソースの対応図 -->
+                <div style="background: white; border-radius: 15px; padding: 35px; margin-bottom: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                    <h4 style="font-size: 1.3em; color: #3730a3; margin-bottom: 25px; text-align: center;">
+                        📊 テーブル → リソース → エンドポイント
+                    </h4>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 20px; align-items: center; margin: 30px 0;">
+                        <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 10px; padding: 25px; text-align: center;">
+                            <div style="font-size: 1.1em; font-weight: bold; color: #92400e; margin-bottom: 10px;">
+                                データベース
+                            </div>
+                            <div style="font-family: 'Courier New', monospace; font-size: 1.2em; color: #78350f; font-weight: bold;">
+                                customers<br>テーブル
+                            </div>
+                        </div>
+                        
+                        <div style="font-size: 2em; color: #3730a3;">→</div>
+                        
+                        <div style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border-radius: 10px; padding: 25px; text-align: center;">
+                            <div style="font-size: 1.1em; font-weight: bold; color: #1e3a8a; margin-bottom: 10px;">
+                                REST API
+                            </div>
+                            <div style="font-family: 'Courier New', monospace; font-size: 1.2em; color: #1e40af; font-weight: bold;">
+                                customers<br>リソース
+                            </div>
+                        </div>
+                        
+                        <div style="font-size: 2em; color: #3730a3;">→</div>
+                        
+                        <div style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-radius: 10px; padding: 25px; text-align: center;">
+                            <div style="font-size: 1.1em; font-weight: bold; color: #065f46; margin-bottom: 10px;">
+                                URL
+                            </div>
+                            <div style="font-family: 'Courier New', monospace; font-size: 1.2em; color: #047857; font-weight: bold;">
+                                /customers<br>エンドポイント
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #f9fafb; border-radius: 10px; padding: 20px; text-align: center; margin-top: 25px;">
+                        <p style="font-size: 1.05em; color: #666; line-height: 1.8;">
+                            つまり、<strong style="color: #ea580c;">テーブルがリソースになり、エンドポイントになる</strong><br>
+                            この対応関係を理解しておくと、<br>
+                            「ああ、このAPIは裏側でこのテーブルを触ってるんだな」というイメージが湧きやすくなります
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- APIとSQLの対応関係 -->
+                <div style="background: white; border-radius: 15px; padding: 35px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                    <h4 style="font-size: 1.3em; color: #3730a3; margin-bottom: 25px; text-align: center;">
+                        🔄 REST API と SQL の対応関係
+                    </h4>
+                    
+                    <div style="display: grid; gap: 20px;">
+                        <!-- GET /customers -->
+                        <div style="border: 2px solid #10b981; border-radius: 10px; overflow: hidden;">
+                            <div style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%); color: white; padding: 15px 20px; display: flex; align-items: center; gap: 15px;">
+                                <div style="background: white; color: #10b981; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9em;">
+                                    GET
+                                </div>
+                                <div style="font-family: 'Courier New', monospace; font-size: 1.2em; font-weight: bold;">
+                                    /customers
+                                </div>
+                            </div>
+                            <div style="padding: 20px; background: #f0fdf4;">
+                                <div style="font-weight: bold; color: #065f46; margin-bottom: 10px;">
+                                    📖 顧客の一覧を取得
+                                </div>
+                                <div style="background: white; border-radius: 8px; padding: 15px; font-family: 'Courier New', monospace; color: #047857; border-left: 4px solid #10b981;">
+                                    SELECT * FROM customers;
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- GET /customers/123 -->
+                        <div style="border: 2px solid #10b981; border-radius: 10px; overflow: hidden;">
+                            <div style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%); color: white; padding: 15px 20px; display: flex; align-items: center; gap: 15px;">
+                                <div style="background: white; color: #10b981; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9em;">
+                                    GET
+                                </div>
+                                <div style="font-family: 'Courier New', monospace; font-size: 1.2em; font-weight: bold;">
+                                    /customers/123
+                                </div>
+                            </div>
+                            <div style="padding: 20px; background: #f0fdf4;">
+                                <div style="font-weight: bold; color: #065f46; margin-bottom: 10px;">
+                                    🔍 ID が 123 の顧客を取得
+                                </div>
+                                <div style="background: white; border-radius: 8px; padding: 15px; font-family: 'Courier New', monospace; color: #047857; border-left: 4px solid #10b981;">
+                                    SELECT * FROM customers<br>
+                                    WHERE id = 123;
+                                </div>
+                                <div style="margin-top: 15px; padding: 15px; background: #fef3c7; border-radius: 8px; font-size: 0.95em; color: #78350f;">
+                                    💡 パスパラメータ <code style="background: white; padding: 2px 6px; border-radius: 4px; color: #ea580c;">123</code> が SQL の WHERE 句になる
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- POST /customers -->
+                        <div style="border: 2px solid #3b82f6; border-radius: 10px; overflow: hidden;">
+                            <div style="background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%); color: white; padding: 15px 20px; display: flex; align-items: center; gap: 15px;">
+                                <div style="background: white; color: #3b82f6; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9em;">
+                                    POST
+                                </div>
+                                <div style="font-family: 'Courier New', monospace; font-size: 1.2em; font-weight: bold;">
+                                    /customers
+                                </div>
+                            </div>
+                            <div style="padding: 20px; background: #eff6ff;">
+                                <div style="font-weight: bold; color: #1e3a8a; margin-bottom: 10px;">
+                                    ➕ 新しい顧客を登録
+                                </div>
+                                <div style="background: white; border-radius: 8px; padding: 15px; font-family: 'Courier New', monospace; color: #1e40af; border-left: 4px solid #3b82f6;">
+                                    INSERT INTO customers<br>
+                                    (name, email, prefecture, ...)<br>
+                                    VALUES ('田中太郎', 'taro@example.com', '石川県', ...);
+                                </div>
+                                <div style="margin-top: 15px; padding: 15px; background: #fef3c7; border-radius: 8px; font-size: 0.95em; color: #78350f;">
+                                    💡 リクエストボディの内容が SQL の VALUES になる
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- PUT /customers/123 -->
+                        <div style="border: 2px solid #f59e0b; border-radius: 10px; overflow: hidden;">
+                            <div style="background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); color: white; padding: 15px 20px; display: flex; align-items: center; gap: 15px;">
+                                <div style="background: white; color: #f59e0b; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9em;">
+                                    PUT
+                                </div>
+                                <div style="font-family: 'Courier New', monospace; font-size: 1.2em; font-weight: bold;">
+                                    /customers/123
+                                </div>
+                            </div>
+                            <div style="padding: 20px; background: #fffbeb;">
+                                <div style="font-weight: bold; color: #92400e; margin-bottom: 10px;">
+                                    ✏️ ID が 123 の顧客情報を更新
+                                </div>
+                                <div style="background: white; border-radius: 8px; padding: 15px; font-family: 'Courier New', monospace; color: #92400e; border-left: 4px solid #f59e0b;">
+                                    UPDATE customers<br>
+                                    SET name = '田中太郎',<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;email = 'new@example.com'<br>
+                                    WHERE id = 123;
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- DELETE /customers/123 -->
+                        <div style="border: 2px solid #ef4444; border-radius: 10px; overflow: hidden;">
+                            <div style="background: linear-gradient(135deg, #ef4444 0%, #f87171 100%); color: white; padding: 15px 20px; display: flex; align-items: center; gap: 15px;">
+                                <div style="background: white; color: #ef4444; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9em;">
+                                    DELETE
+                                </div>
+                                <div style="font-family: 'Courier New', monospace; font-size: 1.2em; font-weight: bold;">
+                                    /customers/123
+                                </div>
+                            </div>
+                            <div style="padding: 20px; background: #fef2f2;">
+                                <div style="font-weight: bold; color: #991b1b; margin-bottom: 10px;">
+                                    🗑️ ID が 123 の顧客を削除
+                                </div>
+                                <div style="background: white; border-radius: 8px; padding: 15px; font-family: 'Courier New', monospace; color: #991b1b; border-left: 4px solid #ef4444; margin-bottom: 15px;">
+                                    DELETE FROM customers<br>
+                                    WHERE id = 123;
+                                </div>
+                                <div style="background: #fef3c7; border-radius: 8px; padding: 15px; font-size: 0.95em; color: #78350f;">
+                                    💡 実務では、完全削除ではなく削除フラグを立てることが多い<br>
+                                    <code style="background: white; padding: 2px 6px; border-radius: 4px; color: #ea580c; font-size: 0.9em;">UPDATE customers SET is_deleted = TRUE WHERE id = 123;</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- まとめ -->
+                <div style="background: white; border-radius: 15px; padding: 35px; margin-top: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                    <h4 style="font-size: 1.3em; color: #3730a3; margin-bottom: 25px; text-align: center;">
+                        📌 ここで押さえておきたいポイント
+                    </h4>
+                    
+                    <div style="display: grid; gap: 20px;">
+                        <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-radius: 10px; padding: 25px; border-left: 5px solid #3b82f6;">
+                            <div style="font-weight: bold; color: #1e3a8a; font-size: 1.1em; margin-bottom: 10px;">
+                                1️⃣ エンドポイント = 「どのリソースを扱うか」を示すURL
+                            </div>
+                            <div style="color: #1e40af; line-height: 1.7;">
+                                <code style="background: white; padding: 3px 8px; border-radius: 4px; color: #ea580c;">/customers</code> なら顧客の話、
+                                <code style="background: white; padding: 3px 8px; border-radius: 4px; color: #ea580c;">/orders</code> なら注文の話
+                            </div>
+                        </div>
+                        
+                        <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-radius: 10px; padding: 25px; border-left: 5px solid #10b981;">
+                            <div style="font-weight: bold; color: #065f46; font-size: 1.1em; margin-bottom: 10px;">
+                                2️⃣ HTTPメソッド = 「どんな操作をするか」を示す動詞
+                            </div>
+                            <div style="color: #047857; line-height: 1.7;">
+                                GET(取得)、POST(作成)、PUT(更新)、DELETE(削除)
+                            </div>
+                        </div>
+                        
+                        <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 10px; padding: 25px; border-left: 5px solid #f59e0b;">
+                            <div style="font-weight: bold; color: #92400e; font-size: 1.1em; margin-bottom: 10px;">
+                                3️⃣ REST API と SQL の本質は同じ
+                            </div>
+                            <div style="color: #78350f; line-height: 1.7;">
+                                SQLは「データベースに直接命令する言葉」<br>
+                                APIは「外部から安全にお願いするための窓口」<br>
+                                言葉は違うけど、やっていることは同じ!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #4c1d95 0%, #6d28d9 100%); color: white; border-radius: 15px; padding: 30px; margin-top: 30px; text-align: center;">
+                    <div style="font-size: 1.2em; line-height: 2;">
+                        非エンジニアの皆さんが覚えておくべきこと:<br><br>
+                        <strong style="font-size: 1.3em;">「エンドポイントを見れば、大体何の話をしているか分かる」</strong><br><br>
+                        <code style="background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 5px;">/customers</code> なら顧客の話、
+                        <code style="background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 5px;">/orders</code> なら注文の話<br>
+                        <strong>URL自体が意味を持つ。これがRESTの大きな利点!</strong>
+                    </div>
+                </div>
+            </div>
+            
             <div class="rest-principles">
                 <h3 style="font-size: 1.3em; color: #ea580c; margin-bottom: 20px; text-align: center;">
                     📋 エンドポイントの命名慣習
@@ -630,67 +951,630 @@
                 </p>
             </div>
             
-            <table class="api-table">
-                <thead>
-                    <tr>
-                        <th style="width: 15%;">メソッド</th>
-                        <th style="width: 30%;">エンドポイント</th>
-                        <th>何をするAPIか</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><code>GET</code></td>
-                        <td><code>/customers</code></td>
-                        <td>顧客一覧を取得(ページング・絞り込み可能)</td>
-                    </tr>
-                    <tr>
-                        <td><code>GET</code></td>
-                        <td><code>/customers/{id}</code></td>
-                        <td>特定の顧客の詳細情報を取得</td>
-                    </tr>
-                    <tr>
-                        <td><code>POST</code></td>
-                        <td><code>/customers</code></td>
-                        <td>新しい顧客を登録</td>
-                    </tr>
-                    <tr>
-                        <td><code>PUT</code></td>
-                        <td><code>/customers/{id}</code></td>
-                        <td>顧客情報を更新</td>
-                    </tr>
-                    <tr>
-                        <td><code>PUT</code></td>
-                        <td><code>/customers/{id}/status</code></td>
-                        <td>顧客ステータスを変更(専用エンドポイント)</td>
-                    </tr>
-                    <tr>
-                        <td><code>POST</code></td>
-                        <td><code>/customers/{id}/notes</code></td>
-                        <td>顧客へのメモを追加</td>
-                    </tr>
-                    <tr>
-                        <td><code>DELETE</code></td>
-                        <td><code>/customers/{id}</code></td>
-                        <td>顧客を削除(または無効化)</td>
-                    </tr>
-                </tbody>
-            </table>
-            
-            <div style="padding: 25px; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 10px; margin-top: 30px;">
-                <h3 style="font-size: 1.2em; color: #92400e; margin-bottom: 15px; text-align: center;">
-                    💡 重要なポイント
-                </h3>
-                <p style="font-size: 1.05em; color: #78350f; line-height: 1.8; text-align: center;">
-                    このAPIがあると、他のシステムとデータ連携しやすくなる!<br><br>
-                    
-                    • MAツールから顧客データを取りに来る<br>
-                    • 経営ダッシュボードでリアルタイムデータを表示<br>
-                    • スマホアプリで外出先から顧客情報を確認<br><br>
-                    
-                    <strong>APIはシステム同士をつなぐ「のり」のようなもの</strong>
-                </p>
+            <!-- 1. 顧客一覧の取得 -->
+            <div style="background: white; border-radius: 20px; padding: 35px; margin-bottom: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
+                    <div style="background: #10b981; color: white; padding: 8px 20px; border-radius: 20px; font-weight: bold; font-size: 1.1em;">
+                        GET
+                    </div>
+                    <div style="font-family: 'Courier New', monospace; font-size: 1.4em; font-weight: bold; color: #1e293b;">
+                        /customers
+                    </div>
+                </div>
+                
+                <h4 style="font-size: 1.3em; color: #ea580c; margin-bottom: 20px;">
+                    1️⃣ 顧客一覧の取得
+                </h4>
+                
+                <div style="background: #f9fafb; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                    <div style="font-weight: bold; color: #333; margin-bottom: 10px;">📋 目的</div>
+                    <div style="color: #666; line-height: 1.7;">
+                        登録されている顧客全員の一覧を取得する操作。<br>
+                        営業担当者が「今日訪問する顧客リスト」を見たいとか、マーケティング部門が「全顧客のデータを分析したい」といった場合に使います。
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                    <div style="font-weight: bold; color: #065f46; margin-bottom: 15px;">💡 ページング機能</div>
+                    <div style="color: #047857; line-height: 1.7; margin-bottom: 15px;">
+                        何千人、何万人もいると大変なので、「1ページ20件」といったページング機能を付けることが多いです。<br>
+                        その場合は、<strong>クエリパラメータ</strong>を使います。
+                    </div>
+                    <div style="background: white; border-radius: 8px; padding: 15px; font-family: 'Courier New', monospace; color: #047857; margin-bottom: 10px;">
+                        GET /customers?page=1&limit=20
+                    </div>
+                    <div style="color: #065f46; font-size: 0.95em;">
+                        👉 「1ページ目を、1ページあたり20件で取得してください」という意味
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border-radius: 10px; padding: 20px;">
+                    <div style="font-weight: bold; color: #1e3a8a; margin-bottom: 15px;">🔍 条件絞り込み</div>
+                    <div style="color: #1e40af; line-height: 1.7; margin-bottom: 15px;">
+                        クエリパラメータを使うことで、柔軟な検索ができます。
+                    </div>
+                    <div style="background: white; border-radius: 8px; padding: 15px; font-family: 'Courier New', monospace; color: #1e40af; margin-bottom: 10px;">
+                        GET /customers?prefecture=石川県&status=契約済み&page=1
+                    </div>
+                    <div style="color: #1e3a8a; font-size: 0.95em; line-height: 1.7;">
+                        👉 「石川県の、ステータスが契約済みの顧客を、1ページ目から取得する」<br><br>
+                        実務では、「どんな条件で絞り込みたいか」を事前に洗い出しておくことが重要です。<br>
+                        都道府県? 業種? 契約日? 売上規模? こういった業務要件を整理して、<br>
+                        「このパラメータが必要です」とエンジニアに伝えられるようになると、非常にスムーズです。
+                    </div>
+                </div>
             </div>
+            
+            <!-- 2. 顧客詳細の取得 -->
+            <div style="background: white; border-radius: 20px; padding: 35px; margin-bottom: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
+                    <div style="background: #10b981; color: white; padding: 8px 20px; border-radius: 20px; font-weight: bold; font-size: 1.1em;">
+                        GET
+                    </div>
+                    <div style="font-family: 'Courier New', monospace; font-size: 1.4em; font-weight: bold; color: #1e293b;">
+                        /customers/{id}
+                    </div>
+                </div>
+                
+                <h4 style="font-size: 1.3em; color: #ea580c; margin-bottom: 20px;">
+                    2️⃣ 顧客詳細の取得
+                </h4>
+                
+                <div style="background: #f9fafb; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                    <div style="font-weight: bold; color: #333; margin-bottom: 10px;">📋 目的</div>
+                    <div style="color: #666; line-height: 1.7; margin-bottom: 15px;">
+                        <code style="background: white; padding: 3px 8px; border-radius: 4px; color: #ea580c;">{id}</code> というのは、「顧客IDが入る」という意味です。<br>
+                        実際には、<code style="background: white; padding: 3px 8px; border-radius: 4px; color: #ea580c;">GET /customers/123</code> や <code style="background: white; padding: 3px 8px; border-radius: 4px; color: #ea580c;">GET /customers/456</code> という形になります。<br><br>
+                        
+                        これで、特定の一人の顧客について、名前、住所、電話番号、メールアドレス、会社名、担当者、契約日、購入履歴など、詳しい情報をすべて取得できます。
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 10px; padding: 20px;">
+                    <div style="font-weight: bold; color: #92400e; margin-bottom: 15px;">💼 使用シーン</div>
+                    <div style="color: #78350f; line-height: 1.8;">
+                        • 営業担当者が「この顧客、前回いつ訪問したっけ?」「どんな商品を買ってたっけ?」と確認したいとき<br>
+                        • カスタマーサポートが電話対応中に「お客様の情報を確認させてください」と言って、詳細情報を表示する
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 3. 新規顧客の登録 -->
+            <div style="background: white; border-radius: 20px; padding: 35px; margin-bottom: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
+                    <div style="background: #3b82f6; color: white; padding: 8px 20px; border-radius: 20px; font-weight: bold; font-size: 1.1em;">
+                        POST
+                    </div>
+                    <div style="font-family: 'Courier New', monospace; font-size: 1.4em; font-weight: bold; color: #1e293b;">
+                        /customers
+                    </div>
+                </div>
+                
+                <h4 style="font-size: 1.3em; color: #ea580c; margin-bottom: 20px;">
+                    3️⃣ 新規顧客の登録
+                </h4>
+                
+                <div style="background: #f9fafb; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                    <div style="font-weight: bold; color: #333; margin-bottom: 10px;">📋 目的</div>
+                    <div style="color: #666; line-height: 1.7;">
+                        新しい顧客をシステムに登録する操作。<br>
+                        名前や住所などの情報を、リクエストの中に含めてサーバーに送ります。<br>
+                        具体的には、<strong>JSON形式</strong>でデータを送ることが多いです。
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                    <div style="font-weight: bold; color: #1e3a8a; margin-bottom: 15px;">📤 リクエスト例(JSON形式)</div>
+                    <div style="background: #1e293b; border-radius: 8px; padding: 20px; font-family: 'Courier New', monospace; color: #a7f3d0; line-height: 1.8; overflow-x: auto;">
+{<br>
+&nbsp;&nbsp;"name": "田中太郎",<br>
+&nbsp;&nbsp;"email": "taro.tanaka@example.com",<br>
+&nbsp;&nbsp;"phone": "090-1234-5678",<br>
+&nbsp;&nbsp;"prefecture": "石川県",<br>
+&nbsp;&nbsp;"company": "株式会社サンプル"<br>
+}
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                    <div style="font-weight: bold; color: #065f46; margin-bottom: 15px;">📥 レスポンス例</div>
+                    <div style="color: #047857; line-height: 1.7; margin-bottom: 10px;">
+                        登録が完了すると、「登録しました。新しい顧客のIDは123番です」という情報が返ってきます。<br>
+                        この返ってきたIDを使って、さらに詳細情報を取得したり、更新したりできるわけです。
+                    </div>
+                </div>
+                
+                <div style="background: #fef3c7; border-radius: 10px; padding: 20px;">
+                    <div style="font-weight: bold; color: #92400e; margin-bottom: 10px;">💡 実務のポイント</div>
+                    <div style="color: #78350f; line-height: 1.7;">
+                        「必須項目は何か」「任意項目は何か」を明確にすることが大事です。<br>
+                        例えば、名前とメールアドレスは必須だけど、電話番号は任意、といった具合です。<br>
+                        これをAPI仕様書に明記しておくと、フロントエンドの開発者が「この項目は入力必須だな」と分かります。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 4. 顧客情報の更新 -->
+            <div style="background: white; border-radius: 20px; padding: 35px; margin-bottom: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
+                    <div style="background: #f59e0b; color: white; padding: 8px 20px; border-radius: 20px; font-weight: bold; font-size: 1.1em;">
+                        PUT
+                    </div>
+                    <div style="font-family: 'Courier New', monospace; font-size: 1.4em; font-weight: bold; color: #1e293b;">
+                        /customers/{id}
+                    </div>
+                </div>
+                
+                <h4 style="font-size: 1.3em; color: #ea580c; margin-bottom: 20px;">
+                    4️⃣ 顧客情報の更新
+                </h4>
+                
+                <div style="background: #f9fafb; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                    <div style="font-weight: bold; color: #333; margin-bottom: 10px;">📋 目的</div>
+                    <div style="color: #666; line-height: 1.7;">
+                        既存の顧客情報を更新する操作。<br>
+                        例えば、ID=123の顧客の住所が変わったら、<code style="background: white; padding: 3px 8px; border-radius: 4px; color: #ea580c;">PUT /customers/123</code> というエンドポイントに、新しい住所情報を含んだデータを送ります。
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                    <div style="font-weight: bold; color: #92400e; margin-bottom: 15px;">📤 リクエスト例</div>
+                    <div style="background: #1e293b; border-radius: 8px; padding: 20px; font-family: 'Courier New', monospace; color: #fde68a; line-height: 1.8;">
+{<br>
+&nbsp;&nbsp;"address": "石川県金沢市◯◯町1-2-3",<br>
+&nbsp;&nbsp;"phone": "090-9999-8888"<br>
+}
+                    </div>
+                    <div style="color: #78350f; margin-top: 15px; line-height: 1.7;">
+                        👉 変更したい項目だけを送ることもできますし、すべての項目を送ることもあります。これは設計次第です。
+                    </div>
+                </div>
+                
+                <div style="background: #e0e7ff; border-radius: 10px; padding: 20px;">
+                    <div style="font-weight: bold; color: #3730a3; margin-bottom: 10px;">💡 PUT vs PATCH</div>
+                    <div style="color: #4338ca; line-height: 1.7;">
+                        <code style="background: white; padding: 3px 8px; border-radius: 4px; color: #f59e0b;">PUT</code> と似たメソッドに <code style="background: white; padding: 3px 8px; border-radius: 4px; color: #f59e0b;">PATCH</code> というものもあります。<br><br>
+                        
+                        • <strong>PUT</strong>:「全体を置き換える」イメージ<br>
+                        • <strong>PATCH</strong>:「一部だけ変更する」イメージ<br><br>
+                        
+                        実務では、この使い分けはケースバイケースなので、チーム内で統一ルールを決めておくといいでしょう。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 5. 顧客ステータスの変更 -->
+            <div style="background: white; border-radius: 20px; padding: 35px; margin-bottom: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
+                    <div style="background: #f59e0b; color: white; padding: 8px 20px; border-radius: 20px; font-weight: bold; font-size: 1.1em;">
+                        PUT
+                    </div>
+                    <div style="font-family: 'Courier New', monospace; font-size: 1.4em; font-weight: bold; color: #1e293b;">
+                        /customers/{id}/status
+                    </div>
+                </div>
+                
+                <h4 style="font-size: 1.3em; color: #ea580c; margin-bottom: 20px;">
+                    5️⃣ 顧客ステータスの変更(専用エンドポイント)
+                </h4>
+                
+                <div style="background: #f9fafb; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                    <div style="font-weight: bold; color: #333; margin-bottom: 10px;">📋 目的</div>
+                    <div style="color: #666; line-height: 1.7;">
+                        顧客全体の情報を更新するのではなく、<strong>「ステータスだけ」</strong>を変更したい場合、専用のエンドポイントを用意することもあります。<br><br>
+                        
+                        例えば、営業プロセスで「見込み客」→「商談中」→「契約済み」→「休眠」といったステータスがあるとして、それを変更する専用のAPIを作るわけです。
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                    <div style="font-weight: bold; color: #92400e; margin-bottom: 15px;">📤 リクエスト例</div>
+                    <div style="background: #1e293b; border-radius: 8px; padding: 20px; font-family: 'Courier New', monospace; color: #fde68a; line-height: 1.8;">
+{<br>
+&nbsp;&nbsp;"status": "契約済み"<br>
+}
+                    </div>
+                    <div style="color: #78350f; margin-top: 15px; line-height: 1.7;">
+                        👉 <code style="background: white; padding: 3px 8px; border-radius: 4px; color: #ea580c;">PUT /customers/123/status</code> に送ると、<br>
+                        ID=123の顧客のステータスだけが「契約済み」に変わります。
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%); border-radius: 10px; padding: 20px;">
+                    <div style="font-weight: bold; color: #3730a3; margin-bottom: 10px;">💡 なぜ専用エンドポイントを作るのか?</div>
+                    <div style="color: #4338ca; line-height: 1.8;">
+                        • ステータス変更という操作が<strong>頻繁に行われる</strong>場合、専用APIがあった方が使いやすい<br>
+                        • ステータス変更のときだけ<strong>特別なログを残したい</strong><br>
+                        • ステータス変更時に<strong>通知を飛ばしたい</strong>、といった追加処理がある場合<br><br>
+                        
+                        専用エンドポイントがあると実装しやすくなります。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 6. 顧客へのメモ追加 -->
+            <div style="background: white; border-radius: 20px; padding: 35px; margin-bottom: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
+                    <div style="background: #3b82f6; color: white; padding: 8px 20px; border-radius: 20px; font-weight: bold; font-size: 1.1em;">
+                        POST
+                    </div>
+                    <div style="font-family: 'Courier New', monospace; font-size: 1.4em; font-weight: bold; color: #1e293b;">
+                        /customers/{id}/notes
+                    </div>
+                </div>
+                
+                <h4 style="font-size: 1.3em; color: #ea580c; margin-bottom: 20px;">
+                    6️⃣ 顧客へのメモ追加
+                </h4>
+                
+                <div style="background: #f9fafb; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                    <div style="font-weight: bold; color: #333; margin-bottom: 10px;">📋 目的</div>
+                    <div style="color: #666; line-height: 1.7;">
+                        顧客情報の一部として「メモ」を追加する専用のAPI。<br>
+                        営業担当が「◯月◯日に電話した」「次回フォローは来週」「A商品に興味あり」といったメモを残せると便利ですよね。
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                    <div style="font-weight: bold; color: #1e3a8a; margin-bottom: 15px;">📤 リクエスト例</div>
+                    <div style="background: #1e293b; border-radius: 8px; padding: 20px; font-family: 'Courier New', monospace; color: #a7f3d0; line-height: 1.8;">
+{<br>
+&nbsp;&nbsp;"content": "2025年11月22日に電話。次回訪問は12月1日予定。",<br>
+&nbsp;&nbsp;"author": "山田太郎"<br>
+}
+                    </div>
+                    <div style="color: #1e40af; margin-top: 15px; line-height: 1.7;">
+                        👉 <code style="background: white; padding: 3px 8px; border-radius: 4px; color: #ea580c;">POST /customers/123/notes</code> に送ると、<br>
+                        ID=123の顧客に新しいメモが追加されます。
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 10px; padding: 20px;">
+                    <div style="font-weight: bold; color: #92400e; margin-bottom: 10px;">💡 サブリソースという概念</div>
+                    <div style="color: #78350f; line-height: 1.8;">
+                        このように、顧客というメインのリソースの下に、「ノート(メモ)」という<strong>サブリソース</strong>を配置する形になっています。<br><br>
+                        
+                        <code style="background: white; padding: 3px 8px; border-radius: 4px; color: #ea580c;">/customers/{id}/notes</code> というURL構造が、<br>
+                        <strong>「顧客の下にあるメモたち」</strong>という階層関係を表しているわけです。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 7. 顧客の検索 -->
+            <div style="background: white; border-radius: 20px; padding: 35px; margin-bottom: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
+                    <div style="background: #10b981; color: white; padding: 8px 20px; border-radius: 20px; font-weight: bold; font-size: 1.1em;">
+                        GET
+                    </div>
+                    <div style="font-family: 'Courier New', monospace; font-size: 1.4em; font-weight: bold; color: #1e293b;">
+                        /customers/search
+                    </div>
+                </div>
+                
+                <h4 style="font-size: 1.3em; color: #ea580c; margin-bottom: 20px;">
+                    7️⃣ 顧客の検索(検索専用エンドポイント)
+                </h4>
+                
+                <div style="background: #f9fafb; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                    <div style="font-weight: bold; color: #333; margin-bottom: 10px;">📋 目的</div>
+                    <div style="color: #666; line-height: 1.7;">
+                        検索専用のエンドポイントを用意することもあります。<br>
+                        顧客一覧の取得(<code style="background: white; padding: 3px 8px; border-radius: 4px; color: #ea580c;">GET /customers</code>)とは別に、複雑な検索条件を扱いたい場合、こういう形もあり得ます。
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-radius: 10px; padding: 20px;">
+                    <div style="font-weight: bold; color: #065f46; margin-bottom: 15px;">🔍 使用例</div>
+                    <div style="background: white; border-radius: 8px; padding: 15px; font-family: 'Courier New', monospace; color: #047857; margin-bottom: 15px;">
+                        GET /customers/search?keyword=田中&prefecture=石川県
+                    </div>
+                    <div style="color: #047857; line-height: 1.8;">
+                        👉 フリーワード検索で「田中」と入力したら、<br>
+                        <strong>名前、会社名、メモの中から「田中」を含むすべての顧客を返す</strong>、といった機能です。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 8. 顧客の削除 -->
+            <div style="background: white; border-radius: 20px; padding: 35px; margin-bottom: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
+                    <div style="background: #ef4444; color: white; padding: 8px 20px; border-radius: 20px; font-weight: bold; font-size: 1.1em;">
+                        DELETE
+                    </div>
+                    <div style="font-family: 'Courier New', monospace; font-size: 1.4em; font-weight: bold; color: #1e293b;">
+                        /customers/{id}
+                    </div>
+                </div>
+                
+                <h4 style="font-size: 1.3em; color: #ea580c; margin-bottom: 20px;">
+                    8️⃣ 顧客の削除(無効化)
+                </h4>
+                
+                <div style="background: #f9fafb; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                    <div style="font-weight: bold; color: #333; margin-bottom: 10px;">📋 目的</div>
+                    <div style="color: #666; line-height: 1.7;">
+                        顧客を削除する操作。<br>
+                        ただし、実務では本当にデータを消すのではなく、<code style="background: white; padding: 3px 8px; border-radius: 4px; color: #ea580c;">is_deleted</code> というフラグを立てるだけのことが多いです。
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                    <div style="font-weight: bold; color: #991b1b; margin-bottom: 15px;">⚠️ 削除の実装方法</div>
+                    <div style="color: #b91c1c; line-height: 1.8;">
+                        あるいは、削除ではなく「無効化」という表現を使うこともあります。<br>
+                        その場合、<code style="background: white; padding: 3px 8px; border-radius: 4px; color: #ea580c;">PUT /customers/{id}/deactivate</code> のような専用エンドポイントを作ることもあります。
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 10px; padding: 20px;">
+                    <div style="font-weight: bold; color: #92400e; margin-bottom: 10px;">💡 実務のポイント</div>
+                    <div style="color: #78350f; line-height: 1.8;">
+                        削除や無効化は、<strong>慎重に扱うべき操作</strong>なので、誤操作を防ぐために:<br><br>
+                        
+                        • 確認画面を挟む<br>
+                        • 管理者権限を要求する<br>
+                        • 削除ログを詳細に記録する<br><br>
+                        
+                        といった仕組みを組み合わせることが多いです。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- レポート・BI用途のAPI -->
+            <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-radius: 20px; padding: 40px; margin-top: 40px; margin-bottom: 30px;">
+                <h3 style="font-size: 1.5em; color: #0369a1; margin-bottom: 25px; text-align: center;">
+                    📊 レポート・BI用途のAPI例
+                </h3>
+                
+                <div style="background: white; border-radius: 15px; padding: 30px; margin-bottom: 25px;">
+                    <p style="font-size: 1.05em; color: #333; line-height: 1.8;">
+                        REST APIの考え方は、顧客や注文といった「モノ」を扱うだけでなく、<br>
+                        <strong style="color: #0369a1;">レポートや集計といった「情報」を扱うこともできるんです。</strong>
+                    </p>
+                </div>
+                
+                <!-- 月次売上レポート -->
+                <div style="background: white; border-radius: 15px; padding: 30px; margin-bottom: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.1);">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <div style="background: #10b981; color: white; padding: 8px 20px; border-radius: 20px; font-weight: bold;">
+                            GET
+                        </div>
+                        <div style="font-family: 'Courier New', monospace; font-size: 1.2em; font-weight: bold; color: #1e293b;">
+                            /reports/monthly-sales
+                        </div>
+                    </div>
+                    <div style="background: #f0fdf4; border-radius: 10px; padding: 20px;">
+                        <div style="font-weight: bold; color: #065f46; margin-bottom: 10px;">📈 月次の売上レポート</div>
+                        <div style="background: white; border-radius: 8px; padding: 15px; font-family: 'Courier New', monospace; color: #047857; margin-bottom: 10px;">
+                            GET /reports/monthly-sales?year=2025&month=11
+                        </div>
+                        <div style="color: #047857; line-height: 1.7;">
+                            年と月を指定すると、その月の売上データが返ってくる。<br>
+                            これを、経営会議の資料作成に使ったり、ダッシュボードに表示したりできます。
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 新規顧客数レポート -->
+                <div style="background: white; border-radius: 15px; padding: 30px; margin-bottom: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.1);">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <div style="background: #10b981; color: white; padding: 8px 20px; border-radius: 20px; font-weight: bold;">
+                            GET
+                        </div>
+                        <div style="font-family: 'Courier New', monospace; font-size: 1.2em; font-weight: bold; color: #1e293b;">
+                            /reports/new-customers
+                        </div>
+                    </div>
+                    <div style="background: #eff6ff; border-radius: 10px; padding: 20px;">
+                        <div style="font-weight: bold; color: #1e3a8a; margin-bottom: 10px;">👥 今月新規登録した顧客の数</div>
+                        <div style="background: white; border-radius: 8px; padding: 15px; font-family: 'Courier New', monospace; color: #1e40af; margin-bottom: 10px;">
+                            GET /reports/new-customers?year=2025&month=11
+                        </div>
+                        <div style="color: #1e40af; line-height: 1.7;">
+                            このように、レポート専用のエンドポイントを作ることもあります。
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 商品別売上ランキング -->
+                <div style="background: white; border-radius: 15px; padding: 30px; margin-bottom: 25px; box-shadow: 0 3px 10px rgba(0,0,0,0.1);">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <div style="background: #10b981; color: white; padding: 8px 20px; border-radius: 20px; font-weight: bold;">
+                            GET
+                        </div>
+                        <div style="font-family: 'Courier New', monospace; font-size: 1.2em; font-weight: bold; color: #1e293b;">
+                            /reports/product-ranking
+                        </div>
+                    </div>
+                    <div style="background: #fef3c7; border-radius: 10px; padding: 20px;">
+                        <div style="font-weight: bold; color: #92400e; margin-bottom: 10px;">🏆 商品別の売上ランキング</div>
+                        <div style="background: white; border-radius: 8px; padding: 15px; font-family: 'Courier New', monospace; color: #78350f; margin-bottom: 10px;">
+                            GET /reports/product-ranking?year=2025&month=11&limit=10
+                        </div>
+                        <div style="color: #78350f; line-height: 1.7;">
+                            上位10商品を取得する、といったこともできます。
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: white; border-radius: 15px; padding: 30px;">
+                    <div style="font-weight: bold; color: #0369a1; font-size: 1.1em; margin-bottom: 15px; text-align: center;">
+                        💡 自動化が進む
+                    </div>
+                    <div style="color: #333; line-height: 1.8; text-align: center;">
+                        実務では、<strong style="color: #0369a1;">「どんなレポートが定期的に必要か」</strong>を洗い出して、<br>
+                        それをAPI化しておくと、自動化が進みます。<br><br>
+                        
+                        毎月手作業でExcelに集計していた作業が、<br>
+                        <strong style="color: #ea580c;">「APIから自動でデータを取得してレポート生成」</strong><br>
+                        というように変わるわけです。
+                    </div>
+                </div>
+            </div>
+          
+            
+            <!-- 業務ニーズをAPI設計に落とし込む -->
+            <div style="background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%); border-radius: 20px; padding: 40px; margin-bottom: 30px; color: white;">
+                <h3 style="font-size: 1.5em; margin-bottom: 25px; text-align: center;">
+                    💼 業務ニーズをAPI設計に落とし込む視点
+                </h3>
+                
+                <div style="background: rgba(255,255,255,0.2); border-radius: 15px; padding: 30px; backdrop-filter: blur(10px); margin-bottom: 25px;">
+                    <div style="font-size: 1.15em; line-height: 2; text-align: center;">
+                        非エンジニアの皆さんにとって大事なのは、<br>
+                        <strong style="font-size: 1.3em;">「自社の業務で、どんなAPIがあったら便利か?」</strong><br>
+                        を考えられるようになることです。
+                    </div>
+                </div>
+                
+                <div style="display: grid; gap: 20px;">
+                    <!-- 営業担当者がスマホで顧客情報 -->
+                    <div style="background: white; border-radius: 15px; padding: 25px; color: #333;">
+                        <div style="display: flex; gap: 20px; align-items: start;">
+                            <div style="font-size: 2.5em; flex-shrink: 0;">📱</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: bold; color: #7c3aed; margin-bottom: 10px; font-size: 1.1em;">
+                                    業務ニーズ
+                                </div>
+                                <div style="color: #666; margin-bottom: 15px; line-height: 1.7;">
+                                    営業担当者が、スマホアプリから顧客情報を見られるようにしたい
+                                </div>
+                                <div style="background: #f3e8ff; border-radius: 8px; padding: 15px; border-left: 4px solid #7c3aed;">
+                                    <div style="font-weight: bold; color: #6b21a8; margin-bottom: 8px;">💡 必要なAPI</div>
+                                    <div style="font-family: 'Courier New', monospace; color: #7c3aed; font-weight: bold;">
+                                        GET /customers/{id}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- コールセンターに問い合わせ履歴を共有 -->
+                    <div style="background: white; border-radius: 15px; padding: 25px; color: #333;">
+                        <div style="display: flex; gap: 20px; align-items: start;">
+                            <div style="font-size: 2.5em; flex-shrink: 0;">📞</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: bold; color: #7c3aed; margin-bottom: 10px; font-size: 1.1em;">
+                                    業務ニーズ
+                                </div>
+                                <div style="color: #666; margin-bottom: 15px; line-height: 1.7;">
+                                    外部のコールセンターに、問い合わせ履歴を共有したい
+                                </div>
+                                <div style="background: #f3e8ff; border-radius: 8px; padding: 15px; border-left: 4px solid #7c3aed;">
+                                    <div style="font-weight: bold; color: #6b21a8; margin-bottom: 8px;">💡 必要なAPI</div>
+                                    <div style="font-family: 'Courier New', monospace; color: #7c3aed; font-weight: bold;">
+                                        GET /inquiries
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 在庫数をリアルタイムで確認 -->
+                    <div style="background: white; border-radius: 15px; padding: 25px; color: #333;">
+                        <div style="display: flex; gap: 20px; align-items: start;">
+                            <div style="font-size: 2.5em; flex-shrink: 0;">📦</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: bold; color: #7c3aed; margin-bottom: 10px; font-size: 1.1em;">
+                                    業務ニーズ
+                                </div>
+                                <div style="color: #666; margin-bottom: 15px; line-height: 1.7;">
+                                    他部署のシステムから、在庫数をリアルタイムで確認したい
+                                </div>
+                                <div style="background: #f3e8ff; border-radius: 8px; padding: 15px; border-left: 4px solid #7c3aed;">
+                                    <div style="font-weight: bold; color: #6b21a8; margin-bottom: 8px;">💡 必要なAPI</div>
+                                    <div style="font-family: 'Courier New', monospace; color: #7c3aed; font-weight: bold;">
+                                        GET /products/{id}/stock
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 会計システムと連携 -->
+                    <div style="background: white; border-radius: 15px; padding: 25px; color: #333;">
+                        <div style="display: flex; gap: 20px; align-items: start;">
+                            <div style="font-size: 2.5em; flex-shrink: 0;">💰</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: bold; color: #7c3aed; margin-bottom: 10px; font-size: 1.1em;">
+                                    業務ニーズ
+                                </div>
+                                <div style="color: #666; margin-bottom: 15px; line-height: 1.7;">
+                                    会計システムと連携して、売上データを自動で取り込みたい
+                                </div>
+                                <div style="background: #f3e8ff; border-radius: 8px; padding: 15px; border-left: 4px solid #7c3aed;">
+                                    <div style="font-weight: bold; color: #6b21a8; margin-bottom: 8px;">💡 必要なAPI</div>
+                                    <div style="font-family: 'Courier New', monospace; color: #7c3aed; font-weight: bold; font-size: 0.95em;">
+                                        GET /orders?date_from=2025-11-01&date_to=2025-11-30
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: rgba(255,255,255,0.2); border-radius: 15px; padding: 30px; backdrop-filter: blur(10px); margin-top: 30px;">
+                    <div style="font-size: 1.15em; line-height: 2; text-align: center;">
+                        こんな風に、<strong>業務のニーズをAPI設計に落とし込む視点</strong>を持つことが、<br>
+                        <strong style="font-size: 1.3em;">非エンジニアにとってのAPIリテラシー</strong>なんです。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- エンジニアとの対話 -->
+            <div style="background: white; border-radius: 20px; padding: 40px; margin-bottom: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                <h3 style="font-size: 1.4em; color: #ea580c; margin-bottom: 25px; text-align: center;">
+                    🤝 エンジニアとの対話がスムーズになる
+                </h3>
+                
+                <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 30px; align-items: center; margin: 30px 0;">
+                    <div style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); border-radius: 15px; padding: 30px; text-align: center;">
+                        <div style="font-size: 2.5em; margin-bottom: 15px;">❌</div>
+                        <div style="font-weight: bold; color: #991b1b; margin-bottom: 15px; font-size: 1.1em;">
+                            抽象的な要望
+                        </div>
+                        <div style="color: #b91c1c; line-height: 1.7; font-size: 0.95em;">
+                            「こういう機能が欲しい」<br>
+                            だけでは曖昧
+                        </div>
+                    </div>
+                    
+                    <div style="font-size: 2.5em; color: #ea580c;">→</div>
+                    
+                    <div style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-radius: 15px; padding: 30px; text-align: center;">
+                        <div style="font-size: 2.5em; margin-bottom: 15px;">✅</div>
+                        <div style="font-weight: bold; color: #065f46; margin-bottom: 15px; font-size: 1.1em;">
+                            具体的な要望
+                        </div>
+                        <div style="color: #047857; line-height: 1.7; font-size: 0.95em;">
+                            「こういうAPIがあれば<br>
+                            実現できそう」<br>
+                            と具体的に伝えられる
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: #f9fafb; border-radius: 15px; padding: 30px; margin-top: 30px;">
+                    <div style="color: #333; line-height: 2; text-align: center; font-size: 1.05em;">
+                        これを整理してエンジニアに伝えられるようになると、開発がスムーズに進みます。<br><br>
+                        
+                        「こういう機能が欲しい」だけでなく、<br>
+                        <strong style="color: #ea580c; font-size: 1.15em;">「こういうAPIがあれば実現できそう」</strong><br>
+                        というレベルで会話ができると、<br>
+                        エンジニアも具体的なイメージを持ちやすくなります。
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #ea580c 0%, #f97316 100%); color: white; border-radius: 15px; padding: 35px; margin-top: 30px; text-align: center;">
+                    <div style="font-size: 1.3em; line-height: 2;">
+                        これが、非エンジニアがREST APIを学ぶ意義なんですね。<br><br>
+                        <strong style="font-size: 1.4em;">システム開発の「共通言語」を持つことで、<br>
+                        チーム全体の生産性が上がるんです。</strong>
+                    </div>
+                </div>
+            </div>
+            
+
             
             <h3 style="font-size: 1.3em; color: #ea580c; margin: 40px 0 25px 0; text-align: center;">
                 APIがあることのメリット
@@ -752,16 +1636,49 @@
             <h2 class="section-title">🤖 AIに「API一覧」を作らせるデモ</h2>
             
             <div style="padding: 25px; background: #f9fafb; border-radius: 10px; margin-bottom: 30px;">
-                <p style="font-size: 1.1em; color: #333; line-height: 1.8; text-align: center;">
-                    AIに業務内容と機能を伝えるだけで、<br>
+                <p style="font-size: 1.1em; color: #333; line-height: 1.8;">
+                    それでは、ここからは実際にAIを使って、API設計を手伝ってもらうデモをお見せします。<br><br>
+                    
+                    今回の題材は、<strong style="color: #ea580c;">「問い合わせ管理システム」</strong>にしましょう。社内で顧客からの問い合わせを管理するシステムをイメージしてください。
+                </p>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-radius: 15px; padding: 30px; margin-bottom: 30px;">
+                <h3 style="font-size: 1.2em; color: #1e3a8a; margin-bottom: 20px; text-align: center;">
+                    📋 問い合わせ管理システムの機能
+                </h3>
+                <div style="background: white; border-radius: 10px; padding: 25px;">
+                    <div style="color: #333; line-height: 2;">
+                        • 問い合わせの新規登録<br>
+                        • 問い合わせ一覧の取得(ステータスで絞り込めると便利)<br>
+                        • 問い合わせの詳細表示<br>
+                        • ステータスの変更(「未対応」→「対応中」→「完了」など)<br>
+                        • 担当者の割り当て<br>
+                        • メモの追加
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: #fef3c7; border-radius: 15px; padding: 25px; margin-bottom: 30px; border-left: 5px solid #f59e0b;">
+                <div style="font-weight: bold; color: #92400e; margin-bottom: 10px; font-size: 1.1em;">
+                    ❓ こんな状況を想定
+                </div>
+                <div style="color: #78350f; line-height: 1.8;">
+                    これらの機能を、REST API風に設計したい。<br>
+                    でも、「どんなエンドポイントにすればいいのか分からない」「HTTPメソッドはどれを使えばいいのか分からない」という状況です。
+                </div>
+            </div>
+            
+            <div style="padding: 25px; background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-radius: 10px; margin-bottom: 30px;">
+                <p style="font-size: 1.15em; color: #065f46; line-height: 1.8; text-align: center; font-weight: bold;">
+                    💡 そんなとき、AIに業務内容と機能を伝えるだけで、<br>
                     REST API風の一覧表を作ってくれる!
                 </p>
             </div>
             
             <div class="prompt-box">
                 <div class="prompt-title">📝 プロンプト例</div>
-                <div class="prompt-content">
-社内の「問い合わせ管理システム」のREST APIを設計したいです。
+                <div class="prompt-content" style="white-space: pre-wrap;">社内の「問い合わせ管理システム」のREST APIを設計したいです。
 
 次のような機能があります:
 - 問い合わせの新規登録
@@ -778,15 +1695,14 @@
 - パス(エンドポイント)
 - 目的(日本語)
 - 主な入力項目
-- 主な出力項目
-                </div>
+- 主な出力項目</div>
             </div>
             
-            <div style="padding: 30px; background: white; border-radius: 15px; border: 3px solid #10b981;">
+            <div style="padding: 30px; background: white; border-radius: 15px; border: 3px solid #10b981; margin-bottom: 30px;">
                 <h3 style="font-size: 1.3em; color: #065f46; margin-bottom: 20px; text-align: center;">
                     ✨ AIが返してくれるイメージ
                 </h3>
-                <p style="font-size: 1.05em; color: #333; line-height: 1.8; text-align: center;">
+                <p style="font-size: 1.05em; color: #333; line-height: 1.8; text-align: center; margin-bottom: 30px;">
                     表形式で、各APIのメソッド、エンドポイント、<br>
                     入力項目、出力項目が整理されて返ってくる!<br><br>
                     
@@ -794,29 +1710,179 @@
                     「この項目も必要だな」「こんなAPIもあった方がいいな」<br>
                     と気づきを得ることができる。
                 </p>
+                
+                <!-- AIが返す表形式の例 -->
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-radius: 10px; overflow: hidden;">
+                        <thead>
+                            <tr style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%); color: white;">
+                                <th style="padding: 15px; text-align: center; font-weight: bold; border-right: 1px solid rgba(255,255,255,0.2); width: 5%;">No</th>
+                                <th style="padding: 15px; text-align: left; font-weight: bold; border-right: 1px solid rgba(255,255,255,0.2); width: 12%;">HTTPメソッド</th>
+                                <th style="padding: 15px; text-align: left; font-weight: bold; border-right: 1px solid rgba(255,255,255,0.2); width: 20%;">エンドポイント</th>
+                                <th style="padding: 15px; text-align: left; font-weight: bold; border-right: 1px solid rgba(255,255,255,0.2); width: 18%;">目的</th>
+                                <th style="padding: 15px; text-align: left; font-weight: bold; border-right: 1px solid rgba(255,255,255,0.2); width: 22%;">主な入力項目</th>
+                                <th style="padding: 15px; text-align: left; font-weight: bold; width: 23%;">主な出力項目</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #e5e7eb;">
+                                <td style="padding: 15px; text-align: center; font-weight: bold; color: #065f46; background: #f0fdf4;">1</td>
+                                <td style="padding: 15px;"><code style="background: #dbeafe; color: #1e40af; padding: 5px 10px; border-radius: 5px; font-weight: bold;">POST</code></td>
+                                <td style="padding: 15px; font-family: 'Courier New', monospace; color: #1e293b; font-weight: bold;">/inquiries</td>
+                                <td style="padding: 15px; color: #333;">新しい問い合わせを登録</td>
+                                <td style="padding: 15px; color: #666; line-height: 1.6;">タイトル、内容、顧客名、メールアドレス、カテゴリー</td>
+                                <td style="padding: 15px; color: #666; line-height: 1.6;">問い合わせID、登録日時</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e5e7eb; background: #fafafa;">
+                                <td style="padding: 15px; text-align: center; font-weight: bold; color: #065f46; background: #f0fdf4;">2</td>
+                                <td style="padding: 15px;"><code style="background: #d1fae5; color: #065f46; padding: 5px 10px; border-radius: 5px; font-weight: bold;">GET</code></td>
+                                <td style="padding: 15px; font-family: 'Courier New', monospace; color: #1e293b; font-weight: bold;">/inquiries</td>
+                                <td style="padding: 15px; color: #333;">問い合わせ一覧を取得</td>
+                                <td style="padding: 15px; color: #666; line-height: 1.6;">ステータス(未対応/対応中/完了)、ページ番号</td>
+                                <td style="padding: 15px; color: #666; line-height: 1.6;">問い合わせID、タイトル、ステータス、登録日時、担当者名の配列</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e5e7eb;">
+                                <td style="padding: 15px; text-align: center; font-weight: bold; color: #065f46; background: #f0fdf4;">3</td>
+                                <td style="padding: 15px;"><code style="background: #d1fae5; color: #065f46; padding: 5px 10px; border-radius: 5px; font-weight: bold;">GET</code></td>
+                                <td style="padding: 15px; font-family: 'Courier New', monospace; color: #1e293b; font-weight: bold;">/inquiries/{id}</td>
+                                <td style="padding: 15px; color: #333;">特定の問い合わせの詳細を取得</td>
+                                <td style="padding: 15px; color: #666; line-height: 1.6;">なし(URLのIDのみ)</td>
+                                <td style="padding: 15px; color: #666; line-height: 1.6;">問い合わせの全情報(タイトル、内容、顧客情報、ステータス、メモ一覧など)</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e5e7eb; background: #fafafa;">
+                                <td style="padding: 15px; text-align: center; font-weight: bold; color: #065f46; background: #f0fdf4;">4</td>
+                                <td style="padding: 15px;"><code style="background: #fef3c7; color: #92400e; padding: 5px 10px; border-radius: 5px; font-weight: bold;">PUT</code></td>
+                                <td style="padding: 15px; font-family: 'Courier New', monospace; color: #1e293b; font-weight: bold;">/inquiries/{id}/status</td>
+                                <td style="padding: 15px; color: #333;">問い合わせのステータスを変更</td>
+                                <td style="padding: 15px; color: #666; line-height: 1.6;">新しいステータス(未対応/対応中/完了)</td>
+                                <td style="padding: 15px; color: #666; line-height: 1.6;">更新後のステータス、更新日時</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e5e7eb;">
+                                <td style="padding: 15px; text-align: center; font-weight: bold; color: #065f46; background: #f0fdf4;">5</td>
+                                <td style="padding: 15px;"><code style="background: #fef3c7; color: #92400e; padding: 5px 10px; border-radius: 5px; font-weight: bold;">PUT</code></td>
+                                <td style="padding: 15px; font-family: 'Courier New', monospace; color: #1e293b; font-weight: bold;">/inquiries/{id}/assign</td>
+                                <td style="padding: 15px; color: #333;">担当者を割り当て</td>
+                                <td style="padding: 15px; color: #666; line-height: 1.6;">担当者ID</td>
+                                <td style="padding: 15px; color: #666; line-height: 1.6;">担当者名、割り当て日時</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 15px; text-align: center; font-weight: bold; color: #065f46; background: #f0fdf4;">6</td>
+                                <td style="padding: 15px;"><code style="background: #dbeafe; color: #1e40af; padding: 5px 10px; border-radius: 5px; font-weight: bold;">POST</code></td>
+                                <td style="padding: 15px; font-family: 'Courier New', monospace; color: #1e293b; font-weight: bold;">/inquiries/{id}/notes</td>
+                                <td style="padding: 15px; color: #333;">メモを追加</td>
+                                <td style="padding: 15px; color: #666; line-height: 1.6;">メモの内容、記入者ID</td>
+                                <td style="padding: 15px; color: #666; line-height: 1.6;">メモID、記入日時</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div style="background: #f0fdf4; border-radius: 10px; padding: 25px; margin-top: 25px; border: 2px dashed #10b981;">
+                    <div style="text-align: center; color: #065f46; line-height: 1.8;">
+                        <div style="font-weight: bold; margin-bottom: 10px; font-size: 1.1em;">✨ このようにAIが表形式で整理して提案してくれる</div>
+                        <div style="font-size: 0.95em; color: #047857;">
+                            これを見ながら、<br>
+                            「この項目も必要だな」「こんなAPIもあった方がいいな」<br>
+                            と気づきを得て、ブラッシュアップしていきます。
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <div class="ai-tips">
-                <div class="tips-title">💡 AIを使うポイント</div>
+                <div class="tips-title">💡 AIが作ったAPI一覧、次にどうする?</div>
                 
                 <div class="tip-item">
-                    <strong>1. 「非エンジニアにもわかるように」と明示する</strong><br>
-                    難しい専門用語を避けて、分かりやすい説明をしてくれる
+                    <strong>1. 「この一覧、うちの業務に合ってるかな?」とチェックする</strong><br>
+                    例えば、「問い合わせの削除」の機能が抜けてるかもしれません。<br>
+                    あるいは、「カテゴリーごとに集計したい」という要望があるなら、<code style="background: white; padding: 2px 6px; border-radius: 4px; color: #ea580c;">GET /inquiries/summary?category=商品</code>みたいなAPIが追加で必要かもしれません。
                 </div>
                 
                 <div class="tip-item">
-                    <strong>2. 出力形式を指定する</strong><br>
-                    「表形式で」「次の項目を含めて」と具体的にお願いすると、欲しい形で回答が返ってくる
+                    <strong>2. 足りないものがあれば、AIに追加依頼する</strong><br>
+                    「こういう機能も欲しいんですが、エンドポイントを追加してください」とお願いすればいいんです。<br><br>
+                    
+                    例えば:<br>
+                    <div style="background: #f9fafb; border-radius: 8px; padding: 15px; margin-top: 10px; font-family: 'Courier New', monospace; font-size: 0.9em; color: #333; white-space: pre-wrap;">この一覧に、以下の機能も追加したいです。
+- 問い合わせの削除(論理削除)
+- カテゴリー別の集計(各カテゴリーの件数を取得)
+- 担当者別の問い合わせ一覧(特定の担当者が抱えている問い合わせを取得)
+
+これらのエンドポイントも提案してください。</div>
+                    <div style="margin-top: 10px;">こんな風にAIに追加で依頼すれば、さらに表が充実します。</div>
                 </div>
                 
                 <div class="tip-item">
-                    <strong>3. AIの回答を鵜呑みにしない</strong><br>
-                    AIは業務の細かい事情までは知らない。「ここは違うな」「これが足りないな」と気づいて、フィードバックする
+                    <strong>3. エンジニアとの打ち合わせの材料にする</strong><br>
+                    この一覧を見ながら、<br>
+                    「このAPI一覧で、うちの業務はカバーできますか?」<br>
+                    「ステータスの変更は専用エンドポイントがいいですか、それとも全体の更新でまとめた方がいいですか?」<br>
+                    といった<strong style="color: #ea580c;">具体的な会話</strong>ができるようになります。<br><br>
+                    
+                    これが、非エンジニアのAPI設計への関わり方です。コードは書けなくても、<br>
+                    <strong style="color: #ea580c;">「どんな機能が必要で、どんな形で提供されるべきか」を整理する</strong>ことはできるんです。
                 </div>
                 
                 <div class="tip-item">
-                    <strong>4. 叩き台として活用する</strong><br>
-                    AIが作った「80点の叩き台」を、あなたの業務知識で「95点」に仕上げる
+                    <strong>4. さらにAIに質問して、理解を深める</strong><br>
+                    このAPI一覧を使って、さらに具体的な質問ができます。<br><br>
+                    
+                    例えば:<br>
+                    <div style="background: #f9fafb; border-radius: 8px; padding: 12px; margin: 10px 0; font-family: 'Courier New', monospace; font-size: 0.9em; color: #333;">
+                        この「問い合わせ一覧取得」のAPI、<br>
+                        ステータスが「未対応」のものだけを取得したい場合、<br>
+                        具体的にどんなURLになりますか?
+                    </div>
+                    
+                    とか、<br>
+                    <div style="background: #f9fafb; border-radius: 8px; padding: 12px; margin: 10px 0; font-family: 'Courier New', monospace; font-size: 0.9em; color: #333;">
+                        「メモ追加」のAPIで送るデータは、<br>
+                        どんな形式(JSON)で送ればいいですか?<br>
+                        サンプルを見せてください。
+                    </div>
+                    
+                    といった質問をAIにすることで、より具体的な理解が深まります。
+                </div>
+                
+                <div class="tip-item">
+                    <strong>5. セキュリティや設計の注意点を聞く</strong><br>
+                    <div style="background: #f9fafb; border-radius: 8px; padding: 12px; margin: 10px 0; font-family: 'Courier New', monospace; font-size: 0.9em; color: #333;">
+                        このAPI設計で、セキュリティ上注意すべき点はありますか?
+                    </div>
+                    
+                    と聞けば、AIが「担当者の権限チェックが必要です」「メモの記入者IDは、ログインユーザーのIDと一致するか確認すべきです」といったアドバイスをくれるかもしれません。<br><br>
+                    
+                    こんな風に、AIは<strong style="color: #ea580c;">「設計のたたき台を作る相棒」</strong>として、非常に強力なツールになるんです。
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); border-radius: 12px; padding: 25px; margin-top: 20px; border-left: 5px solid #ef4444;">
+                    <div style="font-weight: bold; color: #991b1b; font-size: 1.1em; margin-bottom: 15px;">
+                        ⚠️ 重要: AIが作ったものを鵜呑みにしない
+                    </div>
+                    <div style="color: #b91c1c; line-height: 1.8;">
+                        AIは業務の細かい事情までは知りません。<br><br>
+                        
+                        「うちの会社では、問い合わせの担当者は複数人アサインできるようにしたい」<br>
+                        「カテゴリーは3階層の構造になってる」<br><br>
+                        
+                        そういう独自ルールは、<strong>皆さんが補足する必要があります。</strong><br><br>
+                        
+                        AIが作った叩き台を見て、<strong>「ここは違うな」「これが足りないな」と気づけること。</strong><br>
+                        そして、それをAIにフィードバックして修正してもらうこと。<br><br>
+                        
+                        <strong style="font-size: 1.1em;">これが、AIディレクターとしてのスキルなんです。</strong>
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-radius: 12px; padding: 25px; margin-top: 20px; text-align: center;">
+                    <div style="color: #065f46; font-size: 1.1em; line-height: 2;">
+                        AIは「完璧な答え」を出してくれるわけではありません。<br>
+                        でも、<strong style="font-size: 1.2em;">「80点の叩き台」を一瞬で作ってくれます。</strong><br><br>
+                        
+                        それを、皆さんの業務知識で<strong style="font-size: 1.2em;">「95点」に仕上げる。</strong><br><br>
+                        
+                        <strong style="font-size: 1.3em; color: #047857;">これが、これからの仕事の進め方なんです。</strong>
+                    </div>
                 </div>
             </div>
         </div>
@@ -870,17 +1936,6 @@
                 </div>
             </div>
             
-            <div style="background: rgba(255,255,255,0.2); border-radius: 15px; padding: 35px; backdrop-filter: blur(10px); text-align: center; margin-top: 40px;">
-                <p style="font-size: 1.2em; line-height: 2;">
-                    REST APIの基本を理解することは、<br>
-                    非エンジニアが、システム企画や運用に関わる上で、<br>
-                    <strong style="font-size: 1.3em;">非常に重要なスキル</strong>になっています。<br><br>
-                    
-                    コードは書けなくても、<br>
-                    <strong>「どんな機能が必要で、どんな形で提供されるべきか」を整理する</strong><br>
-                    ことはできる!
-                </p>
-            </div>
         </div>
     </div>
 </body>
